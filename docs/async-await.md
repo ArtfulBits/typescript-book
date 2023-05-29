@@ -1,11 +1,11 @@
 ## Async Await
 
-> [A PRO egghead video course that covers the same material](https://egghead.io/courses/async-await-using-typescript)
+> [Відеокурс, який охоплює той самий матеріал](https://egghead.io/courses/async-await-using-typescript)
 
-As a thought experiment imagine the following: a way to tell the JavaScript runtime to pause the executing of code on the `await` keyword when used on a promise and resume *only* once (and if) the promise returned from the function is settled:
+Як експеримент уявіть наступне: спосіб повідомити середовищу виконання JavaScript призупинити виконання коду за ключовим словом await , коли воно використовується для проміса (promise), і відновити лише один раз (і якщо) promise, який повернула функція, був виконан:
 
 ```ts
-// Not actual code. A thought experiment
+// демо-код. Виключно для експеріменту
 async function foo() {
     try {
         var val = await getMeAPromise();
@@ -17,22 +17,21 @@ async function foo() {
 }
 ```
 
-When the promise settles execution continues,
-* if it was fulfilled then await will return the value,
-* if it's rejected an error will be thrown synchronously which we can catch.
+Коли проміс завершено, виконання програми продовжується,
+* якщо він був виконаний вдало, то await поверне значення,
+* якщо проміс буде відхилено, синхронно буде видано помилку, яку ми зможемо зловити.
 
-This suddenly (and magically) makes asynchronous programming as easy as synchronous programming.  Three things needed for this thought experiment are:
+Це раптово (і чарівним чином) робить асинхронне програмування таким же простим, як і синхронне. Для цього експерименту необхідні три речі:
 
-* Ability to *pause function* execution.
-* Ability to *put a value inside* the function.
-* Ability to *throw an exception inside* the function.
+* Можливість призупинити виконання функції .
+* Можливість помістити значення всередину функції.
+* Можливість створити виняток усередині функції.
 
-This is exactly what generators allowed us to do! The thought experiment *is actually real* and so is the `async`/`await` implementation in TypeScript / JavaScript. Under the covers it just uses generators.
+Це саме те, що нам дозволили генератори! Штучний експеримент насправді реальний , як і реалізація async / await у TypeScript / JavaScript. Під кришкою він просто використовує генератори.
 
-### Generated JavaScript
+### Згенерований JavaScript
 
-You don't have to understand this, but it's fairly simple if you've [read up on generators][generators]. The function `foo` can be simply wrapped up as follows:
-
+Вам не обов’язково це розуміти, але це досить просто, якщо ви читали про генератори . Функцію foo можна просто скласти так:
 ```ts
 const foo = wrapToReturnPromise(function* () {
     try {
@@ -45,17 +44,16 @@ const foo = wrapToReturnPromise(function* () {
 });
 ```
 
-where the `wrapToReturnPromise` just executes the generator function to get the `generator` and then use `generator.next()`, if the value is a `promise` it would `then`+`catch` the promise and depending upon the result call `generator.next(result)` or `generator.throw(error)`. That's it!
+де wrapToReturnPromise просто виконує функцію генератора, щоб отримати генератор , а потім використовує generator.next(). Якщо значенням є проміс , то він буде мати методи `then`+`catch` та, залежно від результату, викликає generator.next(result) або generator.throw (помилка) . Це воно!
 
 
+### Підтримка Async Await у TypeScript
+**Async - Await** підтримується [TypeScript since version 1.7](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html). Асинхронні функції мають префікс ключового слова  *async*; *await* призупиняє виконання, доки не буде повернуто проміс з асинхронної функції, і розгортає значення з повернутого *Promise*.
+Він підтримувався лише для **target es6** , який перетворюється безпосередньо до **ES6 generators**.
 
-### Async Await Support in TypeScript
-**Async - Await** has been supported by [TypeScript since version 1.7](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html). Asynchronous functions are prefixed with the *async* keyword; *await* suspends the execution until an asynchronous function return promise is fulfilled and unwraps the value from the *Promise* returned.
-It was only supported for **target es6** transpiling directly to **ES6 generators**.
+**TypeScript 2.1** [додано до ES3 and ES5 run-times](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-1.html), тобто ви можете вільно користуватися ним незалежно від середовища, яке ви використовуєте. Важливо зауважити, що ми можемо використовувати async / await з TypeScript 2.1 і багато браузерів підтримують його при глобальном додаванні **polyfill for Promise**.
 
-**TypeScript 2.1** [added the capability to ES3 and ES5 run-times](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-1.html), meaning you’ll be free to take advantage of it no matter what environment you’re using. It's important to notice that we can use async / await with TypeScript 2.1 and many browsers are supported, of course, having globally added a **polyfill for Promise**.
-
-Let's see this **example** and take a look at this code to figure out how TypeScript async / await **notation** works: 
+Давайте переглянемо цей **приклад** і цей код, щоб зрозуміти, як працює async / await **нотація**: 
 ```ts
 function delay(milliseconds: number, count: number): Promise<number> {
     return new Promise<number>(resolve => {
@@ -188,11 +186,11 @@ function dramaticWelcome() {
 }
 dramaticWelcome();
 ```
-You can see full example [here][asyncawaites5code].
+Ви можете переглянути повний приклад [тут][asyncawaites5code].
 
 
-**Note**: for both target scenarios, we need to make sure our run-time has an ECMAScript-compliant Promise available globally. That might involve grabbing a polyfill for Promise. We also need to make sure that TypeScript knows Promise exists by setting our lib flag to something like "dom", "es2015" or "dom", "es2015.promise", "es5". 
-**We can see what browsers DO have Promise support (native and polyfilled) [here](https://kangax.github.io/compat-table/es6/#test-Promise).**
+**Note**: для обох цільових сценаріїв нам потрібно переконатися, що наше середовище виконання має ECMAScript-сумісний с Promise. Цього можно дістатися при вживанні поліфілу для Promise. Нам також потрібно переконатися, що TypeScript знає про існування Promise, встановивши бібліотеку на кшталт "dom", "es2015" or "dom", "es2015.promise", "es5". 
+**Ми можемо побачити, які браузери ДІЙСНО мають підтримку Promise (нативну та з використанням поліфілу) [тут](https://kangax.github.io/compat-table/es6/#test-Promise).**
 
 [generators]:./generators.md
 [asyncawaites5code]:https://cdn.rawgit.com/basarat/typescript-book/705e4496/code/async-await/es5/asyncAwaitES5.js
