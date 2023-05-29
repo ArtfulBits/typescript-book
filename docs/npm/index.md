@@ -1,66 +1,66 @@
 # NPM 
 
-> Fun fact `npm` is [not an acronym](https://twitter.com/npmjs/status/347057301401763840) so it doesn't expand to anything, but among friends it is commonly called `node package manager`.
+> Цікавий факт: `npm` — це [не абревіатура](https://twitter.com/npmjs/status/347057301401763840), тому не можно розширити його на окреми слова, але його зазвичай називають `менеджер пакунків (node package manager)`.
 
-`npm` is a binary that comes with default `node` installations used to manage community shared JavaScript / TypeScript packages.
+`npm` — це бінарний файл, який постачається разом зі стандартними установками `node`, які використовуються для керування спільними пакетами JavaScript / TypeScript.
 
 
-* NPM packages are hosted at (and installed from) https://www.npmjs.com/ (the ☁️).
+* Пакети NPM розміщено на (і вони можуть бути інсталовані з) https://www.npmjs.com/ (☁️).
 
-## Quick common setup
+## Швидке налаштування
 
-* npm packages are configured using `package.json` file. You can generate a quick file using `npm init -y`.
-* packages get installed into a `./node_modules` folder. You normally have this folder in your `.gitignore`.
+* пакети npm налаштовуються за допомогою файлу `package.json`. Ви можете швидко створити цей файл за допомогою `npm init -y`.
+* пакети встановлюються в папку `./node_modules`. Зазвичай назва цієї папки є у вашому `.gitignore`.
 
-> Even though you might be building an application, having a `package.json` essentially makes your project a package as well. So the terms your `project | package` can be used interchangeably.
+> Навіть якщо ви створюєте програму, наявність `package.json` також робить ваш проект пакетом. Отже, терміни `проект| пакет (project | package)` можна використовувати як взаємозамінні.
 
-When you checkout someone's (your team's) package, it will have a `package.json` that will list the dependencies you need to run the project. You simply run `npm install` and npm will bring them down from the cloud ☁️.
+Коли ви перевіряєте чийсь (вашої команди) пакет, він матиме `package.json`, який містить список залежностей, необхідних для запуску проекту. Ви просто запускаєте `npm install`, та npm перенесе всі потрібні пакети із хмарного середовища ☁️.
  
-## Installing a package
-You can run `npm install <something>`. Most people will use the shorthand `npm i <something>` e.g. 
+## Встановлення пакета
+Ви можете запустити `npm install <назва пакету>`. Більшість розробників використовуватиме скорочений варіант команди -  `npm i <назва пакету>`.Наприклад, якщо ви бажаєте встрановити пакет React
 
 ```ts
-// Install react
+// Встановити react
 npm i react
 ```
 
-> This will also automatically add `react` into your `package.json`'s `dependencies`.
+> Це також автоматично додасть `react` до `залежностей` вашого `package.json`.
 
-## Installing a devDependency
-`devDependencies` are dependencies that are only required during *development* if your project and not required after deployment. 
+## Встановлення devDependency
+`devDependencies` — це залежності, які потрібні лише під час *розробки* вашого проекту та не потрібні після його розгортання на сервері.
 
-`typescript` is common in `devDependencies` as its only required to build `.ts -> .js`. You normally deploy the built `.js` files:
+`typescript` є поширеним у `devDependencies`, оскільки він потрібен лише для перетворення файлів `.ts -> .js`. Зазвичай ви розгортаєте на сервері скомпільовані файли `.js`:
 
-* into production  
-* OR for consumption by other other npm packages
+* у продакшн
+* АБО для використання іншими пакетами npm
 
-## Security
-The public `npm` packages are scanned by security team worldwide and issues get reported to npm team. They then release security advisories detailing the issue and potential fixes. Commonly the fix is simply updating the package. 
+## Безпека
+Загальнодоступні пакунки `npm` скануються командою безпеки по всьому світу, і про проблеми повідомляються команді npm. Потім вони випускають поради щодо безпеки з докладним описом проблеми та можливих виправлень. Зазвичай виправлення полягає в простому оновленні пакета.
 
-You can run an audit on your node project by simply running `npm audit`. This will highlight any vulnerabilities that might exist in the package / dependencies of the package. e.g. 
+Ви можете запустити аудит свого проекту, просто запустивши `npm audit`. Це висвітлить будь-які вразливості, які можуть існувати в пакеті / залежностях пакета. напр
 
 ```
 ┌───────────────┬──────────────────────────────────────────────────────────────┐
-│ Low           │ Regular Expression Denial of Service                         │
+│ Нізкий        │ Відмова в обслуговуванні регулярного виразу                  │
 ├───────────────┼──────────────────────────────────────────────────────────────┤
-│ Package       │ debug                                                        │
+│ Пакет         │ debug                                                        │
 ├───────────────┼──────────────────────────────────────────────────────────────┤
-│ Dependency of │ jest [dev]                                                   │
+│ Залежить від  │ jest [dev]                                                   │
 ├───────────────┼──────────────────────────────────────────────────────────────┤
-│ Path          │ jest > jest-cli > istanbul-lib-source-maps > debug           │
+│ Путь          │ jest > jest-cli > istanbul-lib-source-maps > debug           │
 ├───────────────┼──────────────────────────────────────────────────────────────┤
-│ More info     │ https://nodesecurity.io/advisories/534                       │
+│ Більше інф    │ https://nodesecurity.io/advisories/534                       │
 └───────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-Note that commonly the issues are found in *development* dependencies (e.g. jest in this case). Since these aren't are a part of your production deployments, most likely your production application is not vulnerable. But still good practice to keep vulnerabilities to `0`.
+Зауважте, що зазвичай проблеми виникають у залежностях *розробки (devDependencies)* (наприклад, у цьому випадку паект jest). Оскільки вони не є частиною вашої продакшн збірки, швидше за все, ваша робоча програма не є вразливою. Але все ж хороша практика, щоб уразливості залишалися `0`.
 
-Simply add `npm audit` (the command exist with error code `1` in case of error) as a part of your deployment to ensure the projects stay up to date.
+Просто додайте `npm audit` (команда завершить виконання з кодом `1` у разі помилки) як частину вашого розгортання, щоб забезпечити актуальність проектів.
 
-## NPM Scripts 
+## Скрипти NPM
 
-### What is with `--` in scripts 
-You can build a base script with a limited set of command line arguments e.g. here is a script target that runs `tsc` for the TypeScript compiler: 
+### Що таке `--` у скриптах
+Ви можете створити базовий скрипт з обмеженим набором аргументів командного рядка, наприклад, ось цільовий скрипт, який запускає `tsc` для компілятора TypeScript:
 
 ```json
 {
@@ -70,7 +70,7 @@ You can build a base script with a limited set of command line arguments e.g. he
 }
 ```
 
-You can create a `build:watch` target to run `tsc -p . -w` or alternatively asking npm to run `build` with the additional `-w` flag like so: 
+Ви можете створити посилання `build:watch` для запуску `tsc -p. -w` або, як альтернатива, попросити npm запустити `build` з додатковим прапором `-w` так:
 
 ```json
 {
@@ -80,7 +80,7 @@ You can create a `build:watch` target to run `tsc -p . -w` or alternatively aski
   }
 }
 ```
-You can pass in as many flags as you want after `--` e.g. in the following example `build:more` has the same effect as `something --foo -f -d --bar`
+Ви можете передати скільки завгодно прапорців після `--`, наприклад, у наступному прикладі `build:more` має той самий ефект, що `something --foo -f -d --bar`
 
 ```json
 {
@@ -91,21 +91,22 @@ You can pass in as many flags as you want after `--` e.g. in the following examp
 }
 ```
 
-## Public vs. Private packages
-You don't need this when *using* any of the common public npm packages. Just know its there for enterprise / commercial customers.
+## Публічні чи приватних пакетів
+Вам це не потрібно щось змінювати, коли *використовуєте* будь-який з поширених публічних пакетів npm. Просто знайте, що приватні пакети створюють для корпоративних/комерційних клієнтів.
 
-### Public packages
-* Packages are public by default. 
-* Anyone can deploy a package to npm. 
-* You just need an account (which you can get for free).
+### Публічні пакети
+* За замовчуванням пакети загальнодоступні.
+* Кожен може створити власний пакет для npm.
+* Вам просто потрібен обліковий запис (який ви можете отримати безкоштовно).
  
-No one needs an account to download a public package. 
+Нікому не потрібен обліковий запис, щоб завантажити публічний пакет.
 
-This free sharing of packages is one of the key reasons of success for npm 🌹.
+Цей безкоштовний обмін пакетами є однією з ключових причин успіху npm 🌹.
 
-### Private packages 
+### Приватні пакети
 
-If you want a private package for your company / team / enterprise you need to sign up to a paid plan, details here : https://www.npmjs.com/pricing
+Якщо вам потрібен приватний пакет для вашої компанії/команди/підприємства, вам потрібно купити платну підписку, деталі тут: https://www.npmjs.com/pricing
 
-Of-course you need an account with the right permissions to download a private package.
+Звичайно, вам потрібен обліковий запис із відповідними дозволами для завантаження приватного пакета.
+ 
  
