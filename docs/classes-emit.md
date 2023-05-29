@@ -1,4 +1,5 @@
-#### Що відбувається з IIFE
+#### What's up with the IIFE
+Що відбувається з IIFE.
 js код, згенерований для класу, міг бути таким:
 ```ts
 function Point(x, y) {
@@ -39,7 +40,8 @@ var Point3D = (function (_super) {
 
 Зверніть увагу, що IIFE дозволяє TypeScript легко фіксувати базовий клас `Point`  у змінній `_super` яка постійно використовується в тілі класу.
 
-### `__extends(розширення)`
+### `__extends`
+Розширення
 Ви помітите, що як тільки ви успадкуєте клас, TypeScript також генерує таку функцію:
 ```ts
 var __extends = this.__extends || function (d, b) {
@@ -119,8 +121,10 @@ console.log(foo.__proto__ === Foo.prototype); // True!
 ```
 
 Читання цієї функції у зворотному порядку `d.prototype = new __()` у рядку 3 фактично означає `d.prototype = {__proto__ : __.prototype}` (через вплив new на `prototype` та `__proto__` ), поєднуючи його з попереднім рядком ( тобто рядок 2 `__.prototype = b.prototype;` ) ви отримаєте `d.prototype = {__proto__ : b.prototype}` .
-Але зачекайте, ми хотіли `d.prototype.__proto__` , тобто лише прото змінили та зберегли старий `d.prototype.constructor` . Ось де значення першого рядка (тобто `function __() { this.constructor = d; }` ) з’являється. Тут ми фактично матимемо `d.prototype = {__proto__ : __.prototype, constructor : d}` (оскільки вплив `new` на `this` всередині викликаної функції). Отже, оскільки ми відновлюємо `d.prototype.constructor` , єдине, що ми дійсно змінили, це `__proto__`, отже, `d.prototype.__proto__ = b.prototype` .
-#### значення `d.prototype.__proto__ = b.prototype` 
+Але зачекайте, ми хотіли `d.prototype.__proto__` , тобто лише прото змінили та зберегли старий `d.prototype.constructor` . Ось де значення першого рядка (тобто `function __() { this.constructor = d; }` ) з’являється. Тут ми фактично матимемо `d.prototype = {__proto__ : __.prototype, constructor : d}` (оскільки вплив `new` на `this` всередині викликаної функції). Отже, оскільки ми відновлюємо `d.prototype.constructor` , єдине, що ми дійсно змінили, це `__proto__`, отже, `d.prototype.__proto__ = b.prototype`.
+
+#### `d.prototype.__proto__ = b.prototype` significance
+Значення `d.prototype.__proto__ = b.prototype` 
 
 Важливість полягає в тому, що він дозволяє вам додавати функції-члени до дочірнього класу та успадковувати інші від базового класу. Це демонструє такий простий приклад:
 
