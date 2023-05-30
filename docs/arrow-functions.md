@@ -1,23 +1,26 @@
-* [Arrow Functions](#arrow-functions)
-* [Tip: Arrow Function Need](#tip-arrow-function-need)
-* [Tip: Arrow Function Danger](#tip-arrow-function-danger)
-* [Tip: Libraries that use `this`](#tip-arrow-functions-with-libraries-that-use-this)
-* [Tip: Arrow Function inheritance](#tip-arrow-functions-and-inheritance)
-* [Tip: Quick object return](#tip-quick-object-return)
+* [Функції-стрілки](#arrow-functions)
+* [Tip: переваги стрілочної фукції](#tip-arrow-function-need)
+* [Tip: небезпека стрілочної функції](#tip-arrow-function-danger)
+* [Tip: бібліотеки, які використовують 'this'](#tip-arrow-functions-with-libraries-that-use-this)
+* [Tip: наслідування та стрілочні функції](#tip-arrow-functions-and-inheritance)
+* [Tip: Швидке повернення об'єкта](#tip-quick-object-return)
 
 ### Arrow Functions
+Cтрілочна функція (Arrow Functions)
 
-Lovingly called the *fat arrow* (because `->` is a thin arrow and `=>` is a fat arrow) and also called a *lambda function* (because of other languages). Another commonly used feature is the fat arrow function `()=>something`. The motivation for a *fat arrow* is:
+Її також любовно називаєть "жирною" стрілкою *fat arrow* (оскільки -> тонка стрілка, => жирна стрілка), а також лямбда-функцією (в інших мовах програмування). Найчастіше функція жирної стрілки має вигляд  `()=>something`. 
+    Переваги стрілочної функції:
+1. Вам не потрібно писати `function`
+1. Має контекст `this`
+1. Дозволяє передачу значення аргументів
 
-1. You don't need to keep typing `function`
-1. It lexically captures the meaning of `this`
-1. It lexically captures the meaning of `arguments`
-
-For a language that claims to be functional, in JavaScript you tend to be typing `function` quite a lot. The fat arrow makes it simple for you to create a function
+В функціональних мовах програмування, як JavaScript, ви повинні часто уживати `function`. Стрілочна функція спрощує для разробника створення функції
 ```ts
 var inc = (x)=>x+1;
 ```
-`this` has traditionally been a pain point in JavaScript. As a wise man once said "I hate JavaScript as it tends to lose the meaning of `this` all too easily". Fat arrows fix it by capturing the meaning of `this` from the surrounding context. Consider this pure JavaScript class:
+`this` традиційно був проблемною точкою в JavaScript. 
+Як одного разу сказав мудрий чоловік: «Я ненавиджу JavaScript, оскільки він дуже легко втрачає контекст `this`» . 
+Стрілочна функція виправляє це, отримаючи значення `this` з навколишнього контексту. Розглянемо "чистий" клас JavaScript:
 
 ```ts
 function Person(age) {
@@ -31,7 +34,8 @@ setTimeout(person.growOld,1000);
 
 setTimeout(function() { console.log(person.age); },2000); // 1, should have been 2
 ```
-If you run this code in the browser `this` within the function is going to point to `window` because `window` is going to be what executes the `growOld` function. Fix is to use an arrow function:
+Якщо ви запустите цей код у браузері, `this` у функції вказуватиме на `window` , оскільки саме `window` виконує функцію `growOld` . Виправлення полягає у використанні функції стрілки:
+
 ```ts
 function Person(age) {
     this.age = age;
@@ -44,7 +48,7 @@ setTimeout(person.growOld,1000);
 
 setTimeout(function() { console.log(person.age); },2000); // 2
 ```
-The reason why this works is the reference to `this` is captured by the arrow function from outside the function body. This is equivalent to the following JavaScript code (which is what you would write yourself if you didn't have TypeScript):
+Причина, чому це працює, полягає в тому, що посилання на `this`  фіксується функцією стрілки з-за меж тіла функції. Це еквівалентно наступному коду JavaScript (це те, що ви б написали самі, якби у вас не було TypeScript):
 ```ts
 function Person(age) {
     this.age = age;
@@ -58,7 +62,8 @@ setTimeout(person.growOld,1000);
 
 setTimeout(function() { console.log(person.age); },2000); // 2
 ```
-Note that since you are using TypeScript you can be even sweeter in syntax and combine arrows with classes:
+Зауважте, що оскільки ви використовуєте TypeScript, ви можете використовувати ще зрічніший синтаксис та поєднувати стрілки з класами:
+
 ```ts
 class Person {
     constructor(public age:number) {}
@@ -72,27 +77,33 @@ setTimeout(person.growOld,1000);
 setTimeout(function() { console.log(person.age); },2000); // 2
 ```
 
-> [A sweet video about this pattern 🌹](https://egghead.io/lessons/typescript-make-usages-of-this-safe-in-class-methods)
+> [Добре відео про цей патерн 🌹](https://egghead.io/lessons/typescript-make-usages-of-this-safe-in-class-methods)
 
 #### Tip: Arrow Function Need
-Beyond the terse syntax, you only *need* to use the fat arrow if you are going to give the function to someone else to call. Effectively:
+Переваги стрілочної функції
+Окрім стислого синтаксису, зручно використовувати функцію-стрілку для виклику з іншого контексту. Подивимося, як це працює:
+
 ```ts
 var growOld = person.growOld;
 // Then later someone else calls it:
 growOld();
 ```
-If you are going to call it yourself, i.e.
+Можно зробити виклик
 ```ts
 person.growOld();
 ```
-then `this` is going to be the correct calling context (in this example `person`).
+тоді `this` буде мати вірний контекст виклику (у цьому прикладі `person`). 
 
 #### Tip: Arrow Function Danger
+Небезпека стрілочної функції
 
-In fact if you want `this` *to be the calling context* you should *not use the arrow function*. This is the case with callbacks used by libraries like jquery, underscore, mocha and others. If the documentation mentions functions on `this` then you should probably just use a `function` instead of a fat arrow. Similarly if you plan to use `arguments` don't use an arrow function.
+В тому випадку, якщо ви не бажаєте, щоб `this` мав значення контексту виклику, вам не слід використовувати функцію-стрілку. Це стосується зворотних викликів (callbacks), які використовуються такими бібліотеками, як jquery, underscore, mocha та інші. Якщо в документації згадуються функції, які використовують `this`, то вам, ймовірно, слід просто використовувати звичайну функцію замість функції-стрілки. Так само, якщо ви плануєте використовувати `arguments`, не використовуйте функцію-стрілку.
+
 
 #### Tip: Arrow functions with libraries that use `this`
-Many libraries do this e.g. `jQuery` iterables (one example https://api.jquery.com/jquery.each/) will use `this` to pass you the object that it is currently iterating over. In this case if you want to access the library passed `this` as well as the surrounding context just use a temp variable like `_self` like you would in the absence of arrow functions.
+Бібліотеки, які використовують 'this'
+Багато бібліотек роблять це, наприклад, `jQuery`ітератори (iterables) - (один із прикладів https://api.jquery.com/jquery.each/) використовують `this`, щоб передати вам об’єкт, який він зараз ітерує. У цьому випадку, якщо ви хочете отримати доступ до бібліотеки, переданої `this`, а також до навколишнього контексту, просто використовуйте тимчасову змінну, як ви робили це без використання стрілочних функцій.
+
 
 ```ts
 let _self = this;
@@ -103,7 +114,8 @@ something.each(function() {
 ```
 
 #### Tip: Arrow functions and inheritance
-Arrow functions as properties on classes work fine with inheritance: 
+Наслідування та стрілочні функції
+Функції-стрілки, як властивості класів, добре працюють із наслідуванням:
 
 ```ts
 class Adder {
@@ -122,8 +134,8 @@ const child = new Child(123);
 console.log(child.callAdd(123)); // 246
 ```
 
-However, they do not work with the `super` keyword when you try to override the function in a child class. Properties go on `this`. Since there is only one `this` such functions cannot participate in a call to `super` (`super` only works on prototype members). You can easily get around it by creating a copy of the method before overriding it in the child.
-
+Однак вони не працюють із ключовим словом super, коли ви намагаєтеся перевизначити функцію в дочірньому класі. Властивості класу зʼєднені з контекстом `this`. Оскільки існує лише один контекст `this`, такі функції не можуть брати участь у виклику `super` (`super` працює лише для
+членів прототипу). Ви можете легко обійти це, створивши копію методу перед перевизначенням у дочірньому класі.
 ```ts
 class Adder {
     constructor(public a: number) {}
@@ -144,21 +156,20 @@ class ExtendedAdder extends Adder {
 ```
 
 ### Tip: Quick object return
-
-Sometimes you need a function that just returns a simple object literal. However, something like
-
+Швидке повернення об'єкта
+Іноді вам потрібна функція, яка просто повертає літерал об’єкта. Наприклад, щось подібне
 ```ts
 // WRONG WAY TO DO IT
 var foo = () => {
     bar: 123
 };
 ```
-is parsed as a *block* containing a *JavaScript Label* by JavaScript runtimes (cause of the JavaScript specification).
+середовище виконання JavaScript розуміє як *block*, що містить *мітку JavaScript* (через специфікацію JavaScript).
 
->  If that doesn't make sense, don't worry, as you get a nice compiler error from TypeScript saying "unused label" anyways. Labels are an old (and mostly unused) JavaScript feature that you can ignore as a modern GOTO (considered bad by experienced developers 🌹)
 
-You can fix it by surrounding the object literal with `()`:
+>  Якщо ви не дуже розумієте, що це таке, не хвилюйтеся, оскільки ви все одно отримаєте приємну помилку компілятора від TypeScript із зазначенням «невикористана мітка». Мітки — це стара (та здебільшого невикористовувана) функція JavaScript, яку можна ігнорувати як сучасний GOTO (досвідчені розробники вважають її поганою 🌹)
 
+Ви можете виправити це, оточивши літерал об’єкта за допомогою () :
 ```ts
 // Correct 🌹
 var foo = () => ({

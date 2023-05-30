@@ -1,5 +1,6 @@
 #### What's up with the IIFE
-The js generated for the class could have been:
+Що відбувається з IIFE.
+js код, згенерований для класу, міг бути таким:
 ```ts
 function Point(x, y) {
     this.x = x;
@@ -10,8 +11,7 @@ Point.prototype.add = function (point) {
 };
 ```
 
-The reason it's wrapped in an Immediately-Invoked Function Expression (IIFE) i.e.
-
+Причина, по якій він загорнутий у функцію, що негайно викликається (Immediately-Invoked Function Expression - IIFE)
 ```ts
 (function () {
 
@@ -21,7 +21,7 @@ The reason it's wrapped in an Immediately-Invoked Function Expression (IIFE) i.e
 })();
 ```
 
-has to do with inheritance. It allows TypeScript to capture the base class as a variable `_super` e.g.
+має відношення до спадщини. Це дозволяє TypeScript роботать з базовим класом як со змінною  `_super`.
 
 ```ts
 var Point3D = (function (_super) {
@@ -38,10 +38,11 @@ var Point3D = (function (_super) {
 })(Point);
 ```
 
-Notice that the IIFE allows TypeScript to easily capture the base class `Point` in a `_super` variable and that is used consistently in the class body.
+Зверніть увагу, що IIFE дозволяє TypeScript легко фіксувати базовий клас `Point`  у змінній `_super` яка постійно використовується в тілі класу.
 
 ### `__extends`
-You will notice that as soon as you inherit a class TypeScript also generates the following function:
+Розширення
+Ви помітите, що як тільки ви успадкуєте клас, TypeScript також генерує таку функцію:
 ```ts
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -50,24 +51,24 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 ```
-Here `d` refers to the derived class and `b` refers to the base class. This function does two things:
+Тут `d` відноситься до похідного класу, а `b` відноситься до базового класу. Ця функція робить дві речі:
 
-1. copies the static members of the base class onto the child class i.e. `for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];`
-1. sets up the child class function's prototype to optionally lookup members on the parent's `proto` i.e. effectively `d.prototype.__proto__ = b.prototype`
+1. копіює статичні члени базового класу в дочірній клас, тобто `for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];`
+2. встановлює прототип дочірнього класу як посилання на  батьківське `proto` тобто фактично `d.prototype.__proto__ = b.prototype`
 
-People rarely have trouble understanding 1, but many people struggle with 2. So an explanation is in order.
+Люди рідко мають проблеми з розумінням 1 пункту, але багатьом людям важко зрозуміти пункт 2. Тож пояснення є доречним.
+
 
 #### `d.prototype.__proto__ = b.prototype`
 
-After having tutored many people about this I find the following explanation to be simplest. First we will explain how the code from `__extends` is equivalent to the simple `d.prototype.__proto__ = b.prototype`, and then why this line in itself is significant. To understand all this you need to know these things:
+Після того як я навчав багатьох людей цьому, я вважаю наступне пояснення найпростішим. Спочатку ми пояснимо, як код із __extends еквівалентний простому d.prototype.__proto__ = b.prototype , а потім пояснимо, чому цей рядок сам по собі важливий. Щоб все це зрозуміти, потрібно знати такі речі:
 
 1. `__proto__`
-1. `prototype`
-1. effect of `new` on `this` inside the called function
-1. effect of `new` on `prototype` and `__proto__`
+2. `prototype`
+3. вплив `new` на `this` всередині викликаної функції
+4. вплив `new` на `prototype` та `__proto__`
 
-All objects in JavaScript contain a `__proto__` member. This member is often not accessible in older browsers (sometimes documentation refers to this magical property as `[[prototype]]`). It has one objective: If a property is not found on an object during lookup (e.g. `obj.property`) then it is looked up at `obj.__proto__.property`. If it is still not found then `obj.__proto__.__proto__.property` till either: *it is found* or *the latest `.__proto__` itself is null*. This explains why JavaScript is said to support *prototypal inheritance* out of the box. This is shown in the following example, which you can run in the chrome console or Node.js:
-
+Усі об’єкти в JavaScript містять `__proto__` . Цей елемент часто недоступний у старих браузерах (іноді в документації ця магічна властивість згадується як `[[prototype]]` ). Він має одну мету: якщо властивість не знайдено в об’єкті під час пошуку (наприклад, `obj.property` ), тоді вона шукається за `obj.__proto__.property` . Якщо його все ще не знайдено, тоді `obj.__proto__.__proto__.property` доки: його не буде знайдено , або останній `.__proto__`сам по собі буде нульовим . Це пояснює, чому кажуть, що JavaScript підтримує успадкування прототипів із коробки. Це показано в наступному прикладі, який можна запустити в консолі Chrome або Node.js:
 ```ts
 var foo = {}
 
@@ -82,15 +83,14 @@ delete foo.__proto__.bar; // remove from foo.__proto__
 console.log(foo.bar); // undefined
 ```
 
-Cool so you understand `__proto__`. Another useful fact is that all `function`s in JavaScript have a property called `prototype` and that it has a member `constructor` pointing back to the function. This is shown below:
-
+Круто, що ви зрозуміли `__proto__ `. Іншим корисним фактом є те, що всі `function` в JavaScript мають властивість під назвою `prototype` і що вони мають `constructor`- член , що вказує на функцію. Це показано нижче:
 ```ts
 function Foo() { }
 console.log(Foo.prototype); // {} i.e. it exists and is not undefined
 console.log(Foo.prototype.constructor === Foo); // Has a member called `constructor` pointing back to the function
 ```
 
-Now let's look at *effect of `new` on `this` inside the called function*. Basically `this` inside the called function is going to point to the newly created object that will be returned from the function. It's simple to see if you mutate a property on `this` inside the function:
+Тепер давайте розглянемо вплив `new` на `this` всередині викликаної функції . По суті, `this` всередині викликаної функції вказуватиме на щойно створений об’єкт, який буде повернено функцією. Легко побачити, якщо ви змінюєте властивість `this` всередині функції:
 
 ```ts
 function Foo() {
@@ -102,7 +102,7 @@ var newFoo = new Foo();
 console.log(newFoo.bar); // 123
 ```
 
-Now the only other thing you need to know is that calling `new` on a function assigns the `prototype` of the function to the `__proto__` of the newly created object that is returned from the function call. Here is the code you can run to completely understand it:
+Єдине, що вам потрібно знати, це те, що виклик `new` для функції призначає `prototype` функції `__proto__` новоствореного об’єкта, який повертається викликом функції. Ось код, який ви можете запустити щоб повністю зрозуміти це:
 
 ```ts
 function Foo() { }
@@ -112,7 +112,7 @@ var foo = new Foo();
 console.log(foo.__proto__ === Foo.prototype); // True!
 ```
 
-That's it. Now look at the following straight out of `__extends`. I've taken the liberty to number these lines:
+Тепер подивіться на наступне прямо з `__extends` . Я взяв на себе сміливість пронумерувати ці рядки:
 
 ```ts
 1  function __() { this.constructor = d; }
@@ -120,13 +120,13 @@ That's it. Now look at the following straight out of `__extends`. I've taken the
 3   d.prototype = new __();
 ```
 
-Reading this function in reverse the `d.prototype = new __()` on line 3 effectively means `d.prototype = {__proto__ : __.prototype}` (because of the effect of `new` on `prototype` and `__proto__`), combining it with the previous line (i.e. line 2 `__.prototype = b.prototype;`) you get `d.prototype = {__proto__ : b.prototype}`.
-
-But wait, we wanted `d.prototype.__proto__` i.e. just the proto changed and maintain the old `d.prototype.constructor`. This is where the significance of the first line (i.e. `function __() { this.constructor = d; }`) comes in. Here we will effectively have `d.prototype = {__proto__ : __.prototype, constructor : d}` (because of the effect of `new` on `this` inside the called function). So, since we restore `d.prototype.constructor`, the only thing we have truly mutated is the `__proto__` hence `d.prototype.__proto__ = b.prototype`.
+Читання цієї функції у зворотному порядку `d.prototype = new __()` у рядку 3 фактично означає `d.prototype = {__proto__ : __.prototype}` (через вплив new на `prototype` та `__proto__` ), поєднуючи його з попереднім рядком ( тобто рядок 2 `__.prototype = b.prototype;` ) ви отримаєте `d.prototype = {__proto__ : b.prototype}` .
+Але зачекайте, ми хотіли `d.prototype.__proto__` , тобто лише прото змінили та зберегли старий `d.prototype.constructor` . Ось де значення першого рядка (тобто `function __() { this.constructor = d; }` ) з’являється. Тут ми фактично матимемо `d.prototype = {__proto__ : __.prototype, constructor : d}` (оскільки вплив `new` на `this` всередині викликаної функції). Отже, оскільки ми відновлюємо `d.prototype.constructor` , єдине, що ми дійсно змінили, це `__proto__`, отже, `d.prototype.__proto__ = b.prototype`.
 
 #### `d.prototype.__proto__ = b.prototype` significance
+Значення `d.prototype.__proto__ = b.prototype` 
 
-The significance is that it allows you to add member functions to a child class and inherit others from the base class. This is demonstrated by the following simple example:
+Важливість полягає в тому, що він дозволяє вам додавати функції-члени до дочірнього класу та успадковувати інші від базового класу. Це демонструє такий простий приклад:
 
 ```ts
 function Animal() { }
@@ -140,4 +140,4 @@ var bird = new Bird();
 bird.walk();
 bird.fly();
 ```
-Basically `bird.fly` will be looked up from `bird.__proto__.fly` (remember that `new` makes the `bird.__proto__` point to `Bird.prototype`) and `bird.walk` (an inherited member) will be looked up from `bird.__proto__.__proto__.walk` (as `bird.__proto__ == Bird.prototype` and `bird.__proto__.__proto__` == `Animal.prototype`).
+Загалом `bird.fly` шукатиметься з `bird.__proto__.fly` (пам’ятайте, що `new` робить `bird.__proto__` вказівним на `Bird.prototype` ), а `bird.walk` (успадкований член) шукатиметься з `bird.__proto__.__proto__.walk` (як `bird.__proto__ == Bird.prototype` і `bird.__proto__.__proto__` == `Animal.prototype`).
