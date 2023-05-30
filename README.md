@@ -120,24 +120,34 @@
         <br>
         <a href="https://github.com/olexanderos">OlexanderOs</a>
       </td>
-      <!--
       <td align="center">
         <img
-          src="https://avatars0.githubusercontent.com/u/{id}?s=460&u={user_id}&v=4"
+          src="https://avatars.githubusercontent.com/u/48415878?v=4"
           width="150"
         />
         <br>
-        <a href="https://github.com/{username}">{USER_NAME}</a>
+        <a href="https://github.com/Netaly79">Nataliia Karpenko</a>
       </td>
       <td align="center">
         <img
-          src="https://avatars0.githubusercontent.com/u/{id}?s=460&u={user_id}&v=4"
+          src="https://avatars.githubusercontent.com/u/56434649?v=4"
           width="150"
         />
         <br>
-        <a href="https://github.com/{username}">{USER_NAME}</a>
+        <a href="https://github.com/SvitlanaRybakova">Svitlana Rybakova</a>
       </td>
-      -->
     </tr>
+      <!--
+    <tr>
+      <td align="center">
+        <img
+          src="https://avatars0.githubusercontent.com/u/{id}?s=460&u={user_id}&v=4"
+          width="150"
+        />
+        <br>
+        <a href="https://github.com/{username}">{USER_NAME}</a>
+      </td>
+    </tr>
+      -->
   </tbody>
 </table>
