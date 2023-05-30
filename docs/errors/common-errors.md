@@ -1,34 +1,34 @@
-# Common Errors
-In this section we explain a number of common error codes that users experience in the real world.
+# Поширені помилки
+У цьому розділі ми пояснюємо деякі поширені коди помилок, з якими користувачі стикаються в реальному світі.
 
 ## TS2304
-Samples:
+Приклади:
 > `Cannot find name ga`
 > `Cannot find name $`
 > `Cannot find module jquery`
 
-You are probably using a third party library (e.g. google analytics) and don't have it `declare`d. TypeScript tries to save you from *spelling mistakes* and *using variables without declaring them* so you need to be explicit on anything that is *available at runtime* because of you including some external library ([more on how to fix it][ambient]).
+Можливо, ви використовуєте сторонню бібліотеку (наприклад, google analytics) і не задекларували її. TypeScript намагається вберегти вас від *орфографічних помилок* та *використання змінних без їх оголошення*, тому вам потрібно явно вказати все, що є *доступним під час виконання*, включаючи зовнішні бібліотеки ([детальніше про способи виправлення][ambient]).
 
 ## TS2307
-Samples:
+Приклад:
 > `Cannot find module 'underscore'`
 
-You are probably using a third party library (e.g. underscore) as a *module* ([more on modules][modules]) and don't have the ambient declaration file for it ([more on ambient declarations][ambient]).
+Ви, ймовірно, використовуєте сторонню бібліотеку (наприклад, underscore) як *модуль* ([докладніше про модулі][modules]) але не маєте файлу оголошення для нього ([детальніше про оголошення на ambient][ambient]).
 
 ## TS1148
-Sample:
+Приклад:
 > Cannot compile modules unless the '--module' flag is provided
 
-Checkout the [section on modules][modules].
+Перевірте [розділ про модулі][modules].
 
-## Catch clause variable cannot have a type annotation
-Sample:
+## Catch clause variable cannot have a type annotation (Змінна в операторі catch не може мати анотацію типу)
+Приклад:
 ```js
 try { something(); }
 catch (e: Error) { // Catch clause variable cannot have a type annotation
 }
 ```
-TypeScript is protecting you from JavaScript code in the wild being wrong. Use a type guard instead:
+TypeScript захищає вас від некоректного JavaScript-коду зі сторони. Використайте замість цього захист типів (type guard):
 ```js
 try { something(); }
 catch (e) {
@@ -38,12 +38,12 @@ catch (e) {
 }
 ```
 
-## Interface `ElementClass` cannot simultaneously extend types `Component` and `Component`
-This happens when you have two `react.d.ts` (`@types/react/index.d.ts`) in the compilation context.
+## Interface `ElementClass` cannot simultaneously extend types `Component` and `Component` (Інтерфейс `ElementClass` не може одночасно розширювати типи `Component` і `Component`)
+Це відбувається, коли у контексті компіляції є два файлу `react.d.ts` (`@types/react/index.d.ts`).
 
-**Fix**:
-* Delete `node_modules` and any `package-lock` (or yarn lock) and `npm install` again.
-* If it doesn't work, find the invalid module (all modules used by your project should have `react.d.ts` as a `peerDependency` and not a hard `dependency`) and report it on their project.
+**Виправити**:
+* Видаліть `node_modules` і будь-який `package-lock` (або yarn lock) і знову виконайте `npm install`.
+* Якщо це не працює, знайдіть невірний модуль (всі модулі, що використовуються вашим проектом, повинні мати `react.d.ts` як `peerDependency`, а не як жорстку `dependency`) і зазначте це у своєму проекті.
 
 
 [ambient]: ../types/ambient/d.ts.md
