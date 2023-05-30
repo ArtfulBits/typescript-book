@@ -1,5 +1,5 @@
 # Поширені помилки
-У цьому розділі ми пояснюємо деякі поширені коди помилок, з якими користувачі стикаються в реальному світі.
+У цьому розділі ми пояснюємо деякі поширені коди помилок, з якими користувачі стикаються в реальному кодуванні.
 
 ## TS2304
 Приклади:
@@ -21,7 +21,9 @@
 
 Перевірте [розділ про модулі][modules].
 
-## Catch clause variable cannot have a type annotation (Змінна в операторі catch не може мати анотацію типу)
+## Catch clause variable cannot have a type annotation 
+Змінна в операторі catch не може мати анотацію типу
+<br>
 Приклад:
 ```js
 try { something(); }
@@ -38,7 +40,9 @@ catch (e) {
 }
 ```
 
-## Interface `ElementClass` cannot simultaneously extend types `Component` and `Component` (Інтерфейс `ElementClass` не може одночасно розширювати типи `Component` і `Component`)
+## Interface `ElementClass` cannot simultaneously extend types `Component` and `Component` 
+Інтерфейс ElementClass не може одночасно розширювати типи Component та Component. 
+<br>
 Це відбувається, коли у контексті компіляції є два файлу `react.d.ts` (`@types/react/index.d.ts`).
 
 **Виправити**:
