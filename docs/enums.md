@@ -9,7 +9,9 @@
 * [Enum with static functions](#enum-with-static-functions)
 
 ### Enums
-An enum is a way to organize a collection of related values. Many other programming languages (C/C#/Java) have an `enum` data type but JavaScript does not. However, TypeScript does. Here is an example definition of a TypeScript enum:
+Перелік.
+
+Перелік (Enums) — це спосіб організувати колекцію пов’язаних значень. Багато інших мов програмування (C/C#/Java) мають тип даних `enum` , але JavaScript його не має. Однак TypeScript його має. Ось приклад визначення переліку TypeScript:
 
 ```ts
 enum CardSuit {
@@ -19,30 +21,34 @@ enum CardSuit {
 	Spades
 }
 
-// Sample usage
+// Зразок використання
 var card = CardSuit.Clubs;
 
-// Safety
-card = "not a member of card suit"; // Error : string is not assignable to type `CardSuit`
+// Безпека
+card = "not a member of card suit"; // Помилка: рядок не можна призначити типу `CardSuit`
 ```
 
-These enums values are `number`s so I'll call them Number Enums from hence forth.
+Ці значення переліків є `number` , тому відтепер я буду називати їх Числовим Переліком
 
 #### Number Enums and Numbers
-TypeScript enums are number based. This means that numbers can be assigned to an instance of the enum, and so can anything else that is compatible with `number`.
+Числові Перелікі і числа
+
+Переліки TypeScript базуються на числах. Це означає, що числа можна призначити екземпляру enum, а також будь-що інше, сумісне з `number`
 
 ```ts
 enum Color {
-    Red,
+    Red, // під капотом це елемент 0 = Red
     Green,
     Blue
 }
 var col = Color.Red;
-col = 0; // Effectively same as Color.Red
+col = 0; // Фактично те саме, що Color.Red
 ```
 
 #### Number Enums and Strings
-Before we look further into enums let's look at the JavaScript that it generates, here is a sample TypeScript:
+Числові Переліки і рядки
+
+Перш ніж ми подивимося далі на enum, давайте подивимося на JavaScript, який він генерує, ось зразок TypeScript:
 
 ```ts
 enum Tristate {
@@ -51,7 +57,7 @@ enum Tristate {
     Unknown
 }
 ```
-generates the following JavaScript:
+генерує такий JavaScript:
 
 ```js
 var Tristate;
@@ -62,22 +68,22 @@ var Tristate;
 })(Tristate || (Tristate = {}));
 ```
 
-let's focus on the line `Tristate[Tristate["False"] = 0] = "False";`. Within it `Tristate["False"] = 0` should be self explanatory, i.e. sets `"False"` member of `Tristate` variable to be `0`. Note that in JavaScript the assignment operator returns the assigned value (in this case `0`). Therefore the next thing executed by the JavaScript runtime is `Tristate[0] = "False"`. This means that you can use the `Tristate` variable to convert a string version of the enum to a number or a number version of the enum to a string. This is demonstrated below:
-
+зосередимося на рядку Tristate`[Tristate["False"] = 0] = "False";` . У ньому `Tristate["False"] = 0` має бути зрозумілим, тобто встановлює значення "False" для змінної Tristate рівним 0 . Зверніть увагу, що в JavaScript оператор присвоєння повертає присвоєне значення (у цьому випадку 0 ). Тому наступним, що виконується середою виконання JavaScript, є `Tristate[0] = "False"` . Це означає, що ви можете використовувати змінну Tristate для перетворення рядкової версії enum у число або числової версії enum у рядок. Це показано нижче:
 ```ts
 enum Tristate {
     False,
     True,
     Unknown
 }
-console.log(Tristate[0]); // "False"
+console.log(Tristate[0]); // "Помилковий"
 console.log(Tristate["False"]); // 0
-console.log(Tristate[Tristate.False]); // "False" because `Tristate.False == 0`
+console.log(Tristate[Tristate.False]); // "Помилковий" оскільки `Tristate.False == 0`
 ```
 
 #### Changing the number associated with a Number Enum
-By default enums are `0` based and then each subsequent value increments by 1 automatically. As an example consider the following:
+Зміна числа, пов’язаного з Числовим Переліком
 
+За замовчуванням переліки починаються з `0` , а потім кожне наступне значення автоматично збільшується на 1. Як приклад розглянемо наступне:
 ```ts
 enum Color {
     Red,     // 0
@@ -86,7 +92,7 @@ enum Color {
 }
 ```
 
-However, you can change the number associated with any enum member by assigning to it specifically. This is demonstrated below where we start at 3 and start incrementing from there:
+Однак ви можете змінити номер, пов’язаний з будь-яким членом переліку, спеціально призначивши його. Це показано нижче, де ми починаємо з 3 і починаємо збільшувати звідти:
 
 ```ts
 enum Color {
@@ -96,11 +102,12 @@ enum Color {
 }
 ```
 
-> TIP: I quite commonly initialize the first enum with ` = 1` as it allows me to do a safe truthy check on an enum value.
+> ПОРАДА: я досить часто ініціалізую перший перелік за допомогою `= 1` , оскільки це дає мені змогу безпечно перевірити правдивість значення enum.
 
 #### Number Enums as flags
-One excellent use of enums is the ability to use enums as `Flags`. Flags allow you to check if a certain condition from a set of conditions is true. Consider the following example where we have a set of properties about animals:
+Числові Переліки як прапори
 
+Одним із чудових способів використання переліків є можливість використовувати переліки як прапори (`Flags`). `Flags` дозволяють перевірити, чи виконується певна умова з набору умов. Розглянемо наступний приклад, де ми маємо набір властивостей тварин:
 ```ts
 enum AnimalFlags {
     None           = 0,
@@ -111,7 +118,7 @@ enum AnimalFlags {
 }
 ```
 
-Here we are using the left shift operator to move `1` around a certain level of bits to come up with bitwise disjoint numbers `0001`, `0010`, `0100` and `1000` (these are decimals `1`,`2`,`4`,`8` if you are curious). The bitwise operators `|` (or) / `&` (and) / `~` (not) are your best friends when working with flags and are demonstrated below:
+Тут ми використовуємо оператор зсуву вліво, щоб перемістити `1` на певний рівень бітів, щоб отримати побітово непересічні числа `0001 , 0010 , 0100 і 1000` (це десяткові числа `1 , 2 , 4 , 8 ,` якщо вам цікаво). Побітові оператори `|` (або) `/` `&` (та) `/` `~` (не) є вашими найкращими друзями під час роботи з прапорцями, які показано нижче:
 
 ```ts
 enum AnimalFlags {
@@ -146,12 +153,12 @@ animal.flags |= AnimalFlags.HasClaws | AnimalFlags.CanFly;
 printAnimalAbilities(animal); // animal has claws, animal can fly
 ```
 
-Here:
-* we used `|=` to add flags
-* a combination of `&=` and `~` to clear a flag
-* `|` to combine flags
+У цьому прикладі:
+* ми використали `|=` для додавання прапорів
+* комбінація `&=` і `~` для зняття прапора
+* `|` поєднувати прапори
 
-> Note: you can combine flags to create convenient shortcuts within the enum definition e.g. `EndangeredFlyingClawedFishEating` below:
+> Примітка: ви можете комбінувати прапорці для створення зручних ярликів у визначенні enum, наприклад `EndangeredFlyingClawedFishEating` нижче:
 
 ```ts
 enum AnimalFlags {
@@ -166,7 +173,9 @@ enum AnimalFlags {
 ```
 
 #### String Enums
-We've only looked at enums where the member values are `number`s. You are actually allowed to have enum members with string values as well. e.g. 
+Строкові переліки
+
+Ми розглядали лише переліки, де значеннями членів є `number`. Вам також дозволено мати члени enum із строковим значеннями. Наприклад:
 
 ```ts
 export enum EvidenceTypeEnum {
@@ -179,24 +188,24 @@ export enum EvidenceTypeEnum {
 }
 ```
 
-These can be easier to deal with and debug as they provide meaningful / debuggable string values. 
-
-You can use these values to do simple string comparisons. e.g. 
-
+З ними легше працювати та налагоджувати, оскільки вони надають значущі рядкові значення, які легше перевіряти. 
+Ці значення можна використовувати для простого порівняння рядків.
 ```ts
-// Where `someStringFromBackend` will be '' | 'passport_visa' | 'passport' ... etc.
+// Де `someStringFromBackend` буде '' | 'passport_visa' | 'passport' ... тощо const value = someStringFromBackend as EvidenceTypeEnum;
+
 const value = someStringFromBackend as EvidenceTypeEnum; 
 
-// Sample use in code
+// Зразок використання в коді
 if (value === EvidenceTypeEnum.PASSPORT){
     console.log('You provided a passport');
-    console.log(value); // `passport`
+    console.log(value); // `паспорт`
 }
 ```
 
 #### Const Enums
+Константні Переліки.
 
-If you have an enum definition like the following:
+Якщо у вас є таке визначення переліку
 
 ```ts
 enum Tristate {
@@ -208,8 +217,7 @@ enum Tristate {
 var lie = Tristate.False;
 ```
 
-The line `var lie = Tristate.False` is compiled to the JavaScript `var lie = Tristate.False` (yes, output is same as input). This means that at execution the runtime will need to lookup `Tristate` and then `Tristate.False`. To get a performance boost here you can mark the `enum` as a `const enum`. This is demonstrated below:
-
+то рядок `var lie = Tristate.False` скомпільовано до JavaScript `var lie = Tristate.False` (так, вихідні дані такі ж, як і вхідні). Це означає, що під час виконання буде потрібно знайти `Tristate` , а потім `Tristate.False`. Щоб підвищити продуктивність, ви можете позначити enum як `const enum` . Це показано нижче:
 ```ts
 const enum Tristate {
     False,
@@ -220,22 +228,25 @@ const enum Tristate {
 var lie = Tristate.False;
 ```
 
-generates the JavaScript:
+генерує JavaScript:
 
 ```js
 var lie = 0;
 ```
 
-i.e. the compiler:
+тобто компілятор:
 
-1. *Inlines* any usages of the enum (`0` instead of `Tristate.False`).
-1. Does not generate any JavaScript for the enum definition (there is no `Tristate` variable at runtime) as its usages are inlined.
+1. *Використовує* при будь-якому зверненню до переліку `0` замість `Tristate.False`.
+1. Не створює JavaScript для визначення переліку (немає змінної `Tristate` під час виконання), оскільки його використання вбудовано.
 
 ##### Const enum preserveConstEnums
-Inlining has obvious performance benefits. The fact that there is no `Tristate` variable at runtime is simply the compiler helping you out by not generating JavaScript that is not actually used at runtime. However, you might want the compiler to still generate the JavaScript version of the enum definition for stuff like *number to string* or *string to number* lookups as we saw. In this case you can use the compiler flag `--preserveConstEnums` and it will still generate the `var Tristate` definition so that you can use `Tristate["False"]` or `Tristate[0]` manually at runtime if you want. This does not impact *inlining* in any way.
+
+Вбудовування має очевидні переваги продуктивності. Той факт, що під час виконання не існує змінної `Tristate` , просто компілятор допомагає вам, не генеруючи JavaScript, який насправді не використовується під час виконання. Однак ви можете захотіти, щоб компілятор усе ще генерував версію визначення enum у JavaScript для таких речей, як пошук  *number to string* or *string to number* , як ми бачили. У цьому випадку ви можете використати прапорець компілятора `--preserveConstEnums` , і він усе одно генеруватиме визначення var Tristate , щоб ви могли використовувати `Tristate["False"]` або `Tristate[0]` вручну під час виконання, якщо хочете. Це жодним чином не впливає на вбудовування .
 
 ### Enum with static functions
-You can use the declaration `enum` + `namespace` merging to add static methods to an enum. The following demonstrates an example where we add a static member `isBusinessDay` to an enum `Weekday`:
+### Enum зі статичними функціями
+
+Ви можете використовувати оголошення `enum` + `namespace` , щоб додати статичні методи до enum. Нижче наведено приклад, коли ми додаємо статичний член`isBusinessDay` до переліку  `Weekday`:
 
 ```ts
 enum Weekday {
@@ -266,10 +277,11 @@ console.log(Weekday.isBusinessDay(sun)); // false
 ```
 
 #### Enums are open ended
+Enum є відкритими для додавання.
 
-> NOTE: open ended enums are only relevant if you are not using modules. You should be using modules. Hence this section is last.
+> ПРИМІТКА: відкриті перерахування актуальні, лише якщо ви не використовуєте модулі. Але Ви повинні використовувати модулі. Тому цей розділ останній.
 
-Here is the generated JavaScript for an enum shown again:
+Ось згенерований JavaScript для переліку, показаного знову:
 
 ```js
 var Tristate;
@@ -280,9 +292,8 @@ var Tristate;
 })(Tristate || (Tristate = {}));
 ```
 
-We already explained the `Tristate[Tristate["False"] = 0] = "False";` portion. Now notice the surrounding code `(function (Tristate) { /*code here */ })(Tristate || (Tristate = {}));` specifically the `(Tristate || (Tristate = {}));` portion. This basically captures a local variable `TriState` that will either point to an already defined `Tristate` value or initialize it with a new empty `{}` object.
-
-This means that you can split (and extend) an enum definition across multiple files. For example below we have split the definition for `Color` into two blocks
+Ми вже пояснювали частину  `Tristate[Tristate["False"] = 0] = "False`. Тепер зверніть увагу на навколишній код (`функція (Tristate) { /*код тут*/ })(Tristate || (Tristate = {}))`; зокрема `(Tristate || (Tristate = {}))` частина. По суті, це фіксує локальну змінну TriState , яка або вказуватиме на вже визначене значення Tristate , або ініціалізує його новим порожнім об’єктом {} .
+Це означає, що ви можете розділити (і розширити) визначення enum на кілька файлів. Наприклад, нижче ми розділили визначення кольору на два блоки
 
 ```ts
 enum Color {
@@ -298,4 +309,4 @@ enum Color {
 }
 ```
 
-Note that you *should* reinitialize the first member (here `DarkRed = 3`) in a continuation of an enum to get the generated code not clobber values from a previous definition (i.e. the `0`, `1`, ... so on values). TypeScript will warn you if you don't anyways (error message `In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.`).
+Зауважте, що вам  *обовʼязково* повторно ініціалізувати перший член (тут `DarkRed = 3`) у продовженні переліку, щоб отримати згенерований код, а не стерти значення з попереднього визначення (тобто значення  `0`, `1`, ... тощо). TypeScript попередить вас, якщо ви цього не зробите (повідомлення про помилку `In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.`).
