@@ -1,39 +1,45 @@
 ### Template Literals (Template Strings)
-Syntactically these are strings that use backticks ( i.e. \` ) instead of single (') or double (") quotes. The motivation of Template Literals is three fold:
+Строкові шаблони (шаблонні літерали).
 
-* String Interpolation
-* Multiline Strings
-* Tagged Templates
+Синтаксично це рядки, які використовують зворотні галочки (тобто \` ) замість одинарних (') або подвійних (") лапок. Бонусом шаблонних літералів є:
+
+* Інтерполяція строк
+* Багаторядкові строки
+* Шаблони з тегами
 
 #### String Interpolation
-Another common use case is when you want to generate some string out of some static strings + some variables. For this you would need some *templating logic* and this is where *template strings* originally got their name from. They have since been officially renamed to *template literals*. Here's how you would potentially generate an html string previously:
+Інтерполяція строк.
+
+Ще один поширений випадок використання — це коли ви хочете створити деякий рядок із кількох статичних рядків + деяких змінних. Для цього вам знадобиться деяка *логіка шаблонів*, і саме звідси *строкові шаблонні* отримали свою назву. Відтоді їх було офіційно перейменовано на *літерали шаблону*. Ось як раніше можна було створити рядок html:
 
 ```ts
 var lyrics = 'Never gonna give you up';
 var html = '<div>' + lyrics + '</div>';
 ```
-Now with template literals you can just do:
+Зараз ви можете використати легший варіант:
 
 ```ts
 var lyrics = 'Never gonna give you up';
 var html = `<div>${lyrics}</div>`;
 ```
 
-Note that any placeholder inside the interpolation (`${` and `}`) is treated as a JavaScript expression and evaluated as such e.g. you can do fancy math.
+Зауважте, що будь-який заповнювач усередині інтерполяції (`${` і `}`) розглядається як вираз JavaScript і оцінюється як такий, наприклад. ви можете займатися дивовижною математикою.
 
 ```ts
 console.log(`1 and 1 make ${1 + 1}`);
 ```
 
 #### Multiline Literals
-Ever wanted to put a newline in a JavaScript string? Perhaps you wanted to embed some lyrics? You would have needed to *escape the literal newline* using our favorite escape character `\`, and then put a new line into the string manually `\n` at the next line. This is shown below:
+Багаторядкові строки.
+
+EВи хотіли поставити новий рядок у рядок JavaScript? Можливо, ви хотіли вставити текст? Вам потрібно було б *екранувати символ нового рядка* за допомогою нашого улюбленого символу екранування `\`, а потім вручну вставити новий рядок у рядок `\n` у наступному рядку. Це показано нижче:
 
 ```ts
 var lyrics = "Never gonna give you up \
 \nNever gonna let you down";
 ```
 
-With TypeScript you can just use a template string:
+В TypeScript можна просто використати template string:
 
 ```ts
 var lyrics = `Never gonna give you up
@@ -41,12 +47,13 @@ Never gonna let you down`;
 ```
 
 #### Tagged Templates
+Шаблони з тегами.
 
-You can place a function (called a `tag`) before the template string and it gets the opportunity to pre process the template string literals plus the values of all the placeholder expressions and return a result. A few notes:
-* All the static literals are passed in as an array for the first argument.
-* All the values of the placeholders expressions are passed in as the remaining arguments. Most commonly you would just use rest parameters to convert these into an array as well.
+Ви можете розмістити функцію (так званий «тег») перед рядком шаблону, і вона отримає можливість попередньо обробити літерали рядка шаблону плюс значення всіх виразів-заповнювачів і повернути результат. Кілька зауважень:
+* Усі статичні літерали передаються як масив для першого аргументу.
+* Усі значення виразів-заповнювачів передаються як інші аргументи. Найчастіше ви просто використовуєте параметри rest, щоб також перетворити їх у масив.
 
-Here is an example where we have a tag function (named `htmlEscape`) that escapes the html from all the placeholders:
+Ось приклад, у якому ми маємо функцію тегу (під назвою `htmlEscape`), яка екранує html з усіх заповнювачів:
 
 ```ts
 var say = "a bird in hand > two in the bush";
@@ -72,10 +79,12 @@ function htmlEscape(literals: TemplateStringsArray, ...placeholders: string[]) {
     return result;
 }
 ```
-> Note: You can annotate `placeholders` to be any `[]`. Whatever you annotate it as, TypeScript will type check to make sure the placeholders used to call the tag match the annotation. For example if you expect to deal with `string` or `number`s you can annotate `...placeholders:(string | number)[]`
+>Примітка. Ви можете позначити `заповнювачі` як будь-який `[]`. Що б ви не анотували, TypeScript введе перевірку, щоб переконатися, що заповнювачі, які використовуються для виклику тегу, відповідають анотації. Наприклад, якщо ви плануєте мати справу з `рядком` або `числом`, ви можете анотувати `...placeholders:(string | number)[]`
 
 #### Generated JS
-For pre ES6 compile targets the code is fairly simple. Multiline strings become escaped strings. String interpolation becomes *string concatenation*. Tagged Templates become function calls.
+Згенерований JS.
+
+Для цілей компіляції до ES6 код досить простий. Багаторядкові рядки стають екранованими. Інтерполяція рядків стає *конкатенацією рядків*. Шаблони з тегами стають викликами функцій.
 
 #### Summary
-Multiline strings and string interpolation are just great things to have in any language. It's great that you can now use them in your JavaScript (thanks TypeScript!). Tagged templates allow you to create powerful string utilities.
+Багаторядкові рядки та інтерполяція рядків — це просто чудові речі в будь-якій мові. Чудово, що тепер ви можете використовувати їх у своєму JavaScript (дякуючи TypeScript!). Шаблони з тегами дозволяють створювати потужні рядкові утиліти.
