@@ -1,7 +1,7 @@
-# Interpreting Errors 
-Since TypeScript is a heavily focused *Developer Help* oriented programming language, its errors messages try to be super helpful when something goes wrong. This can lead to a slight information overload for unsuspecting users of compilers that aren't so helpful. 
+# Інтерпретація помилок 
+Оскільки TypeScript - це мова програмування, що зорієнтована на *допомогу розробнику*, її повідомлення про помилки намагаються бути надзвичайно корисними, коли щось пішло не так. Це може призвести до надмірного навантаження інформацією для починаючих користувачів компіляторів.
 
-Lets look at an example in an IDE to break apart the process of reading an error message. 
+Давайте розглянемо приклад у середовищі розробки (IDE), щоб розібратися у процесі читання повідомлення про помилку.
 
 ```ts
 type SomethingComplex = {
@@ -25,21 +25,22 @@ const fail = {
 takeSomethingComplex(fail); // TS ERROR HAPPENS HERE 
 ```
 
-This example demonstrates a common programmer error where they *fail* to call a function (`bar: getBar` should be `bar: getBar()`). Fortunately this mistake is caught by TypeScript as soon as it doesn't meet the type requirements. 
+Цей приклад демонструє поширену помилку програміста, коли він *не викликає* функцію (`bar: getBar` має бути `bar: getBar()`). На щастя, TypeScript виявляє цю помилку, як тільки вона не відповідає вимогам типів.
 
-## Error Categories
-There are two categories of TypeScript Error messages (succinct and detailed). 
+## Категорії помилок
+Існують дві категорії повідомлень про помилки TypeScript: стислі (succinct) і докладні (detailed). 
 
-### Succinct
-The objective of the succinct error message is to provide an example *conventional compiler* description of the error number and message. For this example the succinct message looks like: 
+### Стислі категоріі повідомлень (succinct)
+Метою стислого повідомлення про помилку є надання прикладу *традиційного опису компілятора* номера помилки та повідомлення. У цьому прикладі стисле повідомлення виглядає наступним чином: 
 
 ```
 TS2345: Argument of type '{ foo: number; bar: () => string; }' is not assignable to parameter of type 'SomethingComplex'.
 ```
-It is fairly self explanatory. However, it doesn't provide a deeper breakdown of *why* the error is happening. That is what the *detailed* error message is for.
+Це повідомлення досить зрозуміле. Однак, воно не надає інформаціі про *причини* виникнення помилки. Для цього призначене *детальне* повідомлення про помилку.
 
-### Detailed
-For this example the detailed version looks like: 
+
+### Детальні категоріі повідомлень (detailed)
+Ці повідомлення виглядають так: 
 
 ```
 [ts]
@@ -47,7 +48,7 @@ Argument of type '{ foo: number; bar: () => string; }' is not assignable to para
   Types of property 'bar' are incompatible.
     Type '() => string' is not assignable to type 'string'.
 ```
-The objective of the detailed error message is to *guide* the user to the reason why some error (type incompatibility in this case) is happening. The first line is same as the succinct, followed by a chain. You should read this chain as a series of responses to the developer question `WHY?` between lines i.e 
+Метою детального повідомлення про помилку є *підказка* для користувача на причину виникнення певної помилки (у цьому випадку, несумісність типів). Перший рядок є таким самим, як у стислому повідомленні, а далі йде ланцюжок. Ви повинні читати цей ланцюжок як послідовність відповідей на питання розробника `ЧОМУ?` між рядками, наприклад:
 
 ```
 ERROR: Argument of type '{ foo: number; bar: () => string; }' is not assignable to parameter of type 'SomethingComplex'.
@@ -59,17 +60,18 @@ WHY?
 CAUSE ERROR: Type '() => string' is not assignable to type 'string'.
 ```
 
-So the root cause is,
-* for property `bar`
-* there is a function `() => string` while it was expected as a `string`. 
+Отже, першопричина в наступному,
+* для властивості `bar`
+* є функція `() => string`, тоді як вона очікувалася як `string`. 
 
-This should help the developer fix the bug for the `bar` property (they forgot to invoke `()` the function).
+Це має допомогти розробнику виправити помилку для властивості `bar` (забули викликати функцію `()`).
 
-## How it shows up in an IDE Tooltip 
 
-The IDE normally shows the `detailed` followed by the `succinct` version in a tooltip as shown below: 
+## Як це відображається у підказці IDE 
 
-![IDE error message example](https://raw.githubusercontent.com/basarat/typescript-book/master/images/errors/interpreting-errors/ide.png)
+Зазвичай середовище розробки відображає спочатку `детальне`, а потім `стисле` повідомлення в підказці, як показано нижче:
 
-* You normally just read the `detailed` version forming the `WHY?` chain in your head. 
-* You use the succinct version if you want to search for similar errors (using the `TSXXXX` error code or portions of the error message)
+![Приклад повідомлення про помилку в IDE](https://raw.githubusercontent.com/basarat/typescript-book/master/images/errors/interpreting-errors/ide.png)
+
+* Зазвичай ви просто читаєте `детальну` версію, формуючи ланцюжок `ЧОМУ?` у своїй голові.
+* Ви можете використовувати стислу версію, якщо вам потрібно здійснити пошук схожих помилок (за допомогою коду помилки `TSXXXX` або частини повідомлення про помилку).
