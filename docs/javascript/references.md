@@ -1,8 +1,8 @@
-## References
+## Посилання (references)
 
-Beyond literals, any Object in JavaScript (including functions, arrays, regexp etc) are references. This means the following
+Окрім літералів, будь-який об'єкт у JavaScript (включаючи функції, масиви, regexp тощо) є посиланням. Це означає наступне
 
-### Mutations are across all references
+### Мутації є у всіх посилання
 
 ```js
 var foo = {};
@@ -12,7 +12,8 @@ foo.baz = 123;
 console.log(bar.baz); // 123
 ```
 
-### Equality is for references
+### Порівнення при посиланнях
+У JavaScript, при порівнянні об'єктів або масивів оператор рівності (== або ===) порівнює посилання, а не фактичний зміст об'єктів. Це означає, що два об'єкти або масиви вважаються рівними лише тоді, коли вони посилаються на ту саму область пам'яті.
 
 ```js
 var foo = {};
