@@ -1,16 +1,16 @@
-## Null and Undefined
+## Null та Undefined
 
-> [Free youtube video on the subject](https://www.youtube.com/watch?v=kaUfBNzuUAI)
+> [Безкоштовне відео на youtube по темі](https://www.youtube.com/watch?v=kaUfBNzuUAI)
 
-JavaScript (and by extension TypeScript) has two bottom types : `null` and `undefined`. They are *intended* to mean different things:
+JavaScript (і, відповідно, TypeScript) має два нижніх типи: `null` та `undefined`. Вони мають різні значення:
 
-* Something hasn't been initialized : `undefined`.
-* Something is currently unavailable: `null`.
+* Щось не було ініціалізовано: `undefined`.
+* Щось наразі недоступне: `null`.
 
 
-### Checking for either
+### Перевірка на наявність обох.
 
-Fact is you will need to deal with both. Interestingly in JavaScript with `==`, `null` and `undefined` are only equal to each other:
+Справа в тому, що вам доведеться мати справу з обома. Цікаво, що в JavaScript з `==`, `null` і `undefined` рівні тільки один одному:
 
 ```ts
 // Both null and undefined are only `==` to themselves and each other:
@@ -24,7 +24,7 @@ console.log(0 == undefined); // false
 console.log('' == undefined); // false
 console.log(false == undefined); // false
 ```
-Recommend `== null` to check for both `undefined` or `null`. You generally don't want to make a distinction between the two.
+Рекомендую використовувати `== null` для перевірки як `undefined`, так і `null`. Зазвичай вам не потрібно робити розрізнення між цими двома значеннями.
 
 ```ts
 function foo(arg: string | null | undefined) {
@@ -34,17 +34,18 @@ function foo(arg: string | null | undefined) {
 }
 ```
 
-> You could also do `== undefined`, but `== null` is more conventional/shorter.
+> Ви також можете використовувати `== undefined`, але `== null` є більш традиційним/коротшим підходом.
 
-One exception, root level `undefined` values which we discuss next.
+Є одне виключення - це кореневі значення `undefined`, про які ми розповімо далі.
 
-### Checking for root level undefined
+### Перевірка на undefined на рівні кореня (root level)  
 
-Remember how I said you should use `== null`? Of course you do (cause I just said it ^). Don't use it for root level things. In strict mode if you use `foo` and `foo` is undefined you get a `ReferenceError` **exception** and the whole call stack unwinds.
+Пам'ятаєте, як я говорив, що ви повинні використовувати `== null`? Звичайно, пам'ятаєте (адже я це тільки що сказав ^). Але не використовуйте його для рівня кореня. В строгому режимі, якщо ви використовуєте `foo`, а `foo` є `undefined`, ви отримаєте виняток `ReferenceError` **exception**, і весь стек викликів буде розгорнутий.
 
-> You should use strict mode ... and in fact the TS compiler will insert it for you if you use modules ... more on those later in the book so you don't have to be explicit about it :)
 
-So to check if a variable is defined or not at a *global* level you normally use `typeof`:
+> Ви повинні використовувати строгий режим... і, насправді, компілятор TS автоматично вставить його за вас, якщо ви використовуєте модулі... більше про це буде розказано пізніше в книзі, тому вам не потрібно буде явно це вказувати :)
+
+Тому, щоб перевірити, чи змінна визначена на рівні *глобального* контексту, ви зазвичай використовуєте `typeof`:
 
 ```ts
 if (typeof someglobal !== 'undefined') {
@@ -53,8 +54,9 @@ if (typeof someglobal !== 'undefined') {
 }
 ```
 
-### Limit explicit use of `undefined`
-Because TypeScript gives you the opportunity to *document* your structures separately from values instead of stuff like:
+### Обмежте явне використання `undefined`
+Оскільки TypeScript дає вам можливість *документувати* ваші структури окремо від значень, замість використання такого коду, як:
+
 ```ts
 function foo(){
   // if Something
@@ -63,7 +65,7 @@ function foo(){
   return {a:1,b:undefined};
 }
 ```
-you should use a type annotation:
+ви повинні використовувати анотацію типу:
 ```ts
 function foo():{a:number,b?:number}{
   // if Something
@@ -73,8 +75,8 @@ function foo():{a:number,b?:number}{
 }
 ```
 
-### Node style callbacks
-Node style callback functions (e.g. `(err,somethingElse)=>{ /* something */ }`) are generally called with `err` set to `null` if there isn't an error. You generally just use a truthy check for this anyways:
+### Функції зворотного виклику в стилі вузла (Node style callbacks)
+Зворотні функції у стилі Node (наприклад, `(err, щосьІнше) => { /* щось */ }`) зазвичай викликаються з `err`, встановленим в `null`, якщо помилок немає. Ви, в будь-якому випадку, зазвичай використовуєте перевірку на істинність для цього:
 
 ```ts
 fs.readFile('someFile', 'utf8', (err,data) => {
@@ -85,18 +87,19 @@ fs.readFile('someFile', 'utf8', (err,data) => {
   }
 });
 ```
-When creating your own APIs it's *okay* to use `null` in this case for consistency. In all sincerity for your own APIs you should look at promises, in that case you actually don't need to bother with absent error values (you handle them with `.then` vs. `.catch`).
+При створенні власного API, щоб досягти послідовності, *можна* використовувати `null`   
+Насправді, для власних API варто розглянути використання промісів, в цьому випадку вам фактично не потрібно турбуватися про відсутні значення помилок (ви обробляєте їх за допомогою `.then` або `.catch`).
 
-### Don't use `undefined` as a means of denoting *validity*
+### Не використовуйте `undefined` як засіб *валідаціі*.
 
-For example an awful function like this:
+Нижче наведен приклад цієї помилки:
 
 ```ts
 function toInt(str: string) {
   return str ? parseInt(str) : undefined;
 }
 ```
-can be much better written like this:
+можна набагато краще написати ось так:
 ```ts
 function toInt(str: string): { valid: boolean, int?: number } {
   const int = parseInt(str);
@@ -109,19 +112,19 @@ function toInt(str: string): { valid: boolean, int?: number } {
 }
 ```
 
-### JSON and serialization
+### JSON та серіалізація
 
-The JSON standard has support for encoding `null` but not `undefined`. When JSON-encoding an object with an attribute that is `null`, the attribute will be included with its null value, whereas an attribute with an `undefined` value will be excluded entirely.
+Стандарт JSON підтримує кодування `null`, але не `undefined`. При кодуванні JSON-об'єкта з атрибутом `null`, атрибут буде включено з його нульовим значенням, тоді як атрибут зі значенням `undefined` буде повністю виключено.
 
 ```ts
 JSON.stringify({willStay: null, willBeGone: undefined}); // {"willStay":null}
 ```
 
-As a result, JSON-based databases may support `null` values but not `undefined` values. Since attributes set to `null` are encoded, you can transmit the intent to clear an attribute by setting its value to `null` before encoding and transmitting the object to a remote store.
+Як наслідок, бази даних на основі JSON можуть підтримувати значення `null`, але не `undefined` значення. Оскільки атрибути зі значенням `null` кодуються, ви можете передати намір очистити атрибут, встановивши його значення в `null` перед кодуванням і передачею об'єкта до віддаленого сховища.
 
-Setting attribute values to undefined can save on storage and transmission costs, as the attribute names will not be encoded. However, this can complicate the semantics of clearing values vs. absent values.
+Встановлення значень атрибутів до невизначених (undefined) може заощадити витрати на зберігання та передачу даних, оскільки імена атрибутів не будуть закодовані. Однак, це може ускладнити семантику очищених значень у порівнянні з відсутніми.
 
-### Final thoughts
-TypeScript team doesn't use `null` : [TypeScript coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#null-and-undefined) and it hasn't caused any problems. Douglas Crockford thinks [`null` is a bad idea](https://www.youtube.com/watch?v=PSGEjv3Tqo0&feature=youtu.be&t=9m21s) and we should all just use `undefined`.
+### Заключні думки
+Команда розробників TypeScript не використовує `null`: [Рекомендації з кодування TypeScript](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#null-and-undefined) , і це не викликало жодних проблем. Дуглас Крокфорд вважає, що [`null`, це погана ідея](https://www.youtube.com/watch?v=PSGEjv3Tqo0&feature=youtu.be&t=9m21s) та слід просто використовувати `undefined`.
 
-However, NodeJS style code bases uses `null` for Error arguments as standard as it denotes `Something is currently unavailable`. I personally don't care to distinguish between the two as most projects use libraries with differing opinions and just rule out both with `== null`.
+Однак, в кодових базах у стилі Node.js використовується стандартний підхід використання `null` для аргументів помилок, оскільки воно позначає "щось зараз недоступне". Особисто я не зважаю на розрізнення між цими двома значеннями, оскільки багато проектів використовують бібліотеки з різними підходами і просто відкидають обидва значення за допомогою `== null`.

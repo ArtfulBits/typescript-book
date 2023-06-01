@@ -1,6 +1,6 @@
-## Closure
+## Замикання
 
-The best thing that JavaScript ever got was closures. A function in JavaScript has access to any variables defined in the outer scope. Closures are best explained with examples:
+Найкращою рисою, яку отримав JavaScript, є замикання. Функція в JavaScript має доступ до будь-яких змінних, що визначені у зовнішньому області видимості. Замикання найкраще пояснити на прикладах:
 
 ```ts
 function outerFunction(arg) {
@@ -16,10 +16,9 @@ function outerFunction(arg) {
 
 outerFunction("hello closure"); // logs hello closure!
 ```
+Ви можете помітити, що внутрішня функція має доступ до змінної (variableInOuterFunction) зовнішнього контексту. Змінні в зовнішній функції були захоплені (закриті або прив'язані) внутрішньою функцією. Тому й термін **замикання**. Сама концепція достатньо проста й досить інтуїтивна.
 
-You can see that the inner function has access to a variable (variableInOuterFunction) from the outer scope. The variables in the outer function have been closed by (or bound in) the inner function. Hence the term **closure**. The concept in itself is simple enough and pretty intuitive.
-
-Now the awesome part: The inner function can access the variables from the outer scope *even after the outer function has returned*. This is because the variables are still bound in the inner function and not dependent on the outer function. Again let's look at an example:
+Тепер найцікавіша частина: внутрішня функція може мати доступ до змінних зовнішнього контексту *навіть після повернення зовнішньої функції*. Це сталося через те, що змінні все ще прив'язані внутрішньою функцією і не залежать від зовнішньої функції. Знову ж таки, розглянемо приклад:
 
 ```ts
 function outerFunction(arg) {
@@ -35,8 +34,8 @@ var innerFunction = outerFunction("hello closure!");
 innerFunction(); // logs hello closure!
 ```
 
-### Reason why it's awesome
-It allows you to compose objects easily e.g. the revealing module pattern:
+### Причина, чому це чудово
+Це дозволяє легко компонувати об'єкти, наприклад, за допомогою шаблону розкривання модуля (revealing module pattern):
 
 ```ts
 function createCounter() {
@@ -54,7 +53,7 @@ counter.increment();
 console.log(counter.getVal()); // 2
 ```
 
-At a high level it is also what makes something like Node.js possible (don't worry if it doesn't click in your brain right now. It will eventually 🌹):
+На високому рівні це також те, що робить можливим існування чогось подібного до Node.js (не хвилюйтеся, якщо це наразі не зрозуміло. Зрозуміння прийде з часом 🌹):
 
 ```ts
 // Pseudo code to explain the concept

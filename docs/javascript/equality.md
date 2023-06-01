@@ -1,18 +1,13 @@
-## Equality
+## Порівняння
 
-One thing to be careful about in JavaScript is the difference between `==` and `===`. As JavaScript tries to
-be resilient against programming errors `==` tries to do type coercion between two variables e.g. converts a
-string to a number so that you can compare with a number as shown below:
+Одна річ, на яку потрібно звернути увагу в JavaScript, це різниця між `==` та `===`. Оскільки JavaScript намагається бути стійким до помилок програмування, `==` намагається автоматично конвертувати типи між двома змінними, наприклад, конвертує рядок в число, щоб ви могли порівняти з числом, як показано нижче:
 
 ```js
 console.log(5 == "5"); // true   , TS Error
 console.log(5 === "5"); // false , TS Error
 ```
 
-However, the choices JavaScript makes are not always ideal. For example, in the below example the first statement is false
-because `""` and `"0"` are both strings and are clearly not equal. However, in the second case both `0` and the
-empty string (`""`) are falsy (i.e. behave like `false`) and are therefore equal with respect to `==`. Both statements
-are false when you use `===`.
+Однак, вибір, який робить JavaScript, не завжди є ідеальним. Наприклад, у наведеному нижче прикладі перше твердження є хибним, оскільки `""` та `"0"` - це обидва рядки (string) і, очевидно, не є рівними. Однак у другому випадку як `0`, так і пустий рядок (`""`) є ложними значеннями (тобто поводяться як `false`) і, отже, вони рівні з точки зору `==`. У обох випадках твердження є хибними, коли використовується `===`.
 
 ```js
 console.log("" == "0"); // false
@@ -22,20 +17,20 @@ console.log("" === "0"); // false
 console.log(0 === ""); // false
 ```
 
-> Note that `string == number` and `string === number` are both compile time errors in TypeScript, so you don't normally need to worry about this.
+> Зауважте, що `string == number` та `string === number` обидва є помилками на етапі компіляції в TypeScript, тому зазвичай вам не потрібно хвилюватися про це.
 
-Similar to `==` vs. `===`, there is `!=` vs. `!==`
+Аналогічно до `==` проти `===`, існує також `!=` проти `!==`.
 
-So ProTip: Always use `===` and `!==` except for null checks, which we cover later.
+Тому порада: завжди використовуйте `===` і `!==`, за винятком перевірок на значення null, про які ми розповімо пізніше.
 
-## Structural Equality 
-If you want to compare two objects for structural equality `==`/`===` are ***not*** sufficient. e.g. 
+## Структурне порівняння
+Якщо ви хочете порівняти два об'єкти на структурну рівність, оператори `==`/`===` ***не є достатніми***. Наприклад: 
 
 ```js
 console.log({a:123} == {a:123}); // False
 console.log({a:123} === {a:123}); // False
 ```
-To do such checks use the [deep-equal](https://www.npmjs.com/package/deep-equal) npm package e.g. 
+Для здійснення таких перевірок використовуйте пакет npm [deep-equal](https://www.npmjs.com/package/deep-equal), наприклад: 
 
 ```js
 import * as deepEqual from "deep-equal";
@@ -43,7 +38,7 @@ import * as deepEqual from "deep-equal";
 console.log(deepEqual({a:123},{a:123})); // True
 ```
 
-However, quite commonly you don't need deep checks and all you really need is to check by some `id` e.g. 
+Однак, досить часто вам не потрібно глибоке порівняння, і все, що вам дійсно потрібно, - це перевірка за допомогою якогось `id`, наприклад:
 
 ```ts
 type IdDisplay = {
