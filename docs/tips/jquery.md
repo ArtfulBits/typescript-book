@@ -1,10 +1,10 @@
-## JQuery Tips
+## Поради щодо JQuery
 
-Note: you need to install the `jquery.d.ts` file for these tips
+Примітка: для цих порад потрібно встановити файл `jquery.d.ts`
 
-### Quickly define a new plugin 
+### Швидке визначення нового плагіна
 
-Just create `jquery-foo.d.ts` with: 
+Просто створіть `jquery-foo.d.ts` з таким вмістом:
 
 ```ts
 interface JQuery {
@@ -12,4 +12,4 @@ interface JQuery {
 }
 ```
 
-And now you can use `$('something').foo({whateverYouWant:'hello jquery plugin'})`
+І тепер ви можете використовувати `$('something').foo({whateverYouWant:'hello jquery plugin'})`

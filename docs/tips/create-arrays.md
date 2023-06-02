@@ -1,25 +1,25 @@
-## Creating arrays
+## Створення масивів
 
-Creating an empty array is super easy: 
+Створення порожнього масиву дуже просте:
 
 ```ts
 const foo: string[] = [];
 ```
 
-If you want an array to loop over: 
+Якщо ви хочете створити масив для ітерації:
 
 ```ts
-[...new Array(6)]; 
+[...new Array(6)];
 ```
 
-If you want to create an array pre-filled with some content use the ES6 `Array.prototype.fill`: 
+Якщо ви хочете створити масив з попередньо заповненим вмістом, використовуйте ES6 `Array.prototype.fill`:
 
 ```ts
 const foo: string[] = new Array(3).fill('');
 console.log(foo); // ['','',''];
 ```
 
-If you want to create an array of a predefined length with calls you can use the spread operator: 
+Якщо ви хочете створити масив з попередньо визначеною довжиною з викликами, ви можете використовувати оператор розподілу:
 
 ```ts
 const someNumbers = [...new Array(3)].map((_,i) => i * 10);

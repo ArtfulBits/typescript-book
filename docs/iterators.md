@@ -1,8 +1,6 @@
-### Iterators
+### Ітератори
 
-Iterator itself is not a TypeScript or ES6 feature, Iterator is a
-Behavioral Design Pattern common for Object oriented programming languages.
-It is, generally, an object which implements the following interface:
+Ітератор сам по собі не є функцією TypeScript або ES6, ітератор є патерном поведінки, що є загальним для об'єктно-орієнтованих мов програмування. Це, взагалі, об'єкт, який реалізує наступний інтерфейс:
 
 ```ts
 interface Iterator<T> {
@@ -11,11 +9,10 @@ interface Iterator<T> {
     throw?(e?: any): IteratorResult<T>;
 }
 ```
-([More on that `<T>` notation later][generics])  
-This interface allows to retrieve a value from some collection or sequence
-which belongs to the object.
+([Докладніше про те, що означає `<T>` нотація][generics])  
+Цей інтерфейс дозволяє отримувати значення з деякої колекції або послідовності, яка належить об'єкту.
 
-The `IteratorResult` is simply a `value`+`done` pair: 
+`IteratorResult` - це просто пара `value`+`done`: 
 ```ts
 interface IteratorResult<T> {
     done: boolean;
@@ -23,9 +20,7 @@ interface IteratorResult<T> {
 }
 ```
 
-Imagine that there's an object of some frame, which includes the list of
-components of which this frame consists. With Iterator interface it is possible
-to retrieve components from this frame object like below:
+Уявіть, що є об'єкт деякої рамки, який містить список компонентів, з яких складається ця рамка. З інтерфейсом ітератора можна отримувати компоненти з цього об'єкту рамки, як показано нижче:
 
 ```ts
 class Component {
@@ -61,16 +56,12 @@ let iteratorResult3 = frame.next(); //{ done: false, value: Component { name: 'l
 let iteratorResult4 = frame.next(); //{ done: false, value: Component { name: 'right' } }
 let iteratorResult5 = frame.next(); //{ done: true, value: null }
 
-//It is possible to access the value of iterator result via the value property:
+// Можливо отримати значення результату ітератора через властивість значення:
 let component = iteratorResult1.value; //Component { name: 'top' }
 ```
-Again. Iterator itself is not a TypeScript feature, this code could work without
-implementing Iterator and IteratorResult interfaces explicitly.
-However, it is very helpful to use these common
-ES6 [interfaces](./types/interfaces.md) for code consistency.
+Знову ж таки, ітератор сам по собі не є функцією TypeScript, цей код може працювати без явної реалізації інтерфейсів Iterator та IteratorResult. Однак дуже корисно використовувати ці загальні інтерфейси ES6 для забезпечення консистентності коду.
 
-Ok, Nice, but could be more helpful. ES6 defines the *iterable protocol*
-which includes the [Symbol.iterator] `symbol` if the Iterable interface is implemented:
+Добре, дуже гарно, але можна зробити ще краще. ES6 визначає *протокол ітератора*, який включає [Symbol.iterator] `symbol`, якщо реалізований інтерфейс Iterable:
 ```ts
 //...
 class Frame implements Iterable<Component> {
@@ -105,8 +96,7 @@ for (let cmp of frame) {
 }
 ```
 
-Unfortunately `frame.next()` won't work with this pattern and it also looks
-a bit clunky. IterableIterator interface to the rescue!
+На жаль, `frame.next()` не буде працювати з цим патерном, і він також виглядає трохи незручно. Для цього є інтерфейс IterableIterator!
 ```ts
 //...
 class Frame implements IterableIterator<Component> {
@@ -136,10 +126,9 @@ class Frame implements IterableIterator<Component> {
 }
 //...
 ```
-Both `frame.next()` and `for` cycle now work fine with IterableIterator interface.
+Як і з `frame.next()`, так і з циклом `for` тепер можна працювати з інтерфейсом IterableIterator.
 
-Iterator does not have to iterate a finite value.
-The typical example is a Fibonacci sequence:
+Ітератор не обов'язково повинен ітерувати скінченне значення. Типовим прикладом є послідовність Фібоначчі:
 ```ts
 class Fib implements IterableIterator<number> {
 
@@ -184,15 +173,15 @@ console.log(Array.from(fibMax50)); // [ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 ]
 
 let fibMax21 = new Fib(21);
 for(let num of fibMax21) {
-  console.log(num); //Prints fibonacci sequence 0 to 21
+  console.log(num); //Друкує послідовність Фібоначчі від 0 до 21
 }
 ```
 
-#### Building code with iterators for ES5 target
-Code examples above require ES6 target. However, it could work
-with ES5 target as well if target JS engine supports `Symbol.iterator`.
-This can be achieved by using ES6 lib with ES5 target
-(add es6.d.ts to your project) to make it compile.
-Compiled code should work in node 4+, Google Chrome and in some other browsers.
+#### Побудова коду з ітераторами для цільової платформи ES5
+Приклади коду вище вимагають ціль ES6. Однак вони можуть працювати
+з ціллю ES5, якщо цільовий JS-двигун підтримує `Symbol.iterator`.
+Це можна досягти, використовуючи ES6 lib з ціллю ES5
+(додайте es6.d.ts до свого проекту), щоб зробити компіляцію.
+Скомпільований код повинен працювати в node 4+, Google Chrome та в деяких інших браузерах.
 
 [generics]: ./types/generics.md

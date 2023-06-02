@@ -1,12 +1,12 @@
-## Generators
+## Генератори
 
-`function *` is the syntax used to create a *generator function*. Calling a generator function returns a *generator object*. The generator object just follows the [iterator][iterator] interface (i.e. the `next`, `return` and `throw` functions). 
+`function *` - це синтаксис, який використовується для створення *генераторної функції*. Виклик генераторної функції повертає *об'єкт генератора*. Об'єкт генератора просто слідує інтерфейсу [ітератора][iterator] (тобто функції `next`, `return` та `throw`).
 
-There are two key motivations behind generator functions: 
+Є дві ключові мотивації застосування генераторних функцій:
 
-### Lazy Iterators
+### Ліниві ітератори
 
-Generator functions can be used to create lazy iterators e.g. the following function returns an **infinite** list of integers on demand:
+Генераторні функції можуть бути використані для створення лінивих ітераторів, наприклад, наступна функція повертає **нескінченний** список цілих чисел за запитом:
 
 ```ts
 function* infiniteSequence() {
@@ -22,7 +22,7 @@ while (true) {
 }
 ```
 
-Of course if the iterator does end, you get the result of `{ done: true }` as demonstrated below:
+Звичайно, якщо ітератор закінчується, ви отримуєте результат `{ done: true }`, як показано нижче:
 
 ```ts
 function* idMaker(){
@@ -39,10 +39,11 @@ console.log(gen.next()); // { value: 2, done: false }
 console.log(gen.next()); // { done: true }
 ```
 
-### Externally Controlled Execution
-This is the part of generators that is truly exciting. It essentially allows a function to pause its execution and pass control (fate) of the remainder of the function execution to the caller.
+### Зовнішньо контрольоване виконання
 
-A generator function does not execute when you call it. It just creates a generator object. Consider the following example along with a sample execution:
+Це частина генераторів, яка дійсно захоплює. Вона дозволяє функції призупиняти своє виконання та передавати контроль (долю) виконання решти функції викликачеві.
+
+Генераторна функція не виконується, коли ви її викликаєте. Вона просто створює об'єкт генератора. Розгляньте наступний приклад разом з прикладом виконання:
 
 ```ts
 function* generator(){
@@ -54,13 +55,13 @@ function* generator(){
 }
 
 var iterator = generator();
-console.log('Starting iteration'); // This will execute before anything in the generator function body executes
+console.log('Starting iteration'); // Це виконається до того, як будь-що в тілі функції генератора виконається
 console.log(iterator.next()); // { value: 0, done: false }
 console.log(iterator.next()); // { value: 1, done: false }
 console.log(iterator.next()); // { value: undefined, done: true }
 ```
 
-If you run this you get the following output:
+Якщо ви запустите це, ви отримаєте наступний вивід:
 
 ```
 $ node outside.js
@@ -73,38 +74,38 @@ Execution resumed
 { value: undefined, done: true }
 ```
 
-* The function only starts execution once `next` is called on the generator object.
-* The function *pauses* as soon as a `yield` statement is encountered.
-* The function *resumes* when `next` is called.
+* Функція починає виконуватися лише тоді, коли на об'єкт генератора викликається `next`.
+* Функція *призупиняється*, як тільки зустрічається оператор `yield`.
+* Функція *відновлюється*, коли викликається `next`.
 
-> So essentially the execution of the generator function is controllable by the generator object.
+> Отже, виконання генераторної функції можна контролювати об'єктом генератора.
 
-Our communication using the generator has been mostly one way with the generator returning values for the iterator. One extremely powerful feature of generators in JavaScript is that they allow two way communications (with caveats).
+Наша комунікація за допомогою генератора була переважно односторонньою, де генератор повертав значення для ітератора. Одним надзвичайно потужним функціоналом генераторів у JavaScript є те, що вони дозволяють двосторонню комунікацію (з обмеженнями).
 
-* you can control the resulting value of the `yield` expression using `iterator.next(valueToInject)`
-* you can throw an exception at the point of the `yield` expression using `iterator.throw(error)`
+* ви можете контролювати результат `yield` виразу, використовуючи `iterator.next(valueToInject)`
+* ви можете викинути виняток на місці виразу `yield`, використовуючи `iterator.throw(error)`
 
-The following example demonstrates `iterator.next(valueToInject)`:
+Наступний приклад демонструє `iterator.next(valueToInject)`:
 
 ```ts
 function* generator() {
-    const bar = yield 'foo'; // bar may be *any* type
+    const bar = yield 'foo'; // bar може бути *будь-якого* типу
     console.log(bar); // bar!
 }
 
 const iterator = generator();
-// Start execution till we get first yield value
+// Початок виконання до отримання першого значення yield
 const foo = iterator.next();
 console.log(foo.value); // foo
-// Resume execution injecting bar
+// Відновлення виконання з внесенням bar
 const nextThing = iterator.next('bar');
 ```
 
-Since `yield` returns the parameter passed to the iterator's `next` function, and all iterators' `next` functions accept a parameter of any type, TypeScript will always assign the `any` type to the result of the `yield` operator (`bar` above).
+Оскільки `yield` повертає параметр, переданий функції `next` ітератора, а всі функції `next` ітераторів приймають параметр будь-якого типу, TypeScript завжди призначає тип `any` результату оператора `yield` (`bar` вище).
 
-> You are on your own to coerce the result to the type you expect, and ensure that only values of that type are passed to next (such as by scaffolding an additional type-enforcement layer that calls `next` for you.) If strong typing is important to you, you may want to avoid two-way communication altogether, as well as packages that rely heavily on it (e.g., redux-saga).
+> Вам потрібно самостійно перетворити результат на тип, який ви очікуєте, і переконатися, що до `next` передаються лише значення цього типу (наприклад, шляхом створення додаткового рівня забезпечення типів, який викликає `next` за вас). Якщо сильна типізація має для вас важливе значення, ви можете уникнути двосторонньої комунікації взагалі, а також пакетів, які сильно на неї покладаються (наприклад, redux-saga).
 
-The following example demonstrates `iterator.throw(error)`:
+Наступний приклад демонструє `iterator.throw(error)`:
 
 ```ts
 function* generator() {
@@ -117,19 +118,19 @@ function* generator() {
 }
 
 var iterator = generator();
-// Start execution till we get first yield value
+// Початок виконання до отримання першого значення yield
 var foo = iterator.next();
 console.log(foo.value); // foo
-// Resume execution throwing an exception 'bar'
+// Відновлення виконання з викиданням винятку 'bar'
 var nextThing = iterator.throw(new Error('bar'));
 ```
 
-So here is the summary:
-* `yield` allows a generator function to pause its communication and pass control to an external system
-* the external system can push a value into the generator function body
-* the external system can throw an exception into the generator function body
+Отже, ось підсумок:
+* `yield` дозволяє генераторній функції призупиняти свою комунікацію та передавати контроль зовнішній системі
+* зовнішня система може вставити значення в тіло генераторної функції
+* зовнішня система може викинути виняток в тіло генераторної функції
 
-How is this useful? Jump to the next section [**async/await**][async-await] and find out.
+Як це корисно? Перейдіть до наступного розділу [**async/await**][async-await] та дізнайтеся.
 
 [iterator]:./iterators.md
 [async-await]:./async-await.md

@@ -1,15 +1,15 @@
 ## Generics
 
-The key motivation for generics is to document meaningful type dependencies between members. The members can be:
+Ключовою мотивацією для generics є документування значущих залежностей типів між членами. Члени можуть бути:
 
-* Class instance members
-* Class methods
-* function arguments
-* function return value
+* Члени екземпляру класу
+* Методи класу
+* Аргументи функції
+* Повернення значення функції
 
-## Motivation and samples
+## Мотивація та приклади
 
-Consider the simple `Queue` (first in, first out) data structure implementation. A simple one in TypeScript / JavaScript looks like:
+Розгляньте просту реалізацію структури даних `Queue` (перший вход, перший вихід). Простий приклад на TypeScript / JavaScript виглядає так:
 
 ```ts
 class Queue {
@@ -19,7 +19,7 @@ class Queue {
 }
 ```
 
-One issue with this implementation is that it allows people to add *anything* to the queue and when they pop it - it can be *anything*. This is shown below, where someone can push a `string` onto the queue while the usage actually assumes that only `numbers` were pushed in:
+Одна з проблем з цією реалізацією полягає в тому, що вона дозволяє людям додавати *будь-що* до черги, і коли вони її видаляють - це може бути *будь-що*. Це показано нижче, де хтось може додати `string` до черги, тоді як використання фактично передбачає, що тільки `numbers` були додані:
 
 ```ts
 class Queue {
@@ -37,7 +37,7 @@ console.log(queue.pop().toPrecision(1));
 console.log(queue.pop().toPrecision(1)); // RUNTIME ERROR
 ```
 
-One solution (and in fact the only one in languages that don't support generics) is to go ahead and create *special* classes just for these constraints. E.g. a quick and dirty number queue:
+Один з варіантів (і насправді єдиний в мовах, які не підтримують generics) - створити *спеціальні* класи саме для цих обмежень. Наприклад, швидкий і нечистий черга чисел:
 
 ```ts
 class QueueNumber extends Queue {
@@ -52,7 +52,7 @@ queue.push("1"); // ERROR : cannot push a string. Only numbers allowed
 // ^ if that error is fixed the rest would be fine too
 ```
 
-Of course this can quickly become painful e.g. if you want a string queue you have to go through all that effort again. What you really want is a way to say that whatever the type is of the stuff getting *pushed* it should be the same for whatever gets *popped*. This is done easily with a *generic* parameter (in this case, at the class level):
+Звичайно, це може швидко стати болісним, наприклад, якщо ви хочете чергу рядків, вам доведеться зробити всі зусилля знову. Те, що ви дійсно хочете, - це спосіб сказати, що будь-який тип речей, які отримують *pushed*, повинен бути таким самим для того, що отримує *popped*. Це легко зробити за допомогою *generic* параметра (у цьому випадку на рівні класу):
 
 ```ts
 /** A class definition with a generic parameter */
@@ -70,7 +70,7 @@ queue.push("1"); // ERROR : cannot push a string. Only numbers allowed
 // ^ if that error is fixed the rest would be fine too
 ```
 
-Another example that we have already seen is that of a *reverse* function, here the constraint is between what gets passed into the function and what the function returns:
+Інший приклад, який ми вже бачили, - це функція *reverse*, тут обмеження між тим, що передається в функцію, і тим, що функція повертає:
 
 ```ts
 function reverse<T>(items: T[]): T[] {
@@ -93,7 +93,7 @@ reversed[0] = 1;       // Okay
 reversed = [1, 2];     // Okay
 ```
 
-In this section you have seen examples of generics being defined *at class level* and at *function level*. One minor addition worth mentioning is that you can have generics created just for a member function. As a toy example consider the following where we move the `reverse` function into a `Utility` class:
+У цьому розділі ви побачили приклади generics, що визначаються *на рівні класу* та на *рівні функції*. Одним незначним доповненням, яке варто згадати, є те, що ви можете створювати generics тільки для функції-члена. Як іграшковий приклад розгляньте наступне, де ми переміщуємо функцію `reverse` в клас `Utility`:
 
 ```ts
 class Utility {
@@ -107,18 +107,17 @@ class Utility {
 }
 ```
 
-> TIP: You can call the generic parameter whatever you want. It is conventional to use `T`, `U`, or `V` when you have simple generics. If you have more than one generic argument try to use meaningful names like `TKey` and `TValue`. The convention is to prefix with `T` because generics are also called *templates* in other languages like C++.
+> ПОРАДА: Ви можете називати generic параметр будь-яким ім'ям. Звичайно використовувати `T`, `U` або `V`, коли у вас є прості generics. Якщо у вас є більше одного generic аргументу, спробуйте використовувати значущі назви, такі як `TKey` та `TValue`. Конвенція полягає в тому, що generics також називають *шаблонами* в інших мовах, таких як C ++.
 
+### Шаблон проектування: Зручний generic
 
-### Design Pattern: Convenience generic
-
-Consider the function: 
+Розгляньте функцію:
 
 ```ts
 declare function parse<T>(name: string): T;
 ```
 
-In this case you can see that the type `T` is only used in one place. So there is no constraint *between* members. This is equivalent to a type assertion in terms of type safety:
+У цьому випадку ви можете побачити, що тип `T` використовується тільки в одному місці. Таким чином, немає обмеження *між* членами. Це еквівалентно твердженню типу з точки зору безпеки типів:
 
 ```ts
 declare function parse(name: string): any;
@@ -126,9 +125,10 @@ declare function parse(name: string): any;
 const something = parse('something') as TypeOfSomething;
 ```
 
-Generics used *only once* are no better than an assertion in terms of type safety. That said they do provide *convenience* to your API.
+Generics, які використовуються *лише один раз*, не кращі за твердження з точки зору безпеки типів. Зате вони забезпечують *зручність* вашого API.
 
-A more obvious example is a function that loads a json response. It returns a promise of *whatever type you pass in*:
+Більш очевидний приклад - це функція, яка завантажує відповідь json. Вона повертає обіцянку *будь-якого типу, який ви передаєте*:
+
 ```ts
 const getJSON = <T>(config: {
     url: string,
@@ -145,7 +145,7 @@ const getJSON = <T>(config: {
   }
 ```
 
-Note that you still have to explicitly annotate what you want, but the `getJSON<T>` signature `(config) => Promise<T>` saves you a few key strokes (you don't need to annotate the return type of `loadUsers` as it can be inferred):
+Зверніть увагу, що вам все ще потрібно явно анотувати те, що ви хочете, але сигнатура `getJSON<T>` `(config) => Promise<T>` зберігає вам кілька клавіш (вам не потрібно анотувати тип повернення `loadUsers`, оскільки його можна вивести):
 
 ```ts
 type LoadUsersResponse = {
@@ -159,15 +159,15 @@ function loadUsers() {
 }
 ```
 
-Also `Promise<T>` as a return value is definitely better than alternatives like `Promise<any>`.
+Також `Promise<T>` як повернення значення, безумовно, краще за альтернативи, такі як `Promise<any>`.
 
-Another example is where a generic is only used as an argument: 
+Інший приклад полягає в тому, що generic використовується тільки як аргумент:
 
 ```ts
 declare function send<T>(arg: T): void;
 ```
 
-Here the generic `T` can be used to annote the type that you want the argument to match e.g. 
+Тут generic `T` може бути використаний для анотації типу, який ви хочете, щоб аргумент відповідав, наприклад:
 
 ```ts
 send<Something>({

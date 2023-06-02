@@ -1,22 +1,22 @@
-## Literals
-Literals are *exact* values that are JavaScript primitives. 
+## Літерали
+Літерали - це *точні* значення, які є примітивами JavaScript.
 
-### String Literals
+### Літерали рядків
 
-You can use a string literal as a type. For example:
+Ви можете використовувати літерал рядка як тип. Наприклад:
 
 ```ts
 let foo: 'Hello';
 ```
 
-Here we have created a variable called `foo` that *will only allow the literal value `'Hello'` to be assigned to it*. This is demonstrated below:
+Тут ми створили змінну під назвою `foo`, яка *дозволить призначати лише літеральне значення `'Hello'`*. Це демонструється нижче:
 
 ```ts
 let foo: 'Hello';
-foo = 'Bar'; // Error: "Bar" is not assignable to type "Hello"
+foo = 'Bar'; // Помилка: "Bar" не може бути призначено типу "Hello"
 ```
 
-They are not very useful on their own but can be combined in a type union to create a powerful (and useful) abstraction e.g.:
+Вони не дуже корисні самі по собі, але можуть бути поєднані в об'єднання типів, щоб створити потужну (і корисну) абстракцію, наприклад:
 
 ```ts
 type CardinalDirection =
@@ -29,61 +29,61 @@ function move(distance: number, direction: CardinalDirection) {
     // ...
 }
 
-move(1,"North"); // Okay
-move(1,"Nurth"); // Error!
+move(1,"North"); // Ок
+move(1,"Nurth"); // Помилка!
 ```
 
-### Other literal types
-TypeScript also supports `boolean` and `number` literal types, e.g.: 
+### Інші літеральні типи
+TypeScript також підтримує літеральні типи `boolean` та `number`, наприклад:
 
 ```ts
 type OneToFive = 1 | 2 | 3 | 4 | 5;
 type Bools = true | false;
 ```
 
-### Inference 
-Quite commonly you get an error like `Type string is not assignable to type "foo"`. The following example demonstrates this.
+### Виведення типу
+Досить часто ви отримуєте помилку, як от `Type string is not assignable to type "foo"`. Наступний приклад демонструє це.
 
 ```js
 function iTakeFoo(foo: 'foo') { }
 const test = {
   someProp: 'foo'
 };
-iTakeFoo(test.someProp); // Error: Argument of type string is not assignable to parameter of type 'foo'
+iTakeFoo(test.someProp); // Помилка: Аргумент типу string не може бути призначений параметру типу 'foo'
 ```
 
-This is because `test` is inferred to be of type `{someProp: string}`. The fix here is to use a simple type assertion to tell TypeScript the literal you want it to infer as shown below: 
+Це тому, що `test` виводиться як тип `{someProp: string}`. Виправлення тут полягає в використанні простого підтвердження типу, щоб повідомити TypeScript про літерал, який ви хочете вивести, як показано нижче:
 
 ```js
 function iTakeFoo(foo: 'foo') { }
 const test = {
   someProp: 'foo' as 'foo'
 };
-iTakeFoo(test.someProp); // Okay!
+iTakeFoo(test.someProp); // Ок!
 ```
 
-or use a type annotation that helps TypeScript infer the correct thing at the point of declaration: 
+або використовуйте анотацію типу, яка допомагає TypeScript вивести правильну річ у точці оголошення:
 
 ```ts
 function iTakeFoo(foo: 'foo') { }
 type Test = {
   someProp: 'foo',
 }
-const test: Test = { // Annotate - inferred someProp is always === 'foo'
+const test: Test = { // Анотуйте - виведено, що someProp завжди === 'foo'
   someProp: 'foo' 
 }; 
-iTakeFoo(test.someProp); // Okay!
+iTakeFoo(test.someProp); // Ок!
 ```
 
-### Use cases
-Valid use cases for string literal types are:
+### Використання
+Дійсні випадки використання літеральних типів рядків:
 
-#### String based enums
+#### Enums на основі рядків
 
-[TypeScript enums are number based](../enums.md). You can use string literals with union types to mock a string based enum as we did in the `CardinalDirection` example above. You can even generate a `Key:Value` structure using the following function: 
+[Enums TypeScript базуються на числах](../enums.md). Ви можете використовувати літерали рядків з об'єднаними типами, щоб імітувати enums на основі рядків, як ми зробили в прикладі `CardinalDirection` вище. Ви навіть можете створити структуру `Ключ: Значення`, використовуючи наступну функцію:
 
 ```ts
-/** Utility function to create a K:V from a list of strings */
+/** Функція-утиліта для створення K:V зі списку рядків */
 function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
   return o.reduce((res, key) => {
     res[key] = key;
@@ -92,10 +92,10 @@ function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
 }
 ```
 
-And then generate the literal type union using `keyof typeof`. Here is a complete example:
+А потім створити об'єднання типів літералів, використовуючи `keyof typeof`. Ось повний приклад:
 
 ```ts
-/** Utility function to create a K:V from a list of strings */
+/** Функція-утиліта для створення K:V зі списку рядків */
 function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
   return o.reduce((res, key) => {
     res[key] = key;
@@ -104,40 +104,40 @@ function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
 }
 
 /**
-  * Sample create a string enum
+  * Приклад створення рядкового enum
   */
 
-/** Create a K:V */
+/** Створіть K:V */
 const Direction = strEnum([
   'North',
   'South',
   'East',
   'West'
 ])
-/** Create a Type */
+/** Створіть тип */
 type Direction = keyof typeof Direction;
 
 /** 
-  * Sample using a string enum
+  * Приклад використання рядкового enum
   */
 let sample: Direction;
 
-sample = Direction.North; // Okay
-sample = 'North'; // Okay
-sample = 'AnythingElse'; // ERROR!
+sample = Direction.North; // Ок
+sample = 'North'; // Ок
+sample = 'AnythingElse'; // ПОМИЛКА!
 ```
 
-#### Modelling existing JavaScript APIs
+#### Моделювання існуючих JavaScript API
 
-E.g. [CodeMirror editor has an option `readOnly`](https://codemirror.net/doc/manual.html#option_readOnly) that can either be a `boolean` or the literal string `"nocursor"` (effective valid values `true,false,"nocursor"`).  It can be declared as:
+Наприклад, [редактор CodeMirror має опцію `readOnly`](https://codemirror.net/doc/manual.html#option_readOnly), яка може бути або `boolean`, або літеральним рядком `"nocursor"` (ефективні дійсні значення `true`, `false`, `"nocursor"`). Це можна оголосити як:
 
 ```ts
 readOnly: boolean | 'nocursor';
 ```
 
-#### Discriminated Unions
+#### Розпізнавані об'єднання
 
-We will cover [this later in the book](./discriminated-unions.md).
+Ми розглянемо [це пізніше в книзі](./discriminated-unions.md).
 
 
 [](https://github.com/Microsoft/TypeScript/pull/5185)

@@ -1,18 +1,18 @@
-### Declaration file
-You can tell TypeScript that you are trying to describe code that exists elsewhere (e.g. written in JavaScript/CoffeeScript/The runtime environment like the browser or Node.js) using the `declare` keyword. As a quick example:
+### Файл декларації
+Ви можете повідомити TypeScript, що намагаєтеся описати код, який існує в іншому місці (наприклад, написаний на JavaScript/CoffeeScript/оточенні виконання, такому як браузер або Node.js), використовуючи ключове слово `declare`. Наприклад:
 
 ```ts
-foo = 123; // Error: `foo` is not defined
+foo = 123; // Помилка: `foo` не визначено
 ```
 vs.
 ```ts
 declare var foo: any;
-foo = 123; // allowed
+foo = 123; // дозволено
 ```
 
-You have the option of putting these declarations in a `.ts` file or in a `.d.ts` file. We highly recommend that in your real world projects you use a separate `.d.ts` (start with one called something like `global.d.ts` or `vendor.d.ts`).
+Ви можете розмістити ці декларації в файлі `.ts` або в файлі `.d.ts`. Ми настійно рекомендуємо використовувати окремий файл `.d.ts` (наприклад, `global.d.ts` або `vendor.d.ts`) у реальних проектах.
 
-If a file has the extension `.d.ts` then each root level definition must have the `declare` keyword prefixed to it. This helps make it clear to the author that there will be *no code emitted by TypeScript*. The author needs to ensure that the declared item will exist at runtime.
+Якщо файл має розширення `.d.ts`, то до кожного визначення на рівні кореня повинно бути додано ключове слово `declare`. Це допомагає автору зрозуміти, що *TypeScript не генерує жодного коду*. Автор повинен забезпечити, що оголошений елемент існуватиме під час виконання.
 
-> * Ambient declarations is a promise that you are making with the compiler. If these do not exist at runtime and you try to use them, things will break without warning.
-* Ambient declarations are like docs. If the source changes the docs need to be kept updated. So you might have new behaviours that work at runtime but no one's updated the ambient declaration and hence you get compiler errors.
+> * Ambient declarations - це обіцянка, яку ви даєте компілятору. Якщо вони не існують під час виконання, і ви намагаєтеся їх використовувати, речі зламаються без попередження.
+* Ambient declarations схожі на документацію. Якщо джерело змінюється, документацію потрібно оновлювати. Таким чином, можуть з'являтися нові функції, які працюють під час виконання, але ніхто не оновив ambient declaration, і тому ви отримуєте помилки компілятора.

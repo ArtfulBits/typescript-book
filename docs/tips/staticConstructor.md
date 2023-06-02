@@ -1,11 +1,11 @@
-# Static Constructors in TypeScript
+# Статичні конструктори в TypeScript
 
-TypeScript `class` (like JavaScript `class`) cannot have a static constructor. However, you can get the same effect quite easily by just calling it yourself: 
+Класи TypeScript (як і класи JavaScript) не можуть мати статичного конструктора. Однак, ви можете добитися того ж ефекту досить легко, просто викликавши його самостійно:
 
 ```ts
 class MyClass {
     static initialize() {
-        // Initialization
+        // Ініціалізація
     }
 }
 MyClass.initialize();

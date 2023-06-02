@@ -10,8 +10,7 @@ SourceCode ~~ scanner ~~> Token Stream ~~ parser ~~> AST
 
 Нижче наведено *спрощену* версію коду синтаксичного аналізатора, яку ви можете запустити для демонстрації цієї концепції:
 
-`code/compiler/scanner/runScanner.ts`
-```ts
+```typescript
 import * as ts from "ntypescript";
 
 // TypeScript has a singleton scanner
@@ -53,8 +52,7 @@ SemicolonToken
 ### Стан сканера (Scanner State)
 Після виклику `scan` сканер оновлює свій локальний стан (позицію у скануванні, поточні дані токенів тощо). Сканер надає набір утиліт для отримання поточного стану сканера. У наведеному нижче прикладі ми створюємо сканер, а потім використовуємо його для ідентифікації токенів, а також їх позицій у коді.
 
-`code/compiler/scanner/runScannerWithPosition.ts`
-```ts
+```typescript
 // Sample usage
 initializeState(`
 var foo = 123;

@@ -1,14 +1,14 @@
-# TypeScript Type System
-We covered the main features of the TypeScript Type System back when we discussed [Why TypeScript?](../why-typescript.md). The following are a few key takeaways from that discussion which don't need further explanation:
-* The type system in TypeScript is designed to be *optional* so that *your JavaScript is TypeScript*.
-* TypeScript does not block *JavaScript emit* in the presence of Type Errors, allowing you to *progressively update your JS to TS*.
+# Система типів TypeScript
+Ми розглянули основні функції системи типів TypeScript, коли обговорювали [Чому TypeScript?](../why-typescript.md). Ось кілька ключових моментів з цієї дискусії, які не потребують додаткового пояснення:
+* Система типів у TypeScript розроблена таким чином, щоб бути *необов'язковою*, тому що *ваш JavaScript є TypeScript*.
+* TypeScript не блокує *JavaScript emit* в разі наявності помилок типів, дозволяючи вам *поступово оновлювати ваш JS до TS*.
 
-Now let's start with the *syntax* of the TypeScript type system. This way you can start using these annotations in your code immediately and see the benefit. This will prepare you for a deeper dive later.
+Тепер давайте розпочнемо з *синтаксису* системи типів TypeScript. Таким чином, ви можете почати використовувати ці анотації в своєму коді негайно і побачити їх перевагу. Це підготує вас до більш глибокого дослідження пізніше.
 
-## Basic Annotations
-As mentioned before Types are annotated using `:TypeAnnotation` syntax. Anything that is available in the type declaration space can be used as a Type Annotation.
+## Основні анотації
+Як вже згадувалося раніше, типи анотуються за допомогою синтаксису `:TypeAnnotation`. Будь-що, що доступне в просторі імен декларації типів, може бути використано як анотація типу.
 
-The following example demonstrates type annotations for variables, function parameters and function return values:
+Наступний приклад демонструє анотації типів для змінних, параметрів функцій та значень, що повертаються функцією:
 
 ```ts
 var num: number = 123;
@@ -17,8 +17,8 @@ function identity(num: number): number {
 }
 ```
 
-### Primitive Types
-The JavaScript primitive types are well represented in the TypeScript type system. This means `string`, `number`, `boolean` as demonstrated below:
+### Примітивні типи
+Примітивні типи JavaScript добре представлені в системі типів TypeScript. Це означає, що `string`, `number`, `boolean` представлені нижче:
 
 ```ts
 var num: number;
@@ -27,18 +27,18 @@ var bool: boolean;
 
 num = 123;
 num = 123.456;
-num = '123'; // Error
+num = '123'; // Помилка
 
 str = '123';
-str = 123; // Error
+str = 123; // Помилка
 
 bool = true;
 bool = false;
-bool = 'false'; // Error
+bool = 'false'; // Помилка
 ```
 
-### Arrays
-TypeScript provides dedicated type syntax for arrays to make it easier for you to annotate and document your code. The syntax is basically postfixing `[]` to any valid type annotation (e.g. `:boolean[]`). It allows you to safely do any array manipulation that you would normally do and protects you from errors like assigning a member of the wrong type.  This is demonstrated below:
+### Масиви
+TypeScript надає відповідний синтаксис типу для масивів, щоб зробити його простішим для анотування та документування вашого коду. Синтаксис полягає в тому, що потрібно додати `[]` до будь-якої дійсної анотації типу (наприклад, `:boolean[]`). Це дозволяє вам безпечно виконувати будь-яку маніпуляцію з масивами, яку ви зазвичай робите, і захищає вас від помилок, таких як присвоєння члена неправильного типу. Це демонструється нижче:
 
 ```ts
 var boolArray: boolean[];
@@ -49,13 +49,13 @@ console.log(boolArray.length); // 2
 boolArray[1] = true;
 boolArray = [false, false];
 
-boolArray[0] = 'false'; // Error!
-boolArray = 'false'; // Error!
-boolArray = [true, 'false']; // Error!
+boolArray[0] = 'false'; // Помилка!
+boolArray = 'false'; // Помилка!
+boolArray = [true, 'false']; // Помилка!
 ```
 
-### Interfaces
-Interfaces are the core way in TypeScript to compose multiple type annotations into a single named annotation. Consider the following example:
+### Інтерфейси
+Інтерфейси є основним способом в TypeScript для складання кількох анотацій типів в одну іменовану анотацію. Розгляньте наступний приклад:
 
 ```ts
 interface Name {
@@ -69,19 +69,19 @@ name = {
     second: 'Doe'
 };
 
-name = {           // Error : `second` is missing
+name = {           // Помилка: відсутній `second`
     first: 'John'
 };
-name = {           // Error : `second` is the wrong type
+name = {           // Помилка: `second` має неправильний тип
     first: 'John',
     second: 1337
 };
 ```
 
-Here we've composed the annotations `first: string` + `second: string` into a new annotation `Name` that enforces the type checks on individual members. Interfaces have a lot of power in TypeScript and we will dedicate an entire section to how you can use that to your advantage.
+Тут ми склали анотації `first: string` + `second: string` в нову анотацію `Name`, яка забезпечує перевірку типів для окремих членів. Інтерфейси мають багато потужностей в TypeScript, і ми приділимо цілу секцію тому, як ви можете використовувати їх на свою користь.
 
-### Inline Type Annotation
-Instead of creating a new `interface` you can annotate anything you want *inline* using `:{ /*Structure*/ }`. The previous example presented again with an inline type:
+### Анотація типу в одному рядку
+Замість створення нового `interface` ви можете анотувати будь-що, що вам потрібно *в одному рядку* за допомогою `:{ /*Структура*/ }`. Попередній приклад представлений знову з анотацією типу в одному рядку:
 
 ```ts
 var name: {
@@ -93,94 +93,41 @@ name = {
     second: 'Doe'
 };
 
-name = {           // Error : `second` is missing
+name = {           // Помилка: відсутній `second`
     first: 'John'
 };
-name = {           // Error : `second` is the wrong type
+name = {           // Помилка: `second` має неправильний тип
     first: 'John',
     second: 1337
 };
 ```
 
-Inline types are great for quickly providing a one off type annotation for something. It saves you the hassle of coming up with (a potentially bad) type name. However, if you find yourself putting in the same type annotation inline multiple times it's a good idea to consider refactoring it into an interface (or a `type alias` covered later in this section).
+Анотації в одному рядку чудово підходять для швидкого надання анотації типу для чогось одного разу. Це заощаджує вам клопоту придумування (потенційно поганого) імені типу. Однак, якщо ви помічаєте, що ви використовуєте одну і ту ж анотацію типу в одному рядку кілька разів, розгляньте можливість рефакторингу її в інтерфейс (або в `type alias`, який буде розглянуто пізніше в цьому розділі).
 
-## Special Types
-Beyond the primitive types that have been covered there are a few types that have special meaning in TypeScript. These are `any`, `null`, `undefined`, `void`.
+## Спеціальні типи
+Окрім примітивних типів, які були розглянуті, існує кілька типів, які мають особливе значення в TypeScript. Це `any`, `null`, `undefined`, `void`.
 
 ### any
-The `any` type holds a special place in the TypeScript type system. It gives you an escape hatch from the type system to tell the compiler to bugger off. `any` is compatible with *any and all* types in the type system. This means that *anything can be assigned to it* and *it can be assigned to anything*. This is demonstrated in the example below:
+Тип `any` займає особливе місце в системі типів TypeScript. Він дає вам вихід з системи типів, щоб сказати компілятору "відстань". `any` сумісний з *будь-якими* типами в системі типів. Це означає, що *до нього можна присвоїти будь-що* і *його можна присвоїти будь-чому*. Це демонструється в прикладі нижче:
 
 ```ts
 var power: any;
 
-// Takes any and all types
+// Приймає будь-які типи
 power = '123';
 power = 123;
 
-// Is compatible with all types
+// Сумісний з усіма типами
 var num: number;
 power = num;
 num = power;
 ```
 
-If you are porting JavaScript code to TypeScript, you are going to be close friends with `any` in the beginning. However, don't take this friendship too seriously as it means that *it is up to you to ensure the type safety*. You are basically telling the compiler to *not do any meaningful static analysis*.
+Якщо ви переносите код JavaScript в TypeScript, ви будете добрими друзями з `any` на початку. Однак не беріть цю дружбу занадто серйозно, оскільки це означає, що *вам потрібно забезпечити безпеку типів*. Ви фактично кажете компілятору *не виконувати жодного значущого статичного аналізу*.
 
-### `null` and `undefined`
+### `null` та `undefined`
 
-How they are treated by the type system depends on the `strictNullChecks` compiler flag (we cover this flag later). When in `strictNullCheck:false`, the `null` and `undefined` JavaScript literals are effectively treated by the type system the same as something of type `any`. These literals can be assigned to any other type. This is demonstrated in the below example:
-
-```ts
-var num: number;
-var str: string;
-
-// These literals can be assigned to anything
-num = null;
-str = undefined;
-```
-
-### `:void`
-Use `:void` to signify that a function does not have a return type:
-
-```ts
-function log(message): void {
-    console.log(message);
-}
-```
-
-## Generics
-Many algorithms and data structures in computer science do not depend on the *actual type* of the object. However, you still want to enforce a constraint between various variables. A simple toy example is a function that takes a list of items and returns a reversed list of items. The constraint here is between what is passed in to the function and what is returned by the function:
-
-```ts
-function reverse<T>(items: T[]): T[] {
-    var toreturn = [];
-    for (let i = items.length - 1; i >= 0; i--) {
-        toreturn.push(items[i]);
-    }
-    return toreturn;
-}
-
-var sample = [1, 2, 3];
-var reversed = reverse(sample);
-console.log(reversed); // 3,2,1
-
-// Safety!
-reversed[0] = '1';     // Error!
-reversed = ['1', '2']; // Error!
-
-reversed[0] = 1;       // Okay
-reversed = [1, 2];     // Okay
-```
-
-Here you are basically saying that the function `reverse` takes an array (`items: T[]`) of *some* type `T` (notice the type parameter in `reverse<T>`) and returns an array of type `T` (notice `: T[]`). Because the `reverse` function returns items of the same type as it takes, TypeScript knows the `reversed` variable is also of type `number[]` and will give you Type safety. Similarly if you pass in an array of `string[]` to the reverse function the returned result is also an array of `string[]` and you get similar type safety as shown below:
-
-```ts
-var strArr = ['1', '2'];
-var reversedStrs = reverse(strArr);
-
-reversedStrs = [1, 2]; // Error!
-```
-
-In fact JavaScript arrays already have a `.reverse` function and TypeScript does indeed use generics to define its structure:
+Те, як вони обробляються системою типів, залежить від прапорця компілятора `strictNullChecks` (ми розглянемо цей прапорець пізніше). У режимі `strictNullCheck:false` літерали JavaScript `null` та `undefined` ефективно обробляються системою
 
 ```ts
 interface Array<T> {
@@ -189,19 +136,19 @@ interface Array<T> {
 }
 ```
 
-This means that you get type safety when calling `.reverse` on any array as shown below:
+Це означає, що ви отримуєте безпеку типів при виклику `.reverse` на будь-якому масиві, як показано нижче:
 
 ```ts
 var numArr = [1, 2];
 var reversedNums = numArr.reverse();
 
-reversedNums = ['1', '2']; // Error!
+reversedNums = ['1', '2']; // Помилка!
 ```
 
-We will discuss more about the `Array<T>` interface later when we present `lib.d.ts` in the section **Ambient Declarations**.
+Ми розглянемо більше про інтерфейс `Array<T>` пізніше, коли представимо `lib.d.ts` в розділі **Ambient Declarations**.
 
-## Union Type
-Quite commonly in JavaScript you want to allow a property to be one of multiple types e.g. *a `string` or a `number`*. This is where the *union type* (denoted by `|` in a type annotation e.g. `string|number`) comes in handy. A common use case is a function that can take a single object or an array of the object e.g.:
+## Об'єднані типи
+Досить часто в JavaScript ви хочете дозволити властивості бути одним з кількох типів, наприклад *`string` або `number`*. Це те, де корисний *об'єднаний тип* (позначений `|` в анотації типу, наприклад, `string|number`). Частим випадком є функція, яка може приймати один об'єкт або масив об'єктів, наприклад:
 
 ```ts
 function formatCommandline(command: string[]|string) {
@@ -216,8 +163,8 @@ function formatCommandline(command: string[]|string) {
 }
 ```
 
-## Intersection Type
-`extend` is a very common pattern in JavaScript where you take two objects and create a new one that has the features of both these objects. An **Intersection Type** allows you to use this pattern in a safe way as demonstrated below:
+## Перетин типів
+`extend` є дуже поширеним шаблоном в JavaScript, де ви берете два об'єкти і створюєте новий, який має можливості обох цих об'єктів. **Тип перетину** дозволяє використовувати цей шаблон у безпечний спосіб, як показано нижче:
 
 ```ts
 function extend<T, U>(first: T, second: U): T & U {
@@ -226,25 +173,25 @@ function extend<T, U>(first: T, second: U): T & U {
 
 const x = extend({ a: "hello" }, { b: 42 });
 
-// x now has both `a` and `b`
+// x тепер має як `a`, так і `b`
 const a = x.a;
 const b = x.b;
 ```
 
-## Tuple Type
-JavaScript doesn't have first class tuple support. People generally just use an array as a tuple. This is exactly what the TypeScript type system supports. Tuples can be annotated using `: [typeofmember1, typeofmember2]` etc. A tuple can have any number of members. Tuples are demonstrated in the below example:
+## Тип кортежу
+JavaScript не має підтримки кортежів першого класу. Люди, як правило, просто використовують масив як кортеж. Точно так само підтримує система типів TypeScript. Кортежі можна анотувати за допомогою `: [typeofmember1, typeofmember2]` і т.д. Кортеж може мати будь-яку кількість членів. Кортежі продемонстровано в наведеному нижче прикладі:
 
 ```ts
 var nameNumber: [string, number];
 
-// Okay
+// Добре
 nameNumber = ['Jenny', 8675309];
 
-// Error!
+// Помилка!
 nameNumber = ['Jenny', '867-5309'];
 ```
 
-Combine this with the destructuring support in TypeScript, tuples feel fairly first class despite being arrays underneath:
+Поєднайте це з підтримкою деструктуризації в TypeScript, і кортежі відчуваються досить першокласними, незважаючи на те, що вони є масивами під капотом:
 
 ```ts
 var nameNumber: [string, number];
@@ -253,22 +200,22 @@ nameNumber = ['Jenny', 8675309];
 var [name, num] = nameNumber;
 ```
 
-## Type Alias
-TypeScript provides convenient syntax for providing names for type annotations that you would like to use in more than one place. The aliases are created using the `type SomeName = someValidTypeAnnotation` syntax. An example is demonstrated below:
+## Псевдонім типу
+TypeScript надає зручний синтаксис для надання імені анотації типу, яку ви хотіли б використовувати в більш ніж одному місці. Псевдоніми створюються за допомогою синтаксису `type SomeName = someValidTypeAnnotation`. Нижче наведено приклад:
 
 ```ts
 type StrOrNum = string|number;
 
-// Usage: just like any other notation
+// Використання: як будь-яка інша анотація
 var sample: StrOrNum;
 sample = 123;
 sample = '123';
 
-// Just checking
-sample = true; // Error!
+// Просто перевірка
+sample = true; // Помилка!
 ```
 
-Unlike an `interface` you can give a type alias to literally any type annotation (useful for stuff like union and intersection types). Here are a few more examples to make you familiar with the syntax:
+На відміну від інтерфейсу, ви можете дати псевдонім типу буквально будь-якій анотації типу (корисно для речей, таких як об'єднані та перетинні типи). Ось кілька додаткових прикладів, щоб ви ознайомилися з синтаксисом:
 
 ```ts
 type Text = string | { text: string };
@@ -276,9 +223,9 @@ type Coordinates = [number, number];
 type Callback = (data: string) => void;
 ```
 
-> TIP: If you need to have hierarchies of Type annotations use an `interface`. They can be used with `implements` and `extends`
+> PORADA: Якщо вам потрібно мати ієрархії анотацій типів, використовуйте інтерфейс. Їх можна використовувати з `implements` та `extends`
 
-> TIP: Use a type alias for simpler object structures (like `Coordinates`) just to give them a semantic name. Also when you want to give semantic names to Union or Intersection types, a Type alias is the way to go.
+> PORADA: Використовуйте псевдонім типу для простіших структур об'єктів (наприклад, `Coordinates`), щоб надати їм семантичне ім'я. Крім того, коли ви хочете дати семантичні імена об'єднаним або перетинним типам, псевдонім типу - це правильний вибір.
 
-## Summary
-Now that you can start annotating most of your JavaScript code we can jump into the nitty gritty details of all the power available in TypeScript's Type System.
+## Резюме
+Тепер, коли ви можете починати анотувати більшість вашого коду JavaScript, ми можемо перейти до деталей всієї потужності, доступної в системі типів TypeScript.

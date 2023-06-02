@@ -1,17 +1,17 @@
-## Currying
+## Каррінг
 
-Just use a chain of fat arrow functions:
+Просто використовуйте ланцюжок функцій з товстою стрілкою:
 
 ```ts
-// A curried function
+// Каррірована функція
 let add = (x: number) => (y: number) => x + y;
 
-// Simple usage
+// Просте використання
 add(123)(456);
 
-// partially applied
+// Частково застосована
 let add123 = add(123);
 
-// fully apply the function
+// Повністю застосувати функцію
 add123(456);
 ```

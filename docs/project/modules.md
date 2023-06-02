@@ -1,39 +1,39 @@
-## Modules
+## Модулі
 
-### Global Module
+### Глобальний модуль
 
-By default when you start typing code in a new TypeScript file your code is in a *global* namespace. As a demo consider a file `foo.ts`:
+За замовчуванням, коли ви починаєте вводити код у новому файлі TypeScript, ваш код знаходиться в *глобальному* просторі імен. Наприклад, розгляньте файл `foo.ts`:
 
 ```ts
 var foo = 123;
 ```
 
-If you now create a *new* file `bar.ts` in the same project, you will be *allowed* by the TypeScript type system to use the variable `foo` as if it was available globally:
+Якщо ви зараз створите *новий* файл `bar.ts` у тому ж проекті, то *дозволено* системою типів TypeScript використовувати змінну `foo`, ніби вона була доступна глобально:
 
 ```ts
-var bar = foo; // allowed
+var bar = foo; // дозволено
 ```
-Needless to say having a global namespace is dangerous as it opens your code up for naming conflicts. We recommend using file modules which are presented next.
+Зрозуміло, що глобальний простір імен є небезпечним, оскільки він відкриває ваш код для конфліктів імен. Ми рекомендуємо використовувати файлові модулі, які будуть наведені далі.
 
-### File Module
-Also called *external modules*. If you have an `import` or an `export` at the root level of a TypeScript file then it creates a *local* scope within that file. So if we were to change the previous `foo.ts` to the following (note the `export` usage):
+### Файловий модуль
+Також називається *зовнішніми модулями*. Якщо у файлі TypeScript є імпорт або експорт на рівні кореня, то він створює *локальний* область видимості всередині цього файлу. Тому, якщо ми змінимо попередній файл `foo.ts` на наступний (зверніть увагу на використання `export`):
 
 ```ts
 export var foo = 123;
 ```
 
-We will no longer have `foo` in the global namespace. This can be demonstrated by creating a new file `bar.ts` as follows:
+То ми більше не матимемо `foo` в глобальному просторі імен. Це можна продемонструвати, створивши новий файл `bar.ts` наступного змісту:
 
 ```ts
-var bar = foo; // ERROR: "cannot find name 'foo'"
+var bar = foo; // ПОМИЛКА: "не вдалося знайти ім'я 'foo'"
 ```
 
-If you want to use stuff from `foo.ts` in `bar.ts` *you need to explicitly import it*. This is shown in an updated `bar.ts` below:
+Якщо ви хочете використовувати речі з `foo.ts` у `bar.ts`, *вам потрібно явно імпортувати їх*. Це показано у вищенаведеному файлі `bar.ts`:
 
 ```ts
 import { foo } from "./foo";
-var bar = foo; // allowed
+var bar = foo; // дозволено
 ```
-Using an `import` in `bar.ts` not only allows you to bring in stuff from other files, but also marks the file `bar.ts` as a *module* and therefore, declarations in `bar.ts` don't pollute the global namespace either.
+Використання `import` у `bar.ts` не тільки дозволяє вам включати речі з інших файлів, але також позначає файл `bar.ts` як *модуль*, тому оголошення у `bar.ts` не забруднюють глобальний простір імен.
 
-What JavaScript is generated from a given TypeScript file that uses external modules is driven by the compiler flag called `module`.
+Те, який JavaScript генерується з даного файлу TypeScript, який використовує зовнішні модулі, залежить від прапорця компілятора, який називається `module`.

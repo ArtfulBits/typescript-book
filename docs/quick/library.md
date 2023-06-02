@@ -1,12 +1,12 @@
-# Creating TypeScript node modules
+# Створення модулів TypeScript для Node.js
 
-* [A lesson on creating TypeScript node modules](https://egghead.io/lessons/typescript-create-high-quality-npm-packages-using-typescript)
+* [Урок зі створення модулів TypeScript для Node.js](https://egghead.io/lessons/typescript-create-high-quality-npm-packages-using-typescript)
 
-Using modules written in TypeScript is super fun as you get great compile time safety and autocomplete (essentially executable documentation).
+Використання модулів, написаних на TypeScript, є дуже цікавим, оскільки ви отримуєте велику безпеку на етапі компіляції та автодоповнення (практично виконувану документацію).
 
-TypeScript modules can be consumed both in the nodejs (as is) browser (with something like webpack).
+Модулі TypeScript можуть бути використані як в nodejs (як є), так і в браузері (за допомогою чогось на зразок webpack).
 
-Creating a high quality TypeScript module is simple. Assume the following desired folder structure for your package:
+Створення високоякісного модуля TypeScript є простим. Припустимо, що для вашого пакету необхідна наступна структура папок:
 
 ```text
 package
@@ -15,7 +15,7 @@ package
 ├─ src
 │  ├─ index.ts
 │  ├─ foo.ts
-│  └─ ...All your source files (Authored)
+│  └─ ...Всі ваші вихідні файли (створені)
 └─ lib
   ├─ index.d.ts.map
   ├─ index.d.ts
@@ -23,35 +23,35 @@ package
   ├─ foo.d.ts.map
   ├─ foo.d.ts
   ├─ foo.js
-  └─ ... All your compiled files (Generated)
+  └─ ... Всі ваші скомпільовані файли (створені)
 ```
 
-* `src/index.ts`: Here you would export anything you expect to be consumed from your project. E.g `export { Foo } from './foo';`. Exporting from this file makes it available for consumption when someone does `import { /* Here */ } from 'example';`
+* `src/index.ts`: Тут ви експортуєте все, що очікуєте використовувати в своєму проекті. Наприклад, `export { Foo } from './foo';`. Експорт з цього файлу робить його доступним для використання, коли хтось робить `import { /* Тут */ } from 'example';`
 
-* In your `tsconfig.json`
-  * have `compilerOptions`: `"outDir": "lib"` + `"declaration": true` + `"declarationMap" : true` < This generates `.js` (JavaScript) `.d.ts` (declarations for TypeSafety) and `.d.ts.map` (enables `declaration .d.ts` => `source .ts` IDE navigation) in the lib folder.
-  * have `include: ["src"]` < This includes all the files from the `src` dir.
+* У вашому `tsconfig.json`
+  * маєте `compilerOptions`: `"outDir": "lib"` + `"declaration": true` + `"declarationMap" : true` < Це генерує `.js` (JavaScript) `.d.ts` (декларації для безпеки типів) та `.d.ts.map` (дозволяє навігацію IDE від `declaration .d.ts` до `source .ts`) у папці lib.
+  * маєте `include: ["src"]` < Це включає всі файли з директорії `src`.
 
-* In your `package.json` have
-  * `"main": "lib/index"` < This tells to load `lib/index.js` for runtime code.
-  * `"types": "lib/index"` < This tells TypeScript to load `lib/index.d.ts` for type checking. 
+* У вашому `package.json` маєте
+  * `"main": "lib/index"` < Це говорить про те, що для виконання коду необхідно завантажити `lib/index.js`.
+  * `"types": "lib/index"` < Це говорить TypeScript завантажувати `lib/index.d.ts` для перевірки типів. 
 
-Example package:
-* `npm install typestyle` [for TypeStyle](https://www.npmjs.com/package/typestyle)
-* Usage: `import { style } from 'typestyle';` will be completely type safe.
+Приклад пакету:
+* `npm install typestyle` [для TypeStyle](https://www.npmjs.com/package/typestyle)
+* Використання: `import { style } from 'typestyle';` буде повністю безпечним з точки зору типів.
 
-### Managing Dependencies
+### Керування залежностями
 #### devDependencies
-* If your package depends on another package while you are developing it (e.g. `prettier`) you should install them as a `devDependency`. This way they will not pollute the `node_modules` of your module's consumers (as `npm i foo` does not install `devDependencies` of `foo`).
-* `typescript` is normally a `devDependency` as you only use it to build your package. The consumers can use your package with or without TypeScript.
-* If your package depends on other JavaScript authored packages and you want to use it with type safety in your project, put their types (e.g. `@types/foo`) in `devDependencies`. JavaScript types should be managed *out of bound* from the main NPM streams. The JavaScript ecosystem breaks types without semantic versioning too commonly, so if your users need types for these they should install the `@types/foo` version that works for them. If you want to guide users to install these types you can put them in `peerDependencies` mentioned next.
+* Якщо ваш пакет залежить від іншого пакету під час розробки (наприклад, `prettier`), ви повинні встановити його як `devDependency`. Таким чином вони не забруднять `node_modules` споживачів вашого модуля (оскільки `npm i foo` не встановлює `devDependencies` `foo`).
+* `typescript` зазвичай є `devDependency`, оскільки ви використовуєте його лише для збірки пакету. Споживачі можуть використовувати ваш пакет з або без TypeScript.
+* Якщо ваш пакет залежить від інших пакетів, написаних на JavaScript, і ви хочете використовувати його з безпекою типів у своєму проекті, помістіть їх типи (наприклад, `@types/foo`) у `devDependencies`. Типи JavaScript повинні керуватися *поза межами* основних потоків NPM. Екосистема JavaScript занадто часто порушує типи без семантичного версіонування, тому якщо ваші користувачі потребують типів для цих пакетів, вони повинні встановити версію `@types/foo`, яка працює для них. Якщо ви хочете навести користувачів на думку, щоб вони встановили ці типи, ви можете помістити їх у `peerDependencies`, про які йдеться далі.
 
 #### peerDependencies
-If your package depends on a package that it heavily *works with* (as opposed to *works using*) e.g. `react`, put them in `peerDependencies` just like you would with raw JS packages. To test them locally you should also put them in `devDependencies`. 
+Якщо ваш пакет залежить від пакету, з яким він сильно *працює* (на відміну від *працює з*), наприклад, `react`, помістіть їх у `peerDependencies`, так само, як ви зробили б зі звичайними пакетами JS. Щоб перевірити їх локально, ви також повинні помістити їх у `devDependencies`. 
 
-Now: 
-* When you are developing the package you will get the version of the dependency you specified in your `devDependencies`. 
-* When someone installs your package they will *not* get this dependency (as `npm i foo` does not install `devDependencies` of `foo`) but they will get a warning that they should install the missing `peerDependencies` of your package. 
+Тепер:
+* Під час розробки пакету ви отримаєте версію залежності, яку вказали у `devDependencies`.
+* Коли хтось встановлює ваш пакет, вони *не* отримають цю залежність (оскільки `npm i foo` не встановлює `devDependencies` `foo`), але вони отримають попередження, що вони повинні встановити відсутні `peerDependencies` вашого пакету. 
 
 #### dependencies
-If your package *wraps* another package (meant for internal use even after compilation) you should put them in `dependencies`. Now when someone installs your package they will get your package + any of its dependencies.
+Якщо ваш пакет *обгортає* інший пакет (призначений для внутрішнього використання навіть після компіляції), помістіть їх у `dependencies`. Тепер, коли хтось встановлює ваш пакет, вони отримають ваш пакет + будь-які залежності.

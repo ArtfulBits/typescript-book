@@ -1,8 +1,8 @@
 ### Об'єднання глобального простору імен
-У межах функції `initializeTypeChecker`  існує наступний код:
+У межах функції `initializeTypeChecker` існує наступний код:
 
 ```ts
-// Initialize global symbol table
+// Ініціалізація глобальної таблиці символів
 forEach(host.getSourceFiles(), file => {
     if (!isExternalModule(file)) {
         mergeSymbolTable(globals, file.locals);

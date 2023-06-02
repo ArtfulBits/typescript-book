@@ -78,46 +78,45 @@ function bindChildren(node: Node) {
 
     // This node will now be set as the parent of all of its children as we recurse into them.
     parent = node;
-
-    // Depending on what kind of node this is, we may have to adjust the current container
-    // and block-container.   If the current node is a container, then it is automatically
-    // considered the current block-container as well.  Also, for containers that we know
-    // may contain locals, we proactively initialize the .locals field. We do this because
-    // it's highly likely that the .locals will be needed to place some child in (for example,
-    // a parameter, or variable declaration).
-    //
-    // However, we do not proactively create the .locals for block-containers because it's
-    // totally normal and common for block-containers to never actually have a block-scoped
-    // variable in them.  We don't want to end up allocating an object for every 'block' we
-    // run into when most of them won't be necessary.
-    //
-    // Finally, if this is a block-container, then we clear out any existing .locals object
-    // it may contain within it.  This happens in incremental scenarios.  Because we can be
-    // reusing a node from a previous compilation, that node may have had 'locals' created
-    // for it.  We must clear this so we don't accidentally move any stale data forward from
-    // a previous compilation.
-    let containerFlags = getContainerFlags(node);
-    if (containerFlags & ContainerFlags.IsContainer) {
-        container = blockScopeContainer = node;
-
-        if (containerFlags & ContainerFlags.HasLocals) {
-            container.locals = {};
-        }
-
-        addToContainerChain(container);
-    }
-
-    else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
-        blockScopeContainer = node;
-        blockScopeContainer.locals = undefined;
-    }
-
-    forEachChild(node, bind);
-
-    container = saveContainer;
-    parent = saveParent;
-    blockScopeContainer = savedBlockScopeContainer;
-}
 ```
 
-Як ви пам’ятаєте з розділу про функції прив’язки: `bindChildren` викликається з функції `bind`. Отже, ми маємо рекурсивне налаштування зв’язування: `bind` викликає `bindChildren` яка в свою чергу викликає `bind` для кожного дочірнього елемента.
+```uk
+// Залежно від того, який тип вузла це, ми можемо змінити поточний контейнер
+// та блок-контейнер. Якщо поточний вузол є контейнером, то він автоматично
+// вважається поточним блок-контейнером. Також для контейнерів, які можуть містити
+// локальні змінні, ми превентивно ініціалізуємо поле .locals. Ми робимо це, оскільки
+// дуже ймовірно, що .locals буде потрібно для розміщення деяких дочірніх елементів
+// (наприклад, параметр або оголошення змінної).
+//
+// Однак ми не створюємо .locals превентивно для блок-контейнерів, оскільки це зовсім
+// нормально і часто зустрічається, що в блок-контейнерах ніколи не буде змінних з областю
+// видимості блоку. Ми не хочемо виділяти об'єкт для кожного "блоку", з яким ми зіткнемося,
+// коли більшість з них не буде необхідними.
+//
+// Нарешті, якщо це блок-контейнер, то ми очищуємо будь-який існуючий об'єкт .locals,
+// який він може містити всередині себе. Це стається в інкрементальних сценаріях. Оскільки
+// ми можемо використовувати вузол з попередньої компіляції, цей вузол може мати створені
+// "локальні" для нього. Ми повинні очистити це, щоб не навмисно переносити застарілі дані
+// з попередньої компіляції.
+let containerFlags = getContainerFlags(node);
+if (containerFlags & ContainerFlags.IsContainer) {
+    container = blockScopeContainer = node;
+
+    if (containerFlags & ContainerFlags.HasLocals) {
+        container.locals = {};
+    }
+
+    addToContainerChain(container);
+}
+
+else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
+    blockScopeContainer = node;
+    blockScopeContainer.locals = undefined;
+}
+
+forEachChild(node, bind);
+
+container = saveContainer;
+parent = saveParent;
+blockScopeContainer = savedBlockScopeContainer;
+```

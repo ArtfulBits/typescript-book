@@ -1,4 +1,4 @@
-## Checker
+## Чекер
 Як ми вже згадували раніше *checker* - це те, що робить TypeScript унікально потужним у порівнянні з *просто ще одним транспілером JavaScript*.   `Checker` розташований у файлі `checker.ts`  і на даний момент складається з понад 23 тис. рядків коду на TypeScript (найбільша частина компілятора).
 
 ### Використання програмою
@@ -8,9 +8,9 @@
 program.getTypeChecker ->
     ts.createTypeChecker (in checker)->
         initializeTypeChecker (in checker) ->
-            for each SourceFile `ts.bindSourceFile` (in binder)
+            для кожного SourceFile `ts.bindSourceFile` (in binder)
             // followed by
-            for each SourceFile `ts.mergeSymbolTable` (in checker)
+            для кожного SourceFile `ts.mergeSymbolTable` (in checker)
 ```
 
 ### Пов'язаність з генератором коду
@@ -23,11 +23,11 @@ program.emit ->
     emitWorker (program local) ->
         createTypeChecker.getEmitResolver ->
             // First call the following functions local to createTypeChecker
-            call getDiagnostics ->
+            виклик getDiagnostics ->
                 getDiagnosticsWorker ->
                     checkSourceFile
 
             // then
-            return resolver
-            (already initialized in createTypeChecker using a call to local createResolver())
+            повернути resolver
+            (вже ініціалізований у createTypeChecker за допомогою виклику локальної функції createResolver())
 ```

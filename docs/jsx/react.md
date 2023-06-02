@@ -1,29 +1,29 @@
 # React JSX
 
-> [Free series of youtube videos on React / TypeScript best practices](https://www.youtube.com/watch?v=7EW67MqgJvs&list=PLYvdvJlnTOjHNayH7MukKbSJ6PueUNkkG)
+> [Безкоштовна серія відеоуроків на YouTube про найкращі практики React / TypeScript](https://www.youtube.com/watch?v=7EW67MqgJvs&list=PLYvdvJlnTOjHNayH7MukKbSJ6PueUNkkG)
 
-> [PRO Egghead course on TypeScript and React](https://egghead.io/courses/use-typescript-to-develop-react-applications)
+> [Курс PRO Egghead про TypeScript та React](https://egghead.io/courses/use-typescript-to-develop-react-applications)
 
 [![DesignTSX](https://raw.githubusercontent.com/basarat/typescript-book/master/images/designtsx-banner.png)](https://designtsx.com)
 
-## Setup
+## Налаштування
 
-Our [browser quickstart already sets you up to develop react applications](../quick/browser.md). Here are the key highlights.
+Наш [швидкий старт для браузера вже налаштовує вас на розробку додатків React](../quick/browser.md). Ось основні моменти.
 
-* Use files with the extension `.tsx` (instead of `.ts`).
-* Use `"jsx" : "react"` in your `tsconfig.json`'s `compilerOptions`.
-* Install the definitions for JSX and React into your project : (`npm i -D @types/react @types/react-dom`).
-* Import react into your `.tsx` files (`import * as React from "react"`).
+* Використовуйте файли з розширенням `.tsx` (замість `.ts`).
+* Використовуйте `"jsx": "react"` у `compilerOptions` вашого `tsconfig.json`.
+* Встановіть визначення для JSX та React у свій проект: (`npm i -D @types/react @types/react-dom`).
+* Імпортуйте React у свої файли `.tsx` (`import * as React from "react"`).
 
-## HTML Tags vs. Components
+## HTML-теги проти компонентів
 
-React can either render HTML tags (strings) or React components. The JavaScript emit for these elements is different (`React.createElement('div')` vs. `React.createElement(MyComponent)`). The way this is determined is by the *case* of the *first* letter. `foo` is treated as an HTML tag and `Foo` is treated as a component.
+React може рендерити HTML-теги (рядки) або компоненти React. JavaScript-еміт для цих елементів відрізняється (`React.createElement('div')` проти `React.createElement(MyComponent)`). Це визначається за допомогою *регістру* *першої* літери. `foo` розглядається як HTML-тег, а `Foo` розглядається як компонент.
 
-## Type Checking
+## Перевірка типів
 
-### HTML Tags
+### HTML-теги
 
-An HTML Tag `foo` is to be of the type `JSX.IntrinsicElements.foo`. These types are already defined for all the major tags in a file `react-jsx.d.ts` which we had you install as a part of the setup. Here is a sample of the  the contents of the file:
+HTML-тег `foo` має бути типу `JSX.IntrinsicElements.foo`. Ці типи вже визначені для всіх основних тегів у файлі `react-jsx.d.ts`, який ви встановили як частину налаштування. Ось зразок вмісту файлу:
 
 ```ts
 declare module JSX {
@@ -33,14 +33,14 @@ declare module JSX {
         div: React.HTMLAttributes;
         span: React.HTMLAttributes;
 
-        /// so on ...
+        /// так далі ...
     }
 }
 ```
 
-### Function Components
+### Функційні компоненти
 
-You can define function components simply with the `React.FunctionComponent` interface e.g.
+Ви можете визначити функційні компоненти просто за допомогою інтерфейсу `React.FunctionComponent` наприклад
 
 ```ts
 type Props = {
@@ -53,29 +53,29 @@ const MyComponent: React.FunctionComponent<Props> = (props) => {
 <MyComponent foo="bar" />
 ```
 
-### Void Function Components
+### Функційні компоненти без повернення
 
-As of [@types/react PR #46643](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/46643), you can use a new `React.VoidFunctionComponent` or `React.VFC` type if you wish to declare that a component does not take `children`. This is an interim solution until the next major version of the type defs (where VoidFunctionComponent will be deprecated and FunctionComponent will by default accept no children).
+Зараз, згідно з [@types/react PR #46643](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/46643), ви можете використовувати новий тип `React.VoidFunctionComponent` або `React.VFC`, якщо хочете заявити, що компонент не приймає `children`. Це тимчасове рішення до наступної основної версії визначень типів (де VoidFunctionComponent буде застарілим, а FunctionComponent за замовчуванням не прийматиме дітей).
 
 ```ts
 type Props = { 
   foo: string 
 }
-// OK now, in future, error
+// OK зараз, в майбутньому - помилка
 const FunctionComponent: React.FunctionComponent<Props> = ({ foo, children }: Props) => {
     return <div>{foo} {children}</div>; // OK
 };
-// Error now (children not support), in future, deprecated
+// Помилка зараз (діти не підтримуються), в майбутньому - застаріло
 const VoidFunctionComponent: React.VoidFunctionComponent<Props> = ({ foo, children }) => {
     return <div>{foo}{children}</div>; 
 };
 ```
 
-### Class Components
+### Класові компоненти
 
-Components are type checked based on the `props` property of the component. This is modeled after how JSX is transformed i.e. the attributes become the `props` of the component.
+Компоненти перевіряються на відповідність типу на основі властивості `props` компонента. Це моделюється за тим, як JSX перетворюється, тобто атрибути стають `props` компонента.
 
-The `react.d.ts` file defines the `React.Component<Props,State>` class which you should extend in your own class providing your own `Props` and `State` interfaces. This is demonstrated below:
+Файл `react.d.ts` визначає клас `React.Component<Props, State>`, який ви повинні розширити у своєму власному класі, надаючи свої власні інтерфейси `Props` та `State`. Це продемонстровано нижче:
 
 ```ts
 type Props = {
@@ -90,9 +90,9 @@ class MyComponent extends React.Component<Props, {}> {
 <MyComponent foo="bar" />
 ```
 
-### React JSX Tip: Interface for renderable
+### Порада React JSX: Інтерфейс для відображення
 
-React can render a few things like `JSX` or `string`. These are all consolidated into the type `React.ReactNode` so use it for when you want to accept renderables e.g.
+React може відображати деякі речі, такі як `JSX` або `string`. Вони всі об'єднуються в тип `React.ReactNode`, тому використовуйте його, коли хочете приймати відображувані елементи, наприклад
 
 ```ts
 type Props = {
@@ -111,9 +111,9 @@ class MyComponent extends React.Component<Props, {}> {
 <MyComponent header={<h1>Header</h1>} body={<i>body</i>} />
 ```
 
-### React JSX Tip: Accept an instance of a Component
+### Порада React JSX: Прийміть екземпляр компонента
 
-The react type definitions provide `React.ReactElement<T>` to allow you to annotate the result of a `<T/>` class component instantiation. e.g.
+Визначення типів React надає `React.ReactElement<T>` для того, щоб дозволити вам анотувати результат інстанціювання класового компонента `<T/>`. наприклад.
 
 ```js
 class MyAwesomeComponent extends React.Component {
@@ -126,65 +126,66 @@ const foo: React.ReactElement<MyAwesomeComponent> = <MyAwesomeComponent />; // O
 const bar: React.ReactElement<MyAwesomeComponent> = <NotMyAwesomeComponent />; // Error!
 ```
 
-> Of course you can use this as a function argument annotation and even React component prop member.
+> Звичайно, ви можете використовувати це як анотацію аргумента функції та навіть як член властивості компонента React.
 
-### React JSX Tip: Accept a *component* that can act on props and be rendered using JSX
+### Порада React JSX: Прийміть *компонент*, який може діяти на властивості та бути відображеним за допомогою JSX
 
-The type `React.Component<Props>` consolidates `React.ComponentClass<P> | React.StatelessComponent<P>` so you can accept *something* that takes type `Props` and renders it using JSX e.g.
+Тип `React.Component<Props>` об'єднує `React.ComponentClass<P> | React.StatelessComponent<P>`, тому ви можете приймати *щось*, що приймає тип `Props` та відображає його за допомогою JSX, наприклад.
 
 ```ts
-const X: React.Component<Props> = foo; // from somewhere
+const X: React.Component<Props> = foo; // звідкись
 
-// Render X with some props:
+// Відображення X з деякими властивостями:
 <X {...props}/>;
 ```
 
-### React JSX Tip: Generic components
+### Порада React JSX: Загальні компоненти
 
-It works exactly as expected. Here is an example:
+Це працює точно так, як очікувалося. Ось приклад:
 
 ```ts
-/** A generic component */
+/** Загальний компонент */
 type SelectProps<T> = { items: T[] }
 class Select<T> extends React.Component<SelectProps<T>, any> { }
 
-/** Usage */
+/** Використання */
 const Form = () => <Select<string> items={['a','b']} />;
 ```
 
-### Generic functions
+### Загальні функції
 
-Something like the following works fine:
+Щось на зразок наступного працює добре:
 
 ```ts
 function foo<T>(x: T): T { return x; }
 ```
 
-However, using an arrow generic function will not:
+Однак використання стрілкової загальної функції не працюватиме:
 
 ```ts
-const foo = <T>(x: T) => x; // ERROR : unclosed `T` tag
+const foo = <T>(x: T) => x; // ПОМИЛКА: незакритий тег `T`
 ```
 
-**Workaround**: Use `extends` on the generic parameter to hint the compiler that it's a generic, e.g.:
+**Обхідний шлях**: Використовуйте `extends` на загальному параметрі, щоб натякнути компілятору, що це загальний параметр, наприклад:
 
 ```ts
 const foo = <T extends unknown>(x: T) => x;
 ```
 
-### React Tip: Strongly Typed Refs 
-You basically initialize a variable as a union of the ref and `null` and then initialize it as as callback  e.g. 
+### Порада React: Сильно типізовані посилання
+
+Ви по суті ініціалізуєте змінну як об'єднання посилання та `null`, а потім ініціалізуєте її як зворотний виклик, наприклад
 
 ```ts
 class Example extends React.Component {
   example() {
-    // ... something
+    // ... щось
   }
   
   render() { return <div>Foo</div> }
 }
 
-
+```ts
 class Use {
   exampleRef: Example | null = null; 
   
@@ -194,7 +195,7 @@ class Use {
 }
 ```
 
-And the same with ref's for native elements e.g. 
+Те ж саме з ref для нативних елементів, наприклад:
 
 ```ts
 class FocusingInput extends React.Component<{ value: string, onChange: (value: string) => any }, {}>{
@@ -215,13 +216,13 @@ class FocusingInput extends React.Component<{ value: string, onChange: (value: s
 }
 ```
 
-### Type Assertions
+### Перевірка типів
 
-Use `as Foo` syntax for type assertions as we [mentioned before](../types/type-assertion.md#as-foo-vs-foo).
+Використовуйте синтаксис `as Foo` для перевірки типів, як ми [вже згадували](../types/type-assertion.md#as-foo-vs-foo).
 
-## Default Props
+## Значення за замовчуванням
 
-* Stateful components with default props: You can tell TypeScript that a property will be provided externally (by React) by using a *null assertion* operator (this isn't ideal but is the simplest minimum *extra code* solution I could think of).
+* Компоненти зі станом і значеннями за замовчуванням: Ви можете повідомити TypeScript, що властивість буде надана зовнішньо (за допомогою React) за допомогою оператора *null assertion* (це не ідеально, але це найпростіший мінімальний *додатковий код* рішення, яке я міг придумати).
 
 ```tsx
 class Hello extends React.Component<{
@@ -251,7 +252,7 @@ ReactDOM.render(
 );
 ```
 
-* SFC with default props: Recommend leveraging simple JavaScript patterns as they work well with TypeScript's type system e.g.
+* SFC зі значеннями за замовчуванням: Рекомендуємо використовувати прості шаблони JavaScript, оскільки вони добре працюють з системою типів TypeScript, наприклад:
 
 ```tsx
 const Hello: React.SFC<{
@@ -261,7 +262,7 @@ const Hello: React.SFC<{
   compiler?: string,
   framework: string
 }> = ({
-  compiler = 'TypeScript', // Default prop
+  compiler = 'TypeScript', // Значення за замовчуванням
   framework
 }) => {
     return (
@@ -279,9 +280,9 @@ ReactDOM.render(
 );
 ```
 
-## Declaring a webcomponent
+## Оголошення веб-компонента
 
-If you are using a web component the default React type definitions (`@types/react`) will not know about it. But you can declare it easily e.g. to declare a webcomponent called `my-awesome-slider` that takes Props `MyAwesomeSliderProps` you would: 
+Якщо ви використовуєте веб-компонент, типові визначення React за замовчуванням (`@types/react`) не будуть про нього знати. Але ви можете легко оголосити його, наприклад, щоб оголосити веб-компонент під назвою `my-awesome-slider`, який приймає Props `MyAwesomeSliderProps`, ви повинні:
 
 ```tsx
 declare global {
@@ -297,7 +298,7 @@ declare global {
 }
 ```
 
-Now you can use it in TSX:
+Тепер ви можете використовувати його в TSX:
 
 ```tsx
 <my-awesome-slider name='amazing'/>

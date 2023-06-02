@@ -1,15 +1,15 @@
-# JSX Support
+# Підтримка JSX
 
 [![DesignTSX](https://raw.githubusercontent.com/basarat/typescript-book/master/images/designtsx-banner.png)](https://designtsx.com)
 
-TypeScript supports JSX transpilation and code analysis. If you are unfamiliar with JSX here is an excerpt from the [official website](https://facebook.github.io/jsx/):
+TypeScript підтримує транспіляцію та аналіз коду JSX. Якщо ви не знайомі з JSX, ось уривок з [офіційного веб-сайту](https://facebook.github.io/jsx/):
 
-> JSX is an XML-like syntax extension to ECMAScript without any defined semantics. It's NOT intended to be implemented by engines or browsers. It's NOT a proposal to incorporate JSX into the ECMAScript spec itself. It's intended to be used by various preprocessors (transpilers) to transform these tokens into standard ECMAScript.
+> JSX - це розширення синтаксису, схожого на XML, для ECMAScript без визначених семантик. Воно НЕ призначене для виконання двигунами або браузерами. Це НЕ пропозиція включити JSX до самого специфікації ECMAScript. Воно призначене для використання різними препроцесорами (транспіляторами), щоб перетворити ці токени на стандартний ECMAScript.
 
-The motivation behind JSX is to allow users to write HTML like views *in JavaScript* so that you can:
+Метою JSX є дозвіл користувачам писати HTML-подібні відображення *в JavaScript*, щоб ви могли:
 
-* Have the view Type Checked by the same code that is going to check your JavaScript
-* Have the view be aware of the context it is going to operate under (i.e. strengthen the *controller-view* connection in traditional MVC).
-* Reuse JavaScript patterns for HTML maintenance e.g. `Array.prototype.map`, `?:`, `switch` etc instead of creating new (and probably poorly typed) alternatives.
+* Мати перевірку типів відображення тим самим кодом, який буде перевіряти ваш JavaScript
+* Дозволити відображенню бути свідомим контексту, в якому воно буде працювати (тобто зміцнити зв'язок *контролер-відображення* в традиційній MVC).
+* Повторно використовувати шаблони JavaScript для обслуговування HTML, наприклад, `Array.prototype.map`, `?:`, `switch` тощо, замість створення нових (і, ймовірно, погано типізованих) альтернатив.
 
-This decreases the chances of errors and increases the maintainability of your user interfaces. The main consumer of JSX at this point is [ReactJS from facebook](http://facebook.github.io/react/). This is the usage of JSX that we will discuss here.
+Це зменшує ймовірність помилок та збільшує зручність обслуговування вашого інтерфейсу користувача. Основним споживачем JSX на цей момент є [ReactJS від Facebook](http://facebook.github.io/react/). Саме про використання JSX з ReactJS ми й будемо говорити тут.

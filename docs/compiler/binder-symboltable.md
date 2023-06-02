@@ -100,7 +100,8 @@ function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declarati
 }
 ```
 
-Як SymbolTable заповнюється, визначається першим аргументом цієї функції. Наприклад, при додаванні оголошення до *контейнера* типу `SyntaxKind.ClassDeclaration` або `SyntaxKind.ClassExpression` буде викликана функція `declareClassMember` яка має такий код:
+```uk
+При заповненні SymbolTable першим аргументом цієї функції визначається його тип. Наприклад, при додаванні оголошення до *контейнера* типу `SyntaxKind.ClassDeclaration` або `SyntaxKind.ClassExpression`, буде викликана функція `declareClassMember`, яка має такий код:
 
 ```ts
 function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {

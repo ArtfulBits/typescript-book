@@ -1,36 +1,36 @@
-## Build Toggles
+## Перемикачі збірки
 
-It is common to switch in JavaScript projects based on where they are being run. You can do this quite easily with webpack as it supports *dead code elimination* based on environment variables.
+У JavaScript-проектах зазвичай потрібно перемикатися в залежності від того, де вони запущені. Ви можете зробити це досить легко з webpack, оскільки він підтримує *видалення мертвого коду* на основі змінних середовища.
 
-Add different targets in your `package.json` `scripts`:
+Додайте різні цілі в `scripts` вашого `package.json`:
 
 ```json
 "build:test": "webpack -p --config ./src/webpack.config.js",
 "build:prod": "webpack -p --define process.env.NODE_ENV='\"production\"' --config ./src/webpack.config.js",
 ```
 
-Of course I am assuming you have `npm install webpack --save-dev`. Now you can run `npm run build:test` etc.
+Звичайно, я припускаю, що ви встановили `npm install webpack --save-dev`. Тепер ви можете запустити `npm run build:test` тощо.
 
-Using this variable is super easy as well:
+Використання цієї змінної також дуже просте:
 
 ```ts
 /**
- * This interface makes sure we don't miss adding a property to both `prod` and `test`
+ * Цей інтерфейс переконується, що ми не пропустимо додавання властивості до `prod` та `test`
  */
 interface Config {
   someItem: string;
 }
 
 /**
- * We only export a single thing. The config.
+ * Ми експортуємо лише одну річ. Конфігурацію.
  */
 export let config: Config;
 
 /**
- * `process.env.NODE_ENV` definition is driven from webpack
+ * Визначення `process.env.NODE_ENV` залежить від webpack
  *
- * The whole `else` block will be removed in the emitted JavaScript
- *  for a production build
+ * Весь блок `else` буде видалено в емітованому JavaScript
+ * для продакшен-збірки
  */
 if (process.env.NODE_ENV === 'production') {
   config = {
@@ -45,4 +45,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 ```
 
-> We use `process.env.NODE_ENV` just because it is conventional in a lot of JavaScript libraries themselves e.g. `React`.
+> Ми використовуємо `process.env.NODE_ENV` лише тому, що це звичайно в багатьох бібліотеках JavaScript, наприклад, `React`.

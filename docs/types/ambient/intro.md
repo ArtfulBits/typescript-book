@@ -1,9 +1,9 @@
-## Ambient Declarations
+## Декларації Ambient
 
-As we mentioned in [why TypeScript](../../why-typescript.md):
+Як ми зазначили в [чому TypeScript](../../why-typescript.md):
 
-> A major design goal of TypeScript was to make it possible for you to safely and easily use existing JavaScript libraries in TypeScript. TypeScript does this by means of *declaration*.
+> Однією з головних метою проекту TypeScript було зробити можливим безпечне та просте використання існуючих бібліотек JavaScript у TypeScript. TypeScript досягає цього за допомогою *декларацій*.
 
-Ambient declarations allow you to *safely use existing popular JavaScript libraries* and *incrementally migrate your JavaScript/CoffeeScript/Other-Compile-To-Js-Language project to TypeScript*.
+Декларації Ambient дозволяють вам *безпечно використовувати популярні існуючі бібліотеки JavaScript* та *інкрементально мігрувати ваш проект на TypeScript з JavaScript/CoffeeScript/іншої мови, що компілюється в JS*.
 
-Studying patterns in ambient declarations for *third party JavaScript code* is good practice for annotating *your* TypeScript code base as well. This is why we present it so early on.
+Вивчення патернів у деклараціях Ambient для *стороннього JavaScript-коду* є хорошою практикою для анотування *вашого* коду на TypeScript. Тому ми пропонуємо це на такому ранньому етапі.

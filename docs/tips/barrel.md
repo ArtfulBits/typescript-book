@@ -1,8 +1,8 @@
-## Barrel
+## Бочка
 
-A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
+Бочка - це спосіб згортання експортів з кількох модулів в один зручний модуль. Сама бочка є файлом модуля, який повторно експортує вибрані експорти інших модулів.
 
-Imagine the following class structure in a library: 
+Уявіть наступну структуру класів у бібліотеці:
 
 ```ts
 // demo/foo.ts
@@ -15,7 +15,7 @@ export class Bar {}
 export class Baz {}
 ```
 
-Without a barrel, a consumer would need three import statements:
+Без бочки споживачеві потрібно було б три імпортовані оператори:
 
 ```ts
 import { Foo } from '../demo/foo';
@@ -23,23 +23,23 @@ import { Bar } from '../demo/bar';
 import { Baz } from '../demo/baz';
 ```
 
-You can instead add a barrel `demo/index.ts` containing the following: 
+Замість цього ви можете додати бочку `demo/index.ts`, що містить наступне:
 
 ```ts
 // demo/index.ts
-export * from './foo'; // re-export all of its exports
-export * from './bar'; // re-export all of its exports
-export * from './baz'; // re-export all of its exports
+export * from './foo'; // повторно експортувати всі експорти
+export * from './bar'; // повторно експортувати всі експорти
+export * from './baz'; // повторно експортувати всі експорти
 ```
 
-Now the consumer can import what it needs from the barrel:
+Тепер споживач може імпортувати те, що йому потрібно з бочки:
 
 ```ts
-import { Foo, Bar, Baz } from '../demo'; // demo/index.ts is implied
+import { Foo, Bar, Baz } from '../demo'; // підразумівається demo/index.ts
 ```
 
-### Named exports
-Instead of exporting `*`, you can choose to export the module in a name. E.g., assume that `baz.ts` has functions:
+### Експорти з іменами
+Замість експортування `*`, ви можете вибрати експортування модуля з іменем. Наприклад, припустимо, що `baz.ts` має функції:
 
 ```ts
 // demo/foo.ts
@@ -53,24 +53,24 @@ export function getBaz() {}
 export function setBaz() {}
 ```
 
-If you would rather not export `getBaz` / `setBaz` from demo you can instead put them in a variable by importing them in a name and exporting that name as shown below: 
+Якщо ви не хочете експортувати `getBaz` / `setBaz` з демо, ви можете замість цього помістити їх у змінну, імпортувавши їх за іменем та експортуючи це ім'я, як показано нижче:
 
 ```ts
 // demo/index.ts
-export * from './foo'; // re-export all of its exports
-export * from './bar'; // re-export all of its exports
+export * from './foo'; // повторно експортувати всі експорти
+export * from './bar'; // повторно експортувати всі експорти
 
-import * as baz from './baz'; // import as a name
-export { baz }; // export the name
+import * as baz from './baz'; // імпортувати як ім'я
+export { baz }; // експортувати ім'я
 ```
 
-And now the consumer would look like: 
+А тепер споживач буде виглядати так:
 
 ```ts
-import { Foo, Bar, baz } from '../demo'; // demo/index.ts is implied
+import { Foo, Bar, baz } from '../demo'; // підразумівається demo/index.ts
 
-// usage
+// використання
 baz.getBaz();
 baz.setBaz();
-// etc. ...
+// і т.д. ...
 ```

@@ -1,58 +1,59 @@
-# TypeScript Module Resolution
+# Розв'язання модулів TypeScript
 
-TypeScript's module resolution tries to model and support the real world modules systems / loaders there (commonjs/nodejs, amd/requirejs, ES6/systemjs etc.). The most simplest lookup is relative file path lookup. After that things become a bit complex *because of the nature of magical module loading done by various module loaders*.
+Розв'язання модулів TypeScript намагається моделювати та підтримувати реальні системи/завантажувачі модулів (commonjs/nodejs, amd/requirejs, ES6/systemjs тощо). Найпростішим пошуком є пошук відносного шляху до файлу. Після цього речі стають трохи складнішими *через природу магічного завантаження модулів, яке виконують різні завантажувачі модулів*.
 
-## File Extensions
+## Розширення файлів
 
-You import modules like `foo` or `./foo`. For any file path lookup TypeScript automatically checks for a `.ts` or `.d.ts` or `.tsx` or `.js` (optionally) or `.jsx` (optionally) file in the right order depending upon context. You should **not** provide a file extension with the module name (no `foo.ts`, just `foo`).
+Ви імпортуєте модулі, такі як `foo` або `./foo`. Для будь-якого пошуку файлів TypeScript автоматично перевіряє наявність файлу `.ts` або `.d.ts` або `.tsx` або `.js` (за бажанням) або `.jsx` (за бажанням) в правильному порядку залежно від контексту. Ви **не повинні** надавати розширення файлу з ім'ям модуля (ні `foo.ts`, просто `foo`).
 
-## Relative File Module
+## Відносний файловий модуль
 
-An import with a relative path e.g.:
+Імпорт з відносним шляхом, наприклад:
 
 ```ts
 import foo = require('./foo');
 ```
 
-Tells the TypeScript compiler to look for a TypeScript file at the relative location e.g. `./foo.ts` with respect to the current file. There is no further magic to this kind of import. Of course it can be a longer path e.g. `./foo/bar/bas` or `../../../foo/bar/bas` just like any other *relative paths* you are used to on disk.
+Каже компілятору TypeScript шукати файл TypeScript за відносним шляхом, наприклад, `./foo.ts` відносно поточного файлу. До цього виду імпорту не застосовується жодна додаткова магія. Звичайно, це може бути довший шлях, наприклад, `./foo/bar/bas` або `../../../foo/bar/bas`, як будь-які інші *відносні шляхи*, які ви звикли використовувати на диску.
 
-## Named Module
+## Іменований модуль
 
-The following statement:
+Наступний оператор:
 
 ```ts
 import foo = require('foo');
 ```
 
-Tells the TypeScript compiler to look for an external module in the following order:
+Каже компілятору TypeScript шукати зовнішній модуль в наступному порядку:
 
-* A named [module declaration](#module-declaration) from a file already in the compilation context.
-* If still not resolved and you are compiling with `--module commonjs`  or have set `--moduleResolution node` then its looked up using the [*node modules*](#node-modules) resolution algorithm.
-* If still not resolved and you provided `baseUrl` (and optionally `paths`) then the [*path substitutions*](#path-substitutions) resolution algorithm kicks in.
+* Іменована [декларація модуля](#module-declaration) з файлу, який вже є в контексті компіляції.
+* Якщо все ще не вирішено, і ви компілюєте з `--module commonjs` або встановили `--moduleResolution node`, тоді він шукається за алгоритмом розв'язання [*модулів node*](#node-modules).
+* Якщо все ще не вирішено, і ви надали `baseUrl` (і за бажанням `paths`), тоді запускається алгоритм розв'язання [*замін шляхів*](#path-substitutions).
 
-Note that `"foo"` can be a longer path string e.g. `"foo/bar/bas"`. The key here is that *it does not start with `./` or `../`*.
+Зверніть увагу, що `"foo"` може бути довшим рядком шляху, наприклад, `"foo/bar/bas"`. Ключовим тут є те, що *він не починається з `./` або `../`*.
 
-## Module Declaration
+## Декларація модуля
 
-A module declaration looks like:
+Декларація модуля виглядає так:
 
 ```ts
 declare module "foo" {
 
-    /// Some variable declarations
+    /// Деякі оголошення змінних
 
-    export var bar:number; /*sample*/
+    export var bar:number; /*приклад*/
 }
 ```
 
-This makes the module `"foo"`, *importable*.
+Це робить модуль `"foo"` *імпортованим*.
 
-## Node Modules
-The node module resolution is actually pretty much the same one used by Node.js / NPM ([official nodejs docs](https://nodejs.org/api/modules.html#modules_all_together)). Here is a simple mental model I have:
+## Модулі Node
 
-* module `foo/bar` will resolve to some file : `node_modules/foo` (the module) + `foo/bar`
+Розв'язання модулів Node насправді майже таке ж, як те, яке використовується Node.js / NPM ([офіційна документація nodejs](https://nodejs.org/api/modules.html#modules_all_together)). Ось проста ментальна модель, яку я маю:
 
-## Path Substitutions
+* модуль `foo/bar` буде розв'язуватися до деякого файлу: `node_modules/foo` (модуль) + `foo/bar`
+
+## Заміни шляхів
 
 TODO.
 
