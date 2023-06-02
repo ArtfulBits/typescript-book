@@ -1,32 +1,32 @@
-# Exception Handling
+# Обробка винятків
 
-JavaScript has an `Error` class that you can use for exceptions. You throw an error with the `throw` keyword. You can catch it with a `try` / `catch` block pair e.g.
+У JavaScript є клас `Error`, який можна використовувати для винятків. Ви кидаєте помилку за допомогою ключового слова `throw`. Ви можете перехопити її за допомогою пари блоків `try` / `catch`, наприклад:
 
 ```js
 try {
-  throw new Error('Something bad happened');
+  throw new Error('Щось пішло не так');
 }
 catch(e) {
   console.log(e);
 }
 ```
 
-## Error Sub Types
+## Підтипи помилок
 
-Beyond the built in `Error` class there are a few additional built-in error classes that inherit from `Error` that the JavaScript runtime can throw:
+Поза вбудованим класом `Error` є кілька додаткових вбудованих класів помилок, які успадковуються від `Error`, які може кинути середовище виконання JavaScript:
 
 ### RangeError
 
-Creates an instance representing an error that occurs when a numeric variable or parameter is outside of its valid range.
+Створює екземпляр, який представляє помилку, яка виникає, коли числова змінна або параметр знаходиться поза своїм дійсним діапазоном.
 
 ```js
-// Call console with too many arguments
+// Виклик консолі з надто багатьма аргументами
 console.log.apply(console, new Array(1000000000)); // RangeError: Invalid array length
 ```
 
 ### ReferenceError
 
-Creates an instance representing an error that occurs when de-referencing an invalid reference. e.g.
+Створює екземпляр, який представляє помилку, яка виникає при дереференції недійсної посилання, наприклад:
 
 ```js
 'use strict';
@@ -35,7 +35,7 @@ console.log(notValidVar); // ReferenceError: notValidVar is not defined
 
 ### SyntaxError
 
-Creates an instance representing a syntax error that occurs while parsing code that isn't valid JavaScript.
+Створює екземпляр, який представляє помилку синтаксису, яка виникає під час розбору коду, який не є дійсним JavaScript.
 
 ```js
 1***3; // SyntaxError: Unexpected token *
@@ -43,7 +43,7 @@ Creates an instance representing a syntax error that occurs while parsing code t
 
 ### TypeError
 
-Creates an instance representing an error that occurs when a variable or parameter is not of a valid type.
+Створює екземпляр, який представляє помилку, яка виникає, коли змінна або параметр не є дійсним типом.
 
 ```js
 ('1.2').toPrecision(1); // TypeError: '1.2'.toPrecision is not a function
@@ -51,38 +51,38 @@ Creates an instance representing an error that occurs when a variable or paramet
 
 ### URIError
 
-Creates an instance representing an error that occurs when `encodeURI()` or `decodeURI()` are passed invalid parameters.
+Створює екземпляр, який представляє помилку, яка виникає, коли `encodeURI()` або `decodeURI()` передаються недійсні параметри.
 
 ```js
 decodeURI('%'); // URIError: URI malformed
 ```
 
-## Always use `Error`
+## Завжди використовуйте `Error`
 
-Beginner JavaScript developers sometimes just throw raw strings e.g.
+Початківці розробники JavaScript іноді просто кидають необроблені рядки, наприклад:
 
 ```js
 try {
-  throw 'Something bad happened';
+  throw 'Щось пішло не так';
 }
 catch(e) {
   console.log(e);
 }
 ```
 
-*Don't do that*. The fundamental benefit of `Error` objects is that they automatically keep track of where they were built and originated with the `stack` property.
+*Не робіть цього*. Основна перевага об'єктів `Error` полягає в тому, що вони автоматично відстежують місце їх створення та походження за допомогою властивості `stack`.
 
-Raw strings result in a very painful debugging experience and complicate error analysis from logs.
+Необроблені рядки призводять до дуже болісного досвіду налагодження та ускладнюють аналіз помилок з журналів.
 
-## You don't have to `throw` an error
+## Ви не повинні кидати помилку
 
-It is okay to pass an `Error` object around. This is conventional in Node.js callback style code which takes callbacks with the first argument as an error object.
+Дозволено передавати об'єкт `Error`. Це звичайне в Node.js коді з зворотним викликом, який приймає зворотний виклик з першим аргументом як об'єктом помилки.
 
 ```js
 function myFunction (callback: (e?: Error)) {
   doSomethingAsync(function () {
     if (somethingWrong) {
-      callback(new Error('This is my error'))
+      callback(new Error('Це моя помилка'))
     } else {
       callback();
     }
@@ -90,13 +90,13 @@ function myFunction (callback: (e?: Error)) {
 }
 ```
 
-## Exceptional cases
+## Виняткові випадки
 
-`Exceptions should be exceptional` is a common saying in computer science. There are a few reasons why this is true for JavaScript (and TypeScript) as well.
+"Винятки повинні бути винятковими" - це загальне кажання в інформатиці. Є кілька причин, чому це так для JavaScript (і TypeScript).
 
-### Unclear where it is thrown
+### Невідомо, де воно кидається
 
-Consider the following piece of code:
+Розгляньте наступний фрагмент коду:
 
 ```js
 try {
@@ -104,67 +104,67 @@ try {
   const bar = runTask2();
 }
 catch(e) {
-  console.log('Error:', e);
+  console.log('Помилка:', e);
 }
 ```
 
-The next developer cannot know which function might throw the error. The person reviewing the code cannot know without reading the code for task1 / task2 and other functions they might call etc.
+Наступний розробник не може знати, яка функція може кинути помилку. Людина, яка переглядає код, не може знати без читання коду для завдання 1/завдання 2 та інших функцій, які вони можуть викликати і т.д.
 
-### Makes graceful handling hard
+### Робить гармонійну обробку складною
 
-You can try to make it graceful with explicit catch around each thing that might throw:
+Ви можете спробувати зробити це гармонійним з явним перехопленням навколо кожної річі, яка може кинути помилку:
 
 ```js
 try {
   const foo = runTask1();
 }
 catch(e) {
-  console.log('Error:', e);
+  console.log('Помилка:', e);
 }
 try {
   const bar = runTask2();
 }
 catch(e) {
-  console.log('Error:', e);
+  console.log('Помилка:', e);
 }
 ```
 
-But now if you need to pass stuff from the first task to the second one the code becomes messy: (notice `foo` mutation requiring `let` + explicit need for annotating it because it cannot be inferred from the return of `runTask1`):
+Але тепер, якщо вам потрібно передати речі з першого завдання до другого, код стає марудним: (зверніть увагу на мутацію `foo`, яка потребує `let` + явну необхідність анотувати її, оскільки її не можна вивести з повернення `runTask1`):
 
 ```ts
-let foo: number; // Notice use of `let` and explicit type annotation
+let foo: number; // Зверніть увагу на використання `let` та явну анотацію типу
 try {
   foo = runTask1();
 }
 catch(e) {
-  console.log('Error:', e);
+  console.log('Помилка:', e);
 }
 try {
   const bar = runTask2(foo);
 }
 catch(e) {
-  console.log('Error:', e);
+  console.log('Помилка:', e);
 }
 ```
 
-### Not well represented in the type system
+### Не добре представлено в системі типів
 
-Consider the function:
+Розгляньте функцію:
 
 ```ts
 function validate(value: number) {
-  if (value < 0 || value > 100) throw new Error('Invalid value');
+  if (value < 0 || value > 100) throw new Error('Недійсне значення');
 }
 ```
 
-Using `Error` for such cases is a bad idea as it is not represented in the type definition for the validate function (which is `(value:number) => void`). Instead a better way to create a validate method would be:
+Використання `Error` для таких випадків - погана ідея, оскільки воно не представлено в типовому визначенні для функції перевірки (яке є `(value: number) => void`). Замість цього краще створити метод перевірки таким чином:
 
 ```ts
 function validate(value: number): {error?: string} {
-  if (value < 0 || value > 100) return {error:'Invalid value'};
+  if (value < 0 || value > 100) return {error:'Недійсне значення'};
 }
 ```
 
-And now its represented in the type system.
+І тепер це представлено в системі типів.
 
-> Unless you want to handle the error in a very generic (simple / catch-all etc) way, don't *throw* an error.
+> Якщо ви не хочете обробляти помилку дуже загальним (простим / всеосяжним тощо) способом, не кидайте помилку.

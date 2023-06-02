@@ -1,27 +1,27 @@
 * [Type Guard](#type-guard)
-* [User Defined Type Guards](#user-defined-type-guards)
+* [Користувацькі визначені типові охоронці](#user-defined-type-guards)
 
 ## Type Guard
-Type Guards allow you to narrow down the type of an object within a conditional block. 
+Типові охоронці дозволяють звузити тип об'єкта в межах умовного блоку. 
 
 
 ### typeof
 
-TypeScript is aware of the usage of the JavaScript `instanceof` and `typeof` operators. If you use these in a conditional block, TypeScript will understand the type of the variable to be different within that conditional block. Here is a quick example where TypeScript realizes that a particular function does not exist on `string` and points out what was probably a user typo:
+TypeScript знає про використання операторів JavaScript `instanceof` та `typeof`. Якщо ви використовуєте їх в умовному блоку, TypeScript зрозуміє, що тип змінної відрізняється в межах цього умовного блоку. Ось швидкий приклад, де TypeScript розуміє, що певна функція не існує в `string` та вказує на те, що це, ймовірно, була помилка користувача:
 
 ```ts
 function doSomething(x: number | string) {
-    if (typeof x === 'string') { // Within the block TypeScript knows that `x` must be a string
-        console.log(x.subtr(1)); // Error, 'subtr' does not exist on `string`
-        console.log(x.substr(1)); // OK
+    if (typeof x === 'string') { // В межах блоку TypeScript знає, що `x` має бути рядком
+        console.log(x.subtr(1)); // Помилка, 'subtr' не існує в `string`
+        console.log(x.substr(1)); // ОК
     }
-    x.substr(1); // Error: There is no guarantee that `x` is a `string`
+    x.substr(1); // Помилка: немає гарантії, що `x` є `string`
 }
 ```
 
 ### instanceof
 
-Here is an example with a class and `instanceof`:
+Ось приклад з класом та `instanceof`:
 
 ```ts
 class Foo {
@@ -36,24 +36,24 @@ class Bar {
 
 function doStuff(arg: Foo | Bar) {
     if (arg instanceof Foo) {
-        console.log(arg.foo); // OK
-        console.log(arg.bar); // Error!
+        console.log(arg.foo); // ОК
+        console.log(arg.bar); // Помилка!
     }
     if (arg instanceof Bar) {
-        console.log(arg.foo); // Error!
-        console.log(arg.bar); // OK
+        console.log(arg.foo); // Помилка!
+        console.log(arg.bar); // ОК
     }
 
-    console.log(arg.common); // OK
-    console.log(arg.foo); // Error!
-    console.log(arg.bar); // Error!
+    console.log(arg.common); // ОК
+    console.log(arg.foo); // Помилка!
+    console.log(arg.bar); // Помилка!
 }
 
 doStuff(new Foo());
 doStuff(new Bar());
 ```
 
-TypeScript even understands `else` so when an `if` narrows out one type it knows that within the else *it's definitely not that type*. Here is an example:
+TypeScript навіть розуміє `else`, тому коли `if` звужує один тип, він знає, що в межах `else *це точно не той тип*. Ось приклад:
 
 ```ts
 class Foo {
@@ -66,12 +66,12 @@ class Bar {
 
 function doStuff(arg: Foo | Bar) {
     if (arg instanceof Foo) {
-        console.log(arg.foo); // OK
-        console.log(arg.bar); // Error!
+        console.log(arg.foo); // ОК
+        console.log(arg.bar); // Помилка!
     }
-    else {  // MUST BE Bar!
-        console.log(arg.foo); // Error!
-        console.log(arg.bar); // OK
+    else {  // МУСИТЬ БУТИ Bar!
+        console.log(arg.foo); // Помилка!
+        console.log(arg.bar); // ОК
     }
 }
 
@@ -81,7 +81,7 @@ doStuff(new Bar());
 
 ### in 
 
-The `in` operator does a safe check for the existence of a property on an object and can be used as a type guard. E.g. 
+Оператор `in` перевіряє наявність властивості на об'єкті та може використовуватися як типовий охоронець. Наприклад: 
 
 ```ts
 interface A {
@@ -103,64 +103,64 @@ function doStuff(q: A | B) {
 
 ### Literal Type Guard
 
-You can use `===` / `==` / `!==` / `!=` to distinguish between literal values
+Ви можете використовувати `===` / `==` / `!==` / `!=` для розрізнення літеральних значень
 
 ```ts
 type TriState = 'yes' | 'no' | 'unknown';
 
 function logOutState(state:TriState) {
   if (state == 'yes') {
-    console.log('User selected yes');
+    console.log('Користувач вибрав так');
   } else if (state == 'no') {
-    console.log('User selected no');
+    console.log('Користувач вибрав ні');
   } else {
-    console.log('User has not made a selection yet');
+    console.log('Користувач ще не зробив вибір');
   }
 }
 ```
 
-This even works when you have literal types in a union. You can check the value of a shared property name to discriminate the union e.g. 
+Це працює навіть тоді, коли у злитті є літеральні типи. Ви можете перевірити значення імені спільної властивості, щоб дискримінувати злиття, наприклад: 
 
 ```ts
 type Foo = {
-  kind: 'foo', // Literal type 
+  kind: 'foo', // Літеральний тип 
   foo: number
 }
 type Bar = {
-  kind: 'bar', // Literal type 
+  kind: 'bar', // Літеральний тип 
   bar: number
 }
 
 function doStuff(arg: Foo | Bar) {
     if (arg.kind === 'foo') {
-        console.log(arg.foo); // OK
-        console.log(arg.bar); // Error!
+        console.log(arg.foo); // ОК
+        console.log(arg.bar); // Помилка!
     }
-    else {  // MUST BE Bar!
-        console.log(arg.foo); // Error!
-        console.log(arg.bar); // OK
+    else {  // МУСИТЬ БУТИ Bar!
+        console.log(arg.foo); // Помилка!
+        console.log(arg.bar); // ОК
     }
 }
 ```
 
-### null and undefined with `strictNullChecks`
+### null та undefined з `strictNullChecks`
 
-TypeScript is smart enough to rule out both `null` and `undefined` with a `== null` / `!= null` check. For example:
+TypeScript досить розумний, щоб виключити як `null`, так і `undefined` з перевіркою `== null` / `!= null`. Наприклад:
 
 ```ts
 function foo(a?: number | null) {
   if (a == null) return;
 
-  // a is number now.
+  // a тепер число.
 }
 ```
 
-### User Defined Type Guards
-JavaScript doesn't have very rich runtime introspection support built in. When you are using just plain JavaScript Objects (using structural typing to your advantage), you do not even have access to `instanceof` or `typeof`. For these cases you can create *User Defined Type Guard functions*. These are just functions that return `someArgumentName is SomeType`. Here is an example:
+### Користувацькі визначені типові охоронці
+JavaScript не має дуже багато підтримки рантаймової інтроспекції. Коли ви використовуєте просто об'єкти JavaScript (використовуючи структурне типізування на свою користь), ви навіть не маєте доступу до `instanceof` або `typeof`. У таких випадках ви можете створити *функції користувацького визначення типу охоронців*. Це просто функції, які повертають `someArgumentName is SomeType`. Ось приклад:
 
 ```ts
 /**
- * Just some interfaces
+ * Просто деякі інтерфейси
  */
 interface Foo {
     foo: number;
@@ -173,23 +173,23 @@ interface Bar {
 }
 
 /**
- * User Defined Type Guard!
+ * Користувацький визначений типовий охоронець!
  */
 function isFoo(arg: any): arg is Foo {
     return arg.foo !== undefined;
 }
 
 /**
- * Sample usage of the User Defined Type Guard
+ * Приклад використання користувацького визначеного типового охоронця
  */
 function doStuff(arg: Foo | Bar) {
     if (isFoo(arg)) {
-        console.log(arg.foo); // OK
-        console.log(arg.bar); // Error!
+        console.log(arg.foo); // ОК
+        console.log(arg.bar); // Помилка!
     }
     else {
-        console.log(arg.foo); // Error!
-        console.log(arg.bar); // OK
+        console.log(arg.foo); // Помилка!
+        console.log(arg.bar); // ОК
     }
 }
 
@@ -197,36 +197,36 @@ doStuff({ foo: 123, common: '123' });
 doStuff({ bar: 123, common: '123' });
 ```
 
-### Type Guards and callbacks
+### Типові охоронці та зворотні виклики
 
-TypeScript doesn't assume type guards remain active in callbacks as making this assumption is dangerous. e.g. 
+TypeScript не припускає, що типові охоронці залишаються активними в зворотніх викликах, оскільки це припущення є небезпечним. наприклад: 
 
 ```js
-// Example Setup
+// Приклад налаштування
 declare var foo:{bar?: {baz: string}};
 function immediate(callback: ()=>void) {
   callback();
 }
 
 
-// Type Guard
+// Типовий охоронець
 if (foo.bar) {
-  console.log(foo.bar.baz); // Okay
+  console.log(foo.bar.baz); // ОК
   functionDoingSomeStuff(() => {
-    console.log(foo.bar.baz); // TS error: Object is possibly 'undefined'"
+    console.log(foo.bar.baz); // Помилка TS: Об'єкт може бути 'undefined'"
   });
 }
 ```
 
-The fix is as easy as storing the inferred safe value in a local variable, automatically ensuring it doesn't get changed externally, and TypeScript can easily understand that: 
+Виправлення таке ж просте, як збереження виведеного безпечного значення в локальній змінній, автоматично забезпечуючи, що воно не буде змінене ззовні, і TypeScript легко розуміє це: 
 
 ```js
-// Type Guard
+// Типовий охоронець
 if (foo.bar) {
-  console.log(foo.bar.baz); // Okay
+  console.log(foo.bar.baz); // ОК
   const bar = foo.bar;
   functionDoingSomeStuff(() => {
-    console.log(bar.baz); // Okay
+    console.log(bar.baz); // ОК
   });
 }
 ```

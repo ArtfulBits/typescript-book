@@ -1,19 +1,19 @@
-### Variables
-For example to tell TypeScript about the [`process` variable](https://nodejs.org/api/process.html) you *can* do:
+### Змінні
+Наприклад, щоб повідомити TypeScript про змінну [`process`](https://nodejs.org/api/process.html), ви *можете* зробити наступне:
 
 ```ts
 declare var process: any;
 ```
 
-> You don't *need* to do this for `process` as there is already a [community maintained `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
+> Вам не *потрібно* цього робити для `process`, оскільки вже існує [спільнота, яка підтримує `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
 
-This allows you to use the `process` variable without TypeScript complaining:
+Це дозволяє використовувати змінну `process` без скарг TypeScript:
 
 ```ts
 process.exit();
 ```
 
-We recommend using an interface wherever possible e.g.:
+Ми рекомендуємо використовувати інтерфейси, де це можливо, наприклад:
 
 ```ts
 interface Process {
@@ -22,7 +22,7 @@ interface Process {
 declare var process: Process;
 ```
 
-This allows other people to *extend* the nature of these global variables while still telling TypeScript about such modifications. E.g. consider the following case where we add an `exitWithLogging` function to process for our amusement:
+Це дозволяє іншим людям *розширювати* характер глобальних змінних, при цьому все ще повідомляючи TypeScript про такі зміни. Наприклад, розгляньте наступний випадок, де ми додаємо функцію `exitWithLogging` до процесу для нашої розваги:
 
 ```ts
 interface Process {
@@ -34,4 +34,4 @@ process.exitWithLogging = function() {
 };
 ```
 
-Let's look at interfaces in a bit more detail next.
+Давайте детальніше розглянемо інтерфейси наступного розділу.

@@ -1,20 +1,20 @@
 ## Callable
-You can annotate callables as a part of a type or an interface as follows
+Ви можете анотувати функції як частину типу або інтерфейсу наступним чином:
 
 ```ts
 interface ReturnString {
   (): string
 }
 ```
-An instance of such an interface would be a function that returns a string e.g.
+Екземпляр такого інтерфейсу буде функцією, яка повертає рядок, наприклад:
 
 ```ts
 declare const foo: ReturnString;
-const bar = foo(); // bar is inferred as a string
+const bar = foo(); // bar інферується як рядок
 ```
 
-### Obvious examples
-Of course such a *callable* annotation can also specify any arguments / optional arguments / rest arguments as needed. e.g. here is a complex example:
+### Очевидні приклади
+Звичайно, така анотація *callable* також може вказувати будь-які аргументи / необов'язкові аргументи / аргументи залишку за потребою. Ось складний приклад:
 
 ```ts
 interface Complex {
@@ -22,7 +22,7 @@ interface Complex {
 }
 ```
 
-An interface can provide multiple callable annotations to specify function overloading. For example:
+Інтерфейс може надавати кілька анотацій *callable* для вказівки перевантаження функцій. Наприклад:
 
 ```ts
 interface Overloaded {
@@ -30,7 +30,7 @@ interface Overloaded {
     (foo: number): number
 }
 
-// example implementation
+// Приклад реалізації
 function stringOrNumber(foo: number): number;
 function stringOrNumber(foo: string): string;
 function stringOrNumber(foo: any): any {
@@ -43,12 +43,12 @@ function stringOrNumber(foo: any): any {
 
 const overloaded: Overloaded = stringOrNumber;
 
-// example usage
-const str = overloaded(''); // type of `str` is inferred as `string`
-const num = overloaded(123); // type of `num` is inferred as `number`
+// Приклад використання
+const str = overloaded(''); // тип `str` інферується як `string`
+const num = overloaded(123); // тип `num` інферується як `number`
 ```
 
-Of course, like the body of *any* interface, you can use the body of a callable interface as a type annotation for a variable. For example:
+Звичайно, як і тіло будь-якого інтерфейсу, ви можете використовувати тіло *callable* інтерфейсу як анотацію типу для змінної. Наприклад:
 
 ```ts
 const overloaded: {
@@ -57,25 +57,25 @@ const overloaded: {
 } = (foo: any) => foo;
 ```
 
-### Arrow Syntax
-To make it easy to specify callable signatures, TypeScript also allows simple arrow type annotations. For example, a function that takes a `number` and returns a `string` can be annotated as:
+### Синтаксис стрілки
+Щоб зробити анотації підписів викликів простими, TypeScript також дозволяє прості анотації типів стрілки. Наприклад, функція, яка приймає `number` і повертає `string`, може бути анотована як:
 
 ```ts
 const simple: (foo: number) => string
     = (foo) => foo.toString();
 ```
 
-> Only limitation of the arrow syntax: You can't specify overloads. For overloads you must use the full bodied `{ (someArgs): someReturn }` syntax.
+> Єдине обмеження синтаксису стрілки: ви не можете вказати перевантаження. Для перевантаження ви повинні використовувати повне тіло синтаксису `{ (someArgs): someReturn }`.
 
 ### Newable
 
-Newable is just a special type of *callable* type annotation with the prefix `new`. It simply means that you need to *invoke* with `new` e.g.
+Newable - це просто спеціальний тип анотації *callable* з префіксом `new`. Це просто означає, що вам потрібно *викликати* з `new`, наприклад:
 
 ```ts
 interface CallMeWithNewToGetString {
   new(): string
 }
-// Usage
+// Використання
 declare const Foo: CallMeWithNewToGetString;
-const bar = new Foo(); // bar is inferred to be of type string
+const bar = new Foo(); // bar інферується як рядок
 ```

@@ -1,39 +1,38 @@
 # `@types`
 
-[Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped) is definitely one of TypeScript's greatest strengths. The community has effectively gone ahead and **documented** the nature of nearly 90% of the top JavaScript projects out there.
+[Definitely Typed](https://github.com/DefinitelyTyped/DefinitelyTyped) - це, безумовно, одна з найбільших переваг TypeScript. Спільнота ефективно задокументувала природу майже 90% найпопулярніших проектів JavaScript.
 
-This means that you can use these projects in a very interactive and exploratory manner, no need to have the docs open in a separate window and making sure you don't make a typo.
+Це означає, що ви можете використовувати ці проекти в дуже інтерактивному та дослідницькому режимах, не потрібно відкривати документацію в окремому вікні та переконуватися, що ви не допускаєте помилок.
 
-## Using `@types`
+## Використання `@types`
 
-Installation is fairly simple as it just works on top of `npm`. So as an example you can install type definitions for `jquery` simply as:
+Встановлення досить просте, оскільки воно працює на основі `npm`. Наприклад, ви можете встановити типові визначення для `jquery` просто так:
 
 ```
 npm install @types/jquery --save-dev
 ```
 
-`@types` supports both *global* and *module* type definitions.
+`@types` підтримує як *глобальні*, так і *модульні* типові визначення.
 
+### Глобальні `@types`
 
-### Global `@types`
+За замовчуванням будь-які визначення, які підтримують глобальне використання, автоматично включаються. Наприклад, для `jquery` ви повинні мати можливість просто почати використовувати `$` *глобально* у своєму проекті.
 
-By default any definitions that support global consumption are included automatically. E.g. for `jquery` you should be able to just start using `$` *globally* in your project.
+Однак для *бібліотек* (наприклад, `jquery`) я, як правило, рекомендую використовувати *модулі*:
 
-However, for *libraries*  (like `jquery`) I generally recommend using *modules*:
+### Модульні `@types`
 
-### Module `@types`
-
-After installation, no special configuration is required really. You just use it like a module e.g.:
+Після встановлення, насправді не потрібна жодна спеціальна конфігурація. Ви просто використовуєте його як модуль, наприклад:
 
 ```ts
 import * as $ from "jquery";
 
-// Use $ at will in this module :)
+// Використовуйте $ на свій розсуд у цьому модулі :)
 ```
 
-## Controlling Globals
+## Контроль глобальних змінних
 
-As can be seen, having a definition that allows global leak-in automatically can be a problem for some teams. So you can choose to *explicitly* only bring in the types that make sense using the `tsconfig.json` `compilerOptions.types` e.g.:
+Як можна побачити, визначення, яке дозволяє автоматично проникати в глобальний контекст, може бути проблемою для деяких команд. Тому ви можете вибрати *явно* тільки ті типи, які мають сенс, використовуючи `tsconfig.json` `compilerOptions.types`, наприклад:
 
 ```json
 {
@@ -45,4 +44,4 @@ As can be seen, having a definition that allows global leak-in automatically can
 }
 ```
 
-The above shows a sample where only `jquery` will be allowed to be used. Even if the person installs another definition like `npm install @types/node` its globals (e.g. [`process`](https://nodejs.org/api/process.html)) will not leak into your code until you add them to the `tsconfig.json` types option.
+Вище показано приклад, де дозволено використовувати тільки `jquery`. Навіть якщо людина встановлює інше визначення, наприклад, `npm install @types/node`, його глобальні змінні (наприклад, [`process`](https://nodejs.org/api/process.html)) не проникнуть у ваш код, поки ви не додасте їх до параметру `types` у `tsconfig.json`.

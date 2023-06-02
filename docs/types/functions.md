@@ -1,42 +1,42 @@
-* [Parameter Annotations](#parameter-annotations)
-* [Return Type Annotation](#return-type-annotation)
-* [Optional Parameters](#optional-parameters)
-* [Overloading](#overloading)
+* [Анотації параметрів](#parameter-annotations)
+* [Анотація типу повернення](#return-type-annotation)
+* [Необов'язкові параметри](#optional-parameters)
+* [Перевантаження](#overloading)
 
-## Functions
-The TypeScript type system pays a lot of love to functions, after all they are the core building blocks of a composable system.
+## Функції
+Система типів TypeScript надає багато можливостей для функцій, оскільки вони є основними будівельними блоками композиційної системи.
 
-### Parameter annotations
-Of course you can annotate function parameters just like you can annotate other variables:
+### Анотації параметрів
+Звичайно, ви можете анотувати параметри функції так само, як і інші змінні:
 
 ```ts
-// variable annotation
+// анотація змінної
 var sampleVariable: { bar: number }
 
-// function parameter annotation
+// анотація параметра функції
 function foo(sampleParameter: { bar: number }) { }
 ```
 
-Here I used inline type annotations. Of course you can use interfaces etc.
+Тут я використовував анотації типів в рядку. Звичайно, ви можете використовувати інтерфейси і т.д.
 
-### Return type annotation
+### Анотація типу повернення
 
-You can annotate the return type after the function parameter list with the same style as you use for a variable, e.g. `: Foo` in the below example:
+Ви можете анотувати тип повернення після списку параметрів функції з тим самим стилем, як і для змінної, наприклад, `: Foo` у наведеному нижче прикладі:
 
 ```ts
 interface Foo {
     foo: string;
 }
 
-// Return type annotated as `: Foo`
+// Тип повернення анотований як `: Foo`
 function foo(sample: Foo): Foo {
     return sample;
 }
 ```
 
-Of course I used an `interface` here, but you are free to use other annotations e.g. inline annotations.
+Звичайно, я використовував `interface` тут, але ви можете використовувати інші анотації, наприклад, анотації в рядку.
 
-Quite commonly you don't *need* to annotate the return type of a function as it can generally be inferred by the compiler.
+Досить часто вам не *потрібно* анотувати тип повернення функції, оскільки його можна загалом вивести компілятором.
 
 ```ts
 interface Foo {
@@ -44,24 +44,24 @@ interface Foo {
 }
 
 function foo(sample: Foo) {
-    return sample; // inferred return type 'Foo'
+    return sample; // виведений тип повернення 'Foo'
 }
 ```
 
-However, it is generally a good idea to add these annotation to help with errors e.g.:
+Однак, загалом, добре додавати ці анотації, щоб допомогти з помилками, наприклад:
 
 ```ts
 function foo() {
-    return { fou: 'John Doe' }; // You might not find this misspelling of `foo` till it's too late
+    return { fou: 'John Doe' }; // Ви можливо не знайдете цю помилку в написанні `foo`, поки не буде занадто пізно
 }
 
 sendAsJSON(foo());
 ```
 
-If you don't plan to return anything from a function, you can annotate it as `:void`. You can generally drop `:void` and leave it to the inference engine though.
+Якщо ви не плануєте повертати нічого з функції, ви можете анотувати її як `:void`. Загалом ви можете пропустити `:void` і залишити його для системи виведення.
 
-### Optional Parameters
-You can mark a parameter as optional:
+### Необов'язкові параметри
+Ви можете позначити параметр як необов'язковий:
 
 ```ts
 function foo(bar: number, bas?: string): void {
@@ -72,7 +72,7 @@ foo(123);
 foo(123, 'hello');
 ```
 
-Alternatively you can even provide a default value (using `= someValue` after the parameter declaration) which is injected for you if the caller doesn't provide that argument:
+Альтернативно, ви можете навіть надати значення за замовчуванням (використовуючи `= someValue` після оголошення параметра), яке вставляється для вас, якщо викликач не надає цей аргумент:
 
 ```ts
 function foo(bar: number, bas: string = 'hello') {
@@ -83,8 +83,8 @@ foo(123);           // 123, hello
 foo(123, 'world');  // 123, world
 ```
 
-### Overloading
-TypeScript allows you to *declare* function overloads. This is useful for documentation + type safety purpose. Consider the following code:
+### Перевантаження
+TypeScript дозволяє *оголошувати* перевантаження функцій. Це корисно для документації та забезпечення типової безпеки. Розгляньте наступний код:
 
 ```ts
 function padding(a: number, b?: number, c?: number, d?: any) {
@@ -104,16 +104,16 @@ function padding(a: number, b?: number, c?: number, d?: any) {
 }
 ```
 
-If you look at the code carefully you realize the meaning of `a`,`b`,`c`,`d` changes based on how many arguments are passed in. Also the function only expects `1`, `2` or `4` arguments. These constraints can be *enforced* and *documented* using function overloading. You just declare the function header multiple times. The last function header is the one that is actually active *within* the function body but is not available to the outside world.
+Якщо ви уважно дивитесь на код, ви розумієте, що значення `a`,`b`,`c`,`d` змінюються в залежності від того, скільки аргументів передається. Крім того, функція очікує лише `1`, `2` або `4` аргументи. Ці обмеження можна *застосувати* та *документувати* за допомогою перевантаження функцій. Ви просто оголошуєте заголовок функції кілька разів. Останній заголовок функції є тим, який фактично активний *в середині* тіла функції, але він недоступний для зовнішнього світу.
 
-This is shown below:
+Це показано нижче:
 
 ```ts
-// Overloads
+// Перевантаження
 function padding(all: number);
 function padding(topAndBottom: number, leftAndRight: number);
 function padding(top: number, right: number, bottom: number, left: number);
-// Actual implementation that is a true representation of all the cases the function body needs to handle
+// Фактична реалізація, яка є справжньою представницею всіх випадків, які потрібно обробити в тілі функції
 function padding(a: number, b?: number, c?: number, d?: number) {
     if (b === undefined && c === undefined && d === undefined) {
         b = c = d = a;
@@ -131,24 +131,24 @@ function padding(a: number, b?: number, c?: number, d?: number) {
 }
 ```
 
-Here the first three function headers are available as valid calls to `padding`:
+Тут перші три заголовки функцій доступні як дійсні виклики `padding`:
 
 ```ts
-padding(1); // Okay: all
-padding(1,1); // Okay: topAndBottom, leftAndRight
-padding(1,1,1,1); // Okay: top, right, bottom, left
+padding(1); // Ок: all
+padding(1,1); // Ок: topAndBottom, leftAndRight
+padding(1,1,1,1); // Ок: top, right, bottom, left
 
-padding(1,1,1); // Error: Not a part of the available overloads
+padding(1,1,1); // Помилка: не є частиною доступних перевантажень
 ```
 
-Of course it's important for the final declaration (the true declaration as seen from inside the function) to be compatible with all the overloads. This is because that is the true nature of the function calls that the function body needs to account for.
+Звичайно, важливо, щоб остаточне оголошення (справжнє оголошення, як бачиться зсередини функції) було сумісним з усіма перевантаженнями. Це тому, що це справжня природа викликів функції, які функція повинна враховувати.
 
-> Function overloading in TypeScript doesn't come with any runtime overhead. It just allows you to document the manner you expect the function to be called in and the compiler holds the rest of your code in check.
+> Перевантаження функцій в TypeScript не має ніяких накладних витрат на час виконання. Воно просто дозволяє документувати спосіб, яким ви очікуєте виклик функції, і компілятор перевіряє решту вашого коду.
 
-### Declaring Functions
-> Quick Tip: *Type Declarations* are how you describe the types of existing implementations. 
+### Оголошення функцій
+> Швидкий підказка: *Оголошення типів* - це спосіб описувати типи існуючих реалізацій.
 
-There are two ways to *declare* the type of a function without providing an implementation. E.g. 
+Є два способи *оголошення* типу функції без надання реалізації. Наприклад:
 
 ```ts
 type LongHand = {
@@ -157,7 +157,7 @@ type LongHand = {
 
 type ShortHand = (a: number) => number;
 ```
-The example above are both *exactly* equivalent. The differences exist when you want to add overloads. You can only add overloads in the long hand declaration version e.g. 
+У цьому прикладі обидва варіанти *точно* еквівалентні. Різниця полягає в тому, коли ви хочете додати перевантаження. Ви можете додавати перевантаження тільки в довгому варіанті оголошення, наприклад:
 
 ```ts
 type LongHandAllowsOverloadDeclarations = {

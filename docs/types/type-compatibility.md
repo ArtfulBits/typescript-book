@@ -1,45 +1,45 @@
-* [Type Compatibility](#type-compatibility)
-* [Soundness](#soundness)
-* [Structural](#structural)
-* [Generics](#generics)
-* [Variance](#variance)
-* [Functions](#functions)
-  * [Return Type](#return-type)
-  * [Number of arguments](#number-of-arguments)
-  * [Optional and rest parameters](#optional-and-rest-parameters)
-  * [Types of arguments](#types-of-arguments)
-* [Enums](#enums)
-* [Classes](#classes)
-* [Generics](#generics)
-* [FootNote: Invariance](#footnote-invariance)
+* [Сумісність типів](#type-compatibility)
+* [Звуковість](#soundness)
+* [Структурна](#structural)
+* [Загальні типи](#generics)
+* [Варіантність](#variance)
+* [Функції](#functions)
+  * [Тип повернення](#return-type)
+  * [Кількість аргументів](#number-of-arguments)
+  * [Необов'язкові та залишкові параметри](#optional-and-rest-parameters)
+  * [Типи аргументів](#types-of-arguments)
+* [Перелічення](#enums)
+* [Класи](#classes)
+* [Загальні типи](#generics)
+* [Примітка: Незмінність](#footnote-invariance)
 
-## Type Compatibility
+## Сумісність типів
 
-Type Compatibility (as we discuss here) determines if one thing can be assigned to another. E.g. `string` and `number` are not compatible:
+Сумісність типів (як ми тут обговорюємо) визначає, чи можна одне призначити іншому. Наприклад, `string` та `number` несумісні:
 
 ```ts
 let str: string = "Hello";
 let num: number = 123;
 
-str = num; // ERROR: `number` is not assignable to `string`
-num = str; // ERROR: `string` is not assignable to `number`
+str = num; // ПОМИЛКА: `number` не може бути призначено `string`
+num = str; // ПОМИЛКА: `string` не може бути призначено `number`
 ```
 
-## Soundness
+## Звуковість
 
-TypeScript's type system is designed to be convenient and allows for *unsound* behaviours e.g. anything can be assigned to `any` which means telling the compiler to allow you to do whatever you want:
+Система типів TypeScript розроблена для зручності та дозволяє *незвукові* поведінки, наприклад, будь-що може бути призначено `any`, що означає, що ви кажете компілятору дозволити вам робити все, що ви хочете:
 
 ```ts
 let foo: any = 123;
 foo = "Hello";
 
-// Later
-foo.toPrecision(3); // Allowed as you typed it as `any`
+// Пізніше
+foo.toPrecision(3); // Дозволено, оскільки ви ввели його як `any`
 ```
 
-## Structural
+## Структурна
 
-TypeScript objects are structurally typed. This means the *names* don't matter as long as the structures match
+Об'єкти TypeScript мають структурний тип. Це означає, що *назви* не мають значення, якщо структури співпадають
 
 ```ts
 interface Point {
@@ -52,13 +52,13 @@ class Point2D {
 }
 
 let p: Point;
-// OK, because of structural typing
+// Добре, через структурну типізацію
 p = new Point2D(1,2);
 ```
 
-This allows you to create objects on the fly (like you do in vanilla JS) and still have safety whenever it can be inferred.
+Це дозволяє створювати об'єкти на льоту (як ви робите в vanilla JS) та все ще мати безпеку, коли це можна вивести.
 
-Also *more* data is considered fine:
+Також *більше* даних вважається добре:
 
 ```ts
 interface Point2D {
@@ -72,130 +72,170 @@ interface Point3D {
 }
 var point2D: Point2D = { x: 0, y: 10 }
 var point3D: Point3D = { x: 0, y: 10, z: 20 }
-function iTakePoint2D(point: Point2D) { /* do something */ }
+function iTakePoint2D(point: Point2D) { /* зробити щось */ }
 
-iTakePoint2D(point2D); // exact match okay
-iTakePoint2D(point3D); // extra information okay
-iTakePoint2D({ x: 0 }); // Error: missing information `y`
+iTakePoint2D(point2D); // точний збіг добре
+iTakePoint2D(point3D); // додаткова інформація добре
+iTakePoint2D({ x: 0 }); // Помилка: відсутня інформація `y`
 ```
 
-## Variance
+## Варіантність
 
-Variance is an easy to understand and important concept for type compatibility analysis.
+Варіантність - це легко зрозуміла та важлива концепція для аналізу сумісності типів.
 
-For simple types `Base` and `Child`, if `Child` is a child of `Base`, then instances of `Child` can be assigned to a variable of type `Base`.
+Для простих типів `Base` та `Child`, якщо `Child` є дитиною `Base`, то екземпляри `Child` можуть бути призначені змінній типу `Base`.
 
-> This is polymorphism 101
+> Це поліморфізм 101
 
-In type compatibility of complex types composed of such `Base` and `Child` types depends on where the `Base` and `Child` in similar scenarios is driven by *variance*.
+У сумісності типів складних типів, що складаються з таких типів `Base` та `Child`, залежить від того, де `Base` та `Child` в подібних сценаріях визначається *варіантністю*.
 
-* Covariant : (co aka joint) only in *same direction*
-* Contravariant : (contra aka negative) only in *opposite direction*
-* Bivariant : (bi aka both) both co and contra.
-* Invariant : if the types aren't exactly the same then they are incompatible.
+* Коваріантний: (co, тобто спільний) тільки в *одному напрямку*
+* Контраваріантний: (contra, тобто негативний) тільки в *протилежному напрямку*
+* Біваріантний: (bi, тобто обидва) як co, так і contra.
+* Незмінний: якщо типи не точно співпадають, то вони несумісні.
 
-> Note: For a completely sound type system in the presence of mutable data like JavaScript, `invariant` is the only valid option. But as mentioned *convenience* forces us to make unsound choices.
+> Зауважте: для повністю звукової системи типів в присутності змінних даних, таких як JavaScript, *незмінність* є єдиним дійсним варіантом. Але, як зазначено, *зручність* змушує нас робити незвукові вибори.
 
-## Functions
+## Функції
 
-There are a few subtle things to consider when comparing two functions.
+Є кілька тонких моментів, які потрібно враховувати при порівнянні двох функцій.
 
-### Return Type
+### Тип повернення
 
-`covariant`: The return type must contain at least enough data.
+`коваріантний`: тип повернення повинен містити принаймні достатньо даних.
 
 ```ts
-/** Type Hierarchy */
+/** Ієрархія типів */
 interface Point2D { x: number; y: number; }
 interface Point3D { x: number; y: number; z: number; }
 
-/** Two sample functions */
+/** Дві зразки функцій */
 let iMakePoint2D = (): Point2D => ({ x: 0, y: 0 });
 let iMakePoint3D = (): Point3D => ({ x: 0, y: 0, z: 0 });
 
-/** Assignment */
-iMakePoint2D = iMakePoint3D; // Okay
-iMakePoint3D = iMakePoint2D; // ERROR: Point2D is not assignable to Point3D
+/** Призначення */
+iMakePoint2D = iMakePoint3D; // Добре
+iMakePoint3D = iMakePoint2D; // ПОМИЛКА: Point2D не може бути призначено Point3D
 ```
 
-### Number of arguments
+### Кількість аргументів
 
-Fewer arguments are okay (i.e. functions can choose to ignore additional parameters). After all you are guaranteed to be called with at least enough arguments.
+Менша кількість аргументів допустима (тобто функції можуть вибирати ігнорувати додаткові параметри). В кінці кінців, вам гарантовано, що вас викличуть з принаймні достатньою кількістю аргументів.
 
 ```ts
 let iTakeSomethingAndPassItAnErr
-    = (x: (err: Error, data: any) => void) => { /* do something */ };
+    = (x: (err: Error, data: any) => void) => { /* зробити щось */ };
 
-iTakeSomethingAndPassItAnErr(() => null) // Okay
-iTakeSomethingAndPassItAnErr((err) => null) // Okay
-iTakeSomethingAndPassItAnErr((err, data) => null) // Okay
+iTakeSomethingAndPassItAnErr(() => null) // Добре
+iTakeSomethingAndPassItAnErr((err) => null) // Добре
+iTakeSomethingAndPassItAnErr((err, data) => null) // Добре
 
-// ERROR: Argument of type '(err: any, data: any, more: any) => null' is not assignable to parameter of type '(err: Error, data: any) => void'.
+// ПОМИЛКА: Аргумент типу '(err: any, data: any, more: any) => null' не може бути призначений параметру типу '(err: Error, data: any) => void'.
 iTakeSomethingAndPassItAnErr((err, data, more) => null);
 ```
 
-### Optional and Rest Parameters
+### Необов'язкові та залишкові параметри
 
-Optional (pre determined count) and Rest parameters (any count of arguments) are compatible, again for convenience.
+Необов'язкові (заздалегідь визначена кількість) та залишкові параметри (будь-яка кількість аргументів) сумісні, знову ж таки, для зручності.
 
 ```ts
-let foo = (x:number, y: number) => { /* do something */ }
-let bar = (x?:number, y?: number) => { /* do something */ }
-let bas = (...args: number[]) => { /* do something */ }
+let foo = (x:number, y: number) => { /* зробити щось */ }
+let bar = (x?:number, y?: number) => { /* зробити щось */ }
+let bas = (...args: number[]) => { /* зробити щось */ }
 
 foo = bar = bas;
 bas = bar = foo;
 ```
 
-> Note: optional (in our example `bar`) and non optional (in our example `foo`) are only compatible if strictNullChecks is false.
+> Зауважте: необов'язкові (у нашому прикладі `bar`) та необов'язкові (у нашому прикладі `foo`) сумісні тільки тоді, коли strictNullChecks дорівнює false.
 
-### Types of arguments
+### Типи аргументів
 
-`bivariant` : This is designed to support common event handling scenarios
+`біваріантний`: це призначено для
+
+```uk
+# Сумісність типів в TypeScript
+
+TypeScript має структурну систему типів, що означає, що типи зі структурною сумісністю можуть бути привласнені один одному. Це може призвести до неочікуваної поведінки в деяких випадках. Нижче наведено кілька прикладів.
+
+## Прості типи
+
+* Прості типи повинні бути однакові, щоб бути сумісними.
 
 ```ts
-/** Event Hierarchy */
-interface Event { timestamp: number; }
-interface MouseEvent extends Event { x: number; y: number }
-interface KeyEvent extends Event { keyCode: number }
+let x: number;
+let y: number | string;
 
-/** Sample event listener */
-enum EventType { Mouse, Keyboard }
-function addEventListener(eventType: EventType, handler: (n: Event) => void) {
-    /* ... */
-}
-
-// Unsound, but useful and common. Works as function argument comparison is bivariant
-addEventListener(EventType.Mouse, (e: MouseEvent) => console.log(e.x + "," + e.y));
-
-// Undesirable alternatives in presence of soundness
-addEventListener(EventType.Mouse, (e: Event) => console.log((<MouseEvent>e).x + "," + (<MouseEvent>e).y));
-addEventListener(EventType.Mouse, <(e: Event) => void>((e: MouseEvent) => console.log(e.x + "," + e.y)));
-
-// Still disallowed (clear error). Type safety enforced for wholly incompatible types
-addEventListener(EventType.Mouse, (e: number) => console.log(e));
+x = y; // Помилка: типи несумісні
+y = x; // OK
 ```
 
-Also makes `Array<Child>` assignable to `Array<Base>` (covariance) as the functions are compatible. Array covariance requires all `Array<Child>` functions to be assignable to `Array<Base>` e.g. `push(t:Child)` is assignable to `push(t:Base)` which is made possible by function argument bivariance.
+## Функції
 
-**This can be confusing for people coming from other languages** who would expect the following to error but will not in TypeScript:
+* Функції повинні мати однакову кількість параметрів. Параметри також повинні мати сумісні типи.
 
 ```ts
-/** Type Hierarchy */
-interface Point2D { x: number; y: number; }
-interface Point3D { x: number; y: number; z: number; }
+let x = (a: number) => 0;
+let y = (b: number, s: string) => 0;
 
-/** Two sample functions */
-let iTakePoint2D = (point: Point2D) => { /* do something */ }
-let iTakePoint3D = (point: Point3D) => { /* do something */ }
+y = x; // OK
+x = y; // Помилка
+```
 
-iTakePoint3D = iTakePoint2D; // Okay : Reasonable
-iTakePoint2D = iTakePoint3D; // Okay : WHAT
+* Тип повернення функції повинен мати тип, який може бути привласнений типу відповідного параметра.
+
+```ts
+let x = () => ({name: 'Alice'});
+let y = () => ({name: 'Alice', location: 'Seattle'});
+
+x = y; // Помилка
+y = x; // OK, оскільки тип `y` містить тип `x`
+```
+
+## Об'єкти
+
+* Об'єкти повинні мати однакову кількість властивостей. Властивості також повинні мати сумісні типи.
+
+```ts
+let x = {name: 'Alice'};
+let y = {name: 'Alice', location: 'Seattle'};
+
+x = y; // Помилка
+y = x; // OK
+```
+
+* Якщо об'єкт містить приватні чи захищені властивості, то він повинен бути з того ж класу, щоб бути сумісним.
+
+```ts
+class Animal { feet: number; }
+class Size { feet: number; }
+
+let a: Animal;
+let s: Size;
+
+a = s; // OK
+s = a; // OK, оскільки обидва мають однакові властивості
+
+class Animal { protected feet: number; }
+class Cat extends Animal { }
+
+let animal: Animal;
+let cat: Cat;
+
+animal = cat; // OK
+cat = animal; // OK, оскільки обидва мають однакові захищені властивості
+
+class Size { protected feet: number; }
+
+let size: Size;
+
+animal = size; // Помилка
+size = animal; // Помилка
 ```
 
 ## Enums
 
-* Enums are compatible with numbers, and numbers are compatible with enums.
+* Enums сумісні з числами, і числа сумісні з enums.
 
 ```ts
 enum Status { Ready, Waiting };
@@ -203,11 +243,11 @@ enum Status { Ready, Waiting };
 let status = Status.Ready;
 let num = 0;
 
-status = num; // OKAY
-num = status; // OKAY
+status = num; // OK
+num = status; // OK
 ```
 
-* Enum values from different enum types are considered incompatible. This makes enums useable *nominally* (as opposed to structurally)
+* Значення enums з різних типів enums вважаються несумісними. Це робить enums використовуваними *номінально* (на відміну від структурних типів).
 
 ```ts
 enum Status { Ready, Waiting };
@@ -216,12 +256,12 @@ enum Color { Red, Blue, Green };
 let status = Status.Ready;
 let color = Color.Red;
 
-status = color; // ERROR
+status = color; // Помилка
 ```
 
-## Classes
+## Класи
 
-* Only instance members and methods are compared. *constructors* and *statics* play no part.
+* Порівнюються лише екземплярні властивості та методи. *Конструктори* та *статичні* члени не беруть участі в порівнянні.
 
 ```ts
 class Animal {
@@ -241,31 +281,31 @@ a = s;  // OK
 s = a;  // OK
 ```
 
-* `private` and `protected` members *must originate from the same class*. Such members essentially make the class *nominal*.
+* `private` та `protected` властивості *повинні походити з того ж класу*. Такі властивості в суті роблять клас *номінальним*.
 
 ```ts
-/** A class hierarchy */
+/** Ієрархія класів */
 class Animal { protected feet: number; }
 class Cat extends Animal { }
 
 let animal: Animal;
 let cat: Cat;
 
-animal = cat; // OKAY
-cat = animal; // OKAY
+animal = cat; // OK
+cat = animal; // OK
 
-/** Looks just like Animal */
+/** Виглядає так само, як Animal */
 class Size { protected feet: number; }
 
 let size: Size;
 
-animal = size; // ERROR
-size = animal; // ERROR
+animal = size; // Помилка
+size = animal; // Помилка
 ```
 
 ## Generics
 
-Since TypeScript has a structural type system, type parameters only affect compatibility when used by a member. For example, in the  following `T` has no impact on compatibility:
+Оскільки TypeScript має структурну систему типів, параметри типу впливають на сумісність лише тоді, коли вони використовуються членом. Наприклад, у наступному прикладі `T` не впливає на сумісність:
 
 ```ts
 interface Empty<T> {
@@ -273,10 +313,10 @@ interface Empty<T> {
 let x: Empty<number>;
 let y: Empty<string>;
 
-x = y;  // okay, y matches structure of x
+x = y;  // OK, оскільки `y` відповідає структурі `x`
 ```
 
-However, if `T` is used, it will play a role in compatibility based on its *instantiation* as shown below:
+Однак, якщо `T` використовується, він впливає на сумісність на основі його *інстанціювання*, як показано нижче:
 
 ```ts
 interface NotEmpty<T> {
@@ -285,10 +325,10 @@ interface NotEmpty<T> {
 let x: NotEmpty<number>;
 let y: NotEmpty<string>;
 
-x = y;  // error, x and y are not compatible
+x = y;  // Помилка, `x` та `y` несумісні
 ```
 
-In cases where generic arguments haven't been *instantiated* they are substituted by `any` before checking compatibility:
+У випадках, коли аргументи generics не були *інстанційовані*, вони замінюються на `any` перед перевіркою сумісності:
 
 ```ts
 let identity = function<T>(x: T): T {
@@ -299,10 +339,10 @@ let reverse = function<U>(y: U): U {
     // ...
 }
 
-identity = reverse;  // Okay because (x: any)=>any matches (y: any)=>any
+identity = reverse;  // OK, оскільки (x: any)=>any відповідає (y: any)=>any
 ```
 
-Generics involving classes are matched by relevant class compatibility as mentioned before. e.g. 
+Generics, що включають класи, відповідають відповідній сумісності класів, як зазначено вище. Наприклад:
 
 ```ts
 class List<T> {
@@ -313,53 +353,53 @@ class Animal { name: string; }
 class Cat extends Animal { meow() { } }
 
 const animals = new List<Animal>();
-animals.add(new Animal()); // Okay 
-animals.add(new Cat()); // Okay 
+animals.add(new Animal()); // OK 
+animals.add(new Cat()); // OK 
 
 const cats = new List<Cat>();
-cats.add(new Animal()); // Error 
-cats.add(new Cat()); // Okay
+cats.add(new Animal()); // Помилка 
+cats.add(new Cat()); // OK
 ```
 
-## FootNote: Invariance
+## Примітка: інваріантність
 
-We said invariance is the only sound option. Here is an example where both `contra` and `co` variance are shown to be unsafe for arrays.
+Ми сказали, що інваріантність є єдиною безпечною опцією. Ось приклад, де як `contra`, так і `co` варіанти виявляються небезпечними для масивів.
 
 ```ts
-/** Hierarchy */
+/** Ієрархія */
 class Animal { constructor(public name: string){} }
 class Cat extends Animal { meow() { } }
 
-/** An item of each */
+/** Представники кожного */
 var animal = new Animal("animal");
 var cat = new Cat("cat");
 
 /**
- * Demo : polymorphism 101
+ * Демонстрація: поліморфізм 101
  * Animal <= Cat
  */
-animal = cat; // Okay
-cat = animal; // ERROR: cat extends animal
+animal = cat; // OK
+cat = animal; // Помилка: cat розширює animal
 
-/** Array of each to demonstrate variance */
+/** Масиви для демонстрації варіантності */
 let animalArr: Animal[] = [animal];
 let catArr: Cat[] = [cat];
 
 /**
- * Obviously Bad : Contravariance
+ * Очевидно погано: контраваріантність
  * Animal <= Cat
  * Animal[] >= Cat[]
  */
-catArr = animalArr; // Okay if contravariant
-catArr[0].meow(); // Allowed but BANG 🔫 at runtime
+catArr = animalArr; // OK, якщо контраваріантний
+catArr[0].meow(); // Дозволено, але BANG 🔫 під час виконання
 
 
 /**
- * Also Bad : covariance
+ * Також погано: коваріантність
  * Animal <= Cat
  * Animal[] <= Cat[]
  */
-animalArr = catArr; // Okay if covariant
-animalArr.push(new Animal('another animal')); // Just pushed an animal into catArr!
-catArr.forEach(c => c.meow()); // Allowed but BANG 🔫 at runtime
+animalArr = catArr; // OK, якщо коваріантний
+animalArr.push(new Animal('another animal')); // Щойно додали тварину до catArr!
+catArr.forEach(c => c.meow()); // Дозволено, але BANG 🔫 під час виконання
 ```
