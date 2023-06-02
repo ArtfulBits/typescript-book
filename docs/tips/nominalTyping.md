@@ -1,11 +1,11 @@
-## Nominal Typing
-The TypeScript type system is structural [and this is one of the main motivating benefits](../why-typescript.md). However, there are real-world use cases for a system where you want two variables to be differentiated because they have a different *type name* even if they have the same structure. A very common use case is *identity* structures (which are generally just strings with semantics associated with their *name* in languages like C#/Java).
+## Номінальне типування
+Система типів TypeScript є структурною [і це одна з головних переваг](../why-typescript.md). Однак, є реальні випадки використання, коли ви хочете, щоб дві змінні відрізнялися, оскільки вони мають різні *імена типів*, навіть якщо вони мають однакову структуру. Дуже поширеним випадком є *ідентифікаторні* структури (які, як правило, є просто рядками з семантикою, пов'язаною з їх *іменем* в мовах програмування, таких як C# / Java).
 
-There are a few patterns that have emerged in the community. I cover them in decreasing order of personal preference:
+У спільноті сформувалися деякі шаблони. Я покриваю їх у порядку зменшення особистої переваги:
 
-## Using literal types
+## Використання літеральних типів
 
-This pattern uses generics and literal types: 
+Цей шаблон використовує дженерики та літеральні типи:
 
 ```ts
 /** Generic Id type */
@@ -25,23 +25,23 @@ const createBar = (value: string): BarId => ({ type: 'bar', value });
 let foo = createFoo('sample')
 let bar = createBar('sample');
 
-foo = bar; // Error
-foo = foo; // Okay
+foo = bar; // Помилка
+foo = foo; // Ок
 ```
 
-* Advantages
-  - No need for any type assertions 
-* Disadvantage
-  - The structure `{type,value}` might not be desireable and need server serialization support
+* Переваги
+  - Не потрібні жодні підтвердження типу
+* Недолік
+  - Структура `{type, value}` може бути небажаною та потребувати підтримки серіалізації сервера
 
-## Using Enums
-[Enums in TypeScript](../enums.md) offer a certain level of nominal typing. Two enum types aren't equal if they differ by name. We can use this fact to provide nominal typing for types that are otherwise structurally compatible.
+## Використання Enums
+[Enums in TypeScript](../enums.md) пропонують певний рівень номінального типування. Два типи переліку не є рівними, якщо вони відрізняються за іменем. Ми можемо використовувати цей факт, щоб забезпечити номінальне типування для типів, які інакше мають структурну сумісність.
 
-The workaround involves:
-* Creating a *brand* enum.
-* Creating the type as an *intersection* (`&`) of the brand enum + the actual structure.
+Обхідний шлях включає:
+* Створення переліку *бренду*.
+* Створення типу як *перетин* (`&`) переліку бренду + фактичної структури.
 
-This is demonstrated below where the structure of the types is just a string:
+Це продемонстровано нижче, де структура типів є просто рядком:
 
 ```ts
 // FOO
@@ -59,40 +59,40 @@ var fooId: FooId;
 var barId: BarId;
 
 // Safety!
-fooId = barId; // error
-barId = fooId; // error
+fooId = barId; // помилка
+barId = fooId; // помилка
 
 // Newing up
 fooId = 'foo' as FooId;
 barId = 'bar' as BarId;
 
-// Both types are compatible with the base
+// Обидва типи сумісні з базовим
 var str: string;
 str = fooId;
 str = barId;
 ```
 
-Note how the brand enums,  ``FooIdBrand`` and ``BarIdBrand`` above, each have single member (`_`) that maps to the empty string, as specified by ``{ _ = "" }``. This forces TypeScript to infer that these are string-based enums, with values of type ``string``, and not enums with values of type ``number``.  This is necessary because TypeScript infers an empty enum (``{}``) to be a numeric enum, and as of TypeScript 3.6.2 the intersection of a numeric ``enum`` and ``string`` is ``never``.
+Зверніть увагу, як переліки брендів, ``FooIdBrand`` та ``BarIdBrand`` вище, мають по одному члену (`_`), який відображає порожній рядок, як вказано у ``{ _ = "" }``. Це змушує TypeScript вважати, що це переліки на основі рядків зі значеннями типу ``string``, а не переліки зі значеннями типу ``number``. Це необхідно, оскільки TypeScript вважає порожній перелік (``{}``) числовим переліком, і згідно з TypeScript 3.6.2 перетин числового ``enum`` та ``string`` є ``never``.
 
-## Using Interfaces
+## Використання інтерфейсів
 
-Because `numbers` are type compatible with `enum`s the previous technique cannot be used for them. Instead we can use interfaces to break the structural compatibility. This method is still used by the TypeScript compiler team, so worth mentioning. Using `_` prefix and a `Brand` suffix is a convention I strongly recommend (and [the one followed by the TypeScript team](https://github.com/Microsoft/TypeScript/blob/7b48a182c05ea4dea81bab73ecbbe9e013a79e99/src/compiler/types.ts#L693-L698)).
+Оскільки `numbers` сумісні з типами `enum`, попередній метод не можна використовувати для них. Замість цього ми можемо використовувати інтерфейси, щоб розірвати структурну сумісність. Цей метод все ще використовується командою компілятора TypeScript, тому варто згадати. Префікс `_` та суфікс `Brand` - це конвенція, яку я наполегливо рекомендую (і [яку дотримується команда TypeScript](https://github.com/Microsoft/TypeScript/blob/7b48a182c05ea4dea81bab73ecbbe9e013a79e99/src/compiler/types.ts#L693-L698)).
 
-The workaround involves the following:
-* adding an unused property on a type to break structural compatibility.
-* using a type assertion when needing to new up or cast down.
+Обхідний шлях включає наступне:
+* додавання невикористовуваної властивості до типу, щоб розірвати структурну сумісність.
+* використання підтвердження типу при необхідності нового або зменшення розміру.
 
-This is demonstrated below:
+Це продемонстровано нижче:
 
 ```ts
 // FOO
 interface FooId extends String {
-    _fooIdBrand: string; // To prevent type errors
+    _fooIdBrand: string; // Щоб запобігти помилкам типу
 }
 
 // BAR
 interface BarId extends String {
-    _barIdBrand: string; // To prevent type errors
+    _barIdBrand: string; // Щоб запобігти помилкам типу
 }
 
 /**
@@ -102,16 +102,16 @@ var fooId: FooId;
 var barId: BarId;
 
 // Safety!
-fooId = barId; // error
-barId = fooId; // error
-fooId = <FooId>barId; // error
-barId = <BarId>fooId; // error
+fooId = barId; // помилка
+barId = fooId; // помилка
+fooId = <FooId>barId; // помилка
+barId = <BarId>fooId; // помилка
 
 // Newing up
 fooId = 'foo' as any;
 barId = 'bar' as any;
 
-// If you need the base string
+// Якщо вам потрібен базовий рядок
 var str: string;
 str = fooId as any;
 str = barId as any;

@@ -1,6 +1,6 @@
-## `export default` concerns
+## Проблеми з `export default`
 
-Consider you have a file `foo.ts` with the following contents:
+Припустимо, що у вас є файл `foo.ts` з наступним вмістом:
 
 ```ts
 class Foo {
@@ -8,85 +8,85 @@ class Foo {
 export default Foo;
 ```
 
-You would import it (in `bar.ts`) using ES6 syntax as follows:
+Ви імпортуєте його (у `bar.ts`) за допомогою синтаксису ES6 наступним чином:
 
 ```ts
 import Foo from "./foo";
 ```
 
-There are a few maintainability concerns here:
-* If you refactor `Foo` in `foo.ts` it will not rename it in `bar.ts`.
-* If you end up needing to export more stuff from `foo.ts` (which is what many of your files will have) then you have to juggle the import syntax.
+Тут є кілька проблем з підтримкою:
+* Якщо ви перейменуєте `Foo` у `foo.ts`, то він не перейменується у `bar.ts`.
+* Якщо ви потрапите у ситуацію, коли потрібно експортувати більше речей з `foo.ts` (що є тим, що мають багато ваших файлів), то вам доведеться маневрувати синтаксисом імпорту.
 
-For this reason I recommend simple exports + destructured import. E.g. `foo.ts`:
+З цієї причини я рекомендую прості експорти + імпорт з деструктуризацією. Наприклад, `foo.ts`:
 
 ```ts
 export class Foo {
 }
 ```
-And then:
+А потім:
 
 ```ts
 import { Foo } from "./foo";
 ```
 
-Below I also present a few more reasons.
+Нижче я також приводжу кілька інших причин.
 
-### Poor Discoverability
-Discoverability is very poor for default exports. You cannot explore a module with intellisense to see if it has a default export or not.
+### Погана відкритість
+Відкритість дуже погана для експорту за замовчуванням. Ви не можете досліджувати модуль з інтелектуальним підказуванням, щоб побачити, чи є в ньому експорт за замовчуванням чи ні.
 
-With export default you get nothing here (maybe it does export default / maybe it doesn't `¯\_(ツ)_/¯`):
+З експортом за замовчуванням ви тут нічого не отримуєте (можливо, він експортує за замовчуванням / можливо, ні `¯\_(ツ)_/¯`):
 ```
 import /* here */ from 'something';
 ```
 
-Without export default you get a nice intellisense here: 
+Без експорту за замовчуванням ви отримуєте гарне інтелектуальне підказування тут: 
 
 ```
 import { /* here */ } from 'something';
 ```
 
-### Autocomplete 
-Irrespective of if you know about the exports, you even autocomplete at this `import {/*here*/} from "./foo";` cursor location. Gives your developers a bit of wrist relief.
+### Автодоповнення 
+Незалежно від того, чи ви знаєте про експорти, ви навіть автодоповнення на цьому місці курсора `import {/*here*/} from "./foo";`. Це дозволяє вашим розробникам трохи полегшити роботу з зап'ястям.
 
-### CommonJS interop
-With `default` there is horrible experience for commonJS users who have to `const {default} = require('module/foo');` instead of `const {Foo} = require('module/foo')`. You will most likely want to rename the `default` export to something else when you import it.
+### Сумісність з CommonJS
+З `default` є жахливий досвід для користувачів CommonJS, які повинні `const {default} = require('module/foo');` замість `const {Foo} = require('module/foo')`. Ймовірно, ви захочете перейменувати експорт `default` на щось інше при імпорті.
 
-### Typo Protection
-You don't get typos like one dev doing `import Foo from "./foo";` and another doing `import foo from "./foo";`
+### Захист від помилок при написанні
+Ви не отримуєте помилок при написанні, якщо один розробник робить `import Foo from "./foo";`, а інший робить `import foo from "./foo";`
 
-### TypeScript auto-import
-Auto import quickfix works better. You use `Foo` and auto import will write down `import { Foo } from "./foo";` cause its a well defined name exported from a module. Some tools out there will try to magic read and *infer* a name for a default export but magic is flaky.
+### Автоматичний імпорт TypeScript
+Швидкий автоматичний імпорт працює краще. Ви використовуєте `Foo`, а автоматичний імпорт напише `import { Foo } from "./foo";`, оскільки це добре визначене ім'я, експортоване з модуля. Деякі інструменти там спробують магічно прочитати та *вивести* ім'я для експорту за замовчуванням, але магія не завжди працює.
 
-### Re-exporting
-Re-exporting is common for the root `index` file in npm packages, and forces you to name the default export manually e.g. `export { default as Foo } from "./foo";` (with default) vs. `export * from "./foo"` (with named exports).
+### Повторний експорт
+Повторний експорт є загальним для кореневого файлу `index` у пакетах npm, і змушує вас вручну називати експорт за замовчуванням, наприклад, `export { default as Foo } from "./foo";` (за замовчуванням) проти `export * from "./foo"` (за іменованими експортами).
 
-### Dynamic Imports
-Default exports expose themselves badly named as `default` in dynamic `import`s e.g. 
+### Динамічний імпорт
+Експорти за замовчуванням погано названі як `default` в динамічних `import`s, наприклад 
 
 ```ts
 const HighCharts = await import('https://code.highcharts.com/js/es-modules/masters/highcharts.src.js');
-HighCharts.default.chart('container', { ... }); // Notice `.default`
+HighCharts.default.chart('container', { ... }); // Зверніть увагу на `.default`
 ```
 
-Much nicer with named exports: 
+Набагато краще з іменованими експортами: 
 
 ```ts
 const {HighCharts} = await import('https://code.highcharts.com/js/es-modules/masters/highcharts.src.js');
-HighCharts.chart('container', { ... }); // Notice `.default`
+HighCharts.chart('container', { ... }); // Зверніть увагу на `.default`
 ```
 
 
-### Needs two lines for non-class / non-function
+### Потрібні два рядки для не-класу / не-функції
 
-Can be one statement for function / class e.g. 
+Може бути одним оператором для функції / класу, наприклад: 
 
 ```ts
 export default function foo() {
 }
 ```
 
-Can be one statement for *non named / type annotated* objects e.g.: 
+Може бути одним оператором для *не названих / не типових* об'єктів, наприклад: 
 
 ```ts
 export default {
@@ -95,9 +95,9 @@ export default {
 };
 ```
 
-But needs two statements otherwise:
+Але інакше потрібно два оператори:
 ```ts
-// If you need to name it (here `foo`) for local use OR need to annotate type (here `Foo`)
+// Якщо вам потрібно назвати його (тут `foo`) для локального використання АБО потрібно анотувати тип (тут `Foo`)
 const foo: Foo = {
   notAFunction: 'Yeah, I am not a function or a class',
   soWhat: 'The export is now *removed* from the declaration'

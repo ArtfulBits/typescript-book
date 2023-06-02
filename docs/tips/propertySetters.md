@@ -1,8 +1,8 @@
-## Limit usage of property setters
+## Обмеження використання сетерів властивостей
 
-Prefer explicit set/get functions (e.g. `setBar` and `getBar` functions) over setters/getters.
+Перевага надається явним функціям `set/get` (наприклад, функціям `setBar` та `getBar`) над сетерами/гетерами.
 
-Consider the following code:
+Розгляньте наступний код:
 
 ```ts
 foo.bar = {
@@ -11,7 +11,7 @@ foo.bar = {
 };
 ```
 
-In the presence of setter/getters:
+У наявності сетерів/гетерів:
 
 ```ts
 class Foo {
@@ -25,6 +25,6 @@ class Foo {
 let foo = new Foo();
 ```
 
-This is not a *good* use of property setters. The person reading the first code sample has no context about all the things that will change. Whereas someone calling `foo.setBar(value)` might have an idea that something might change on `foo`.
+Це не є *добрим* використанням сетерів властивостей. Людина, яка читає перший приклад коду, не має контексту про всі речі, які зміняться. Тоді як той, хто викликає `foo.setBar(value)`, може мати уявлення, що щось може змінитися на `foo`.
 
-> Bonus points: Find references works better if you have different functions. In TypeScript tools if you find references for a getter or a setter you get *both* whereas with explicit function calls you only get references to the relevant function.
+> Бонусні бали: Пошук посилань працює краще, якщо у вас є різні функції. У засобах TypeScript, якщо ви знаходите посилання на геттер або сетер, ви отримуєте *обидва*, тоді як з явними викликами функцій ви отримуєте посилання тільки на відповідну функцію.

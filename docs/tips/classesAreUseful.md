@@ -1,70 +1,70 @@
-## Classes Are Useful
+## Класи корисні
 
-It is very common to have the following structure:
+Дуже часто зустрічається наступна структура:
 
 ```ts
 function foo() {
     let someProperty;
 
-    // Some other initialization code
+    // Деякий ініціалізаційний код
 
     function someMethod() {
-        // Do some stuff with `someProperty`
-        // And potentially other things
+        // Виконати деякі дії з `someProperty`
+        // І можливо ще деякі речі
     }
-    // Maybe some other methods
+    // Можливо деякі інші методи
 
     return {
         someMethod,
-        // Maybe some other methods
+        // Можливо деякі інші методи
     };
 }
 ```
 
-This is known as the *revealing module pattern* and quite common in JavaScript (taking advantage of JavaScript closure).
+Це відомо як *шаблон розкриваючого модуля* і досить поширений у JavaScript (використовуючи замикання JavaScript).
 
-If you use [*file modules* (which you really should as global scope is bad)](../project/modules.md) then *your file is effectively the same*. However, there are too many cases where people will write code like the following:
+Якщо ви використовуєте [*файлові модулі* (що ви дійсно повинні, оскільки глобальний обсяг поганий)](../project/modules.md), то *ваш файл фактично той самий*. Однак є занадто багато випадків, коли люди пишуть код на зразок наступного:
 
 ```ts
 let someProperty;
 
 function foo() {
-   // Some initialization code
+   // Деякий ініціалізаційний код
 }
-foo(); // some initialization code
+foo(); // деякий ініціалізаційний код
 
-someProperty = 123; // some more initialization
+someProperty = 123; // ще деяка ініціалізація
 
-// Some utility function not exported
+// Деяка утилітарна функція, яка не експортується
 
-// later
+// пізніше
 export function someMethod() {
 
 }
 ```
 
-Even though I am not a big fan of inheritance *I do find that letting people use classes helps them organize their code better*. The same developer would intuitively write the following:
+Навіть якщо я не є великим прихильником успадкування, *я вважаю, що дозволити людям використовувати класи допомагає їм краще організовувати свій код*. Той самий розробник інтуїтивно написав би наступне:
 
 ```ts
 class Foo {
     public someProperty;
 
     constructor() {
-        // some initialization
+        // деяка ініціалізація
     }
 
     public someMethod() {
-        // some code
+        // деякий код
     }
 
     private someUtility() {
-        // some code
+        // деякий код
     }
 }
 
 export = new Foo();
 ```
 
-And its not just developers, creating dev tools that provide great visualizations over classes are much more common, and there is one less pattern your team needs to understand and maintain.
+І це не тільки розробники, створення інструментів розробника, які надають великі візуалізації над класами, набагато поширеніші, і є на один шаблон менше, який ваша команда повинна розуміти та підтримувати.
 
-> PS: There is nothing wrong in my opinion with *shallow* class hierarchies if they provide significant reuse and reduction in boiler plate.
+> PS: На мою думку, немає нічого поганого в *мілких* ієрархіях класів, якщо вони забезпечують значну повторність та зменшення шаблону.
