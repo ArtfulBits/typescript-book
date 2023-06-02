@@ -1,12 +1,12 @@
 # Convenience vs. Soundness
 
-There are a few things that TypeScript prevents you from doing out of the box e.g. using a variable that *isn't ever declared* (of course you can use a *declaration file* for external systems).
+Є кілька речей, які TypeScript заважає вам робити з коробки, наприклад, використовувати змінну, яка *ніколи не була оголошена* (звичайно, ви можете використовувати *файл оголошень* для зовнішніх систем).
 
-That said, traditionally programming languages have a hard boundary between what is and isn't allowed by the type system. TypeScript is different in that it gives you control over where you put the slider. This is really to allow you to use the JavaScript you know and love with as much safety as **you** want. There are lots of compiler options to control exactly this slider so let's have a look.
+З цього приводу, традиційні мови програмування мають жорстку межу між тим, що дозволяється та що не дозволяється системою типів. TypeScript відрізняється тим, що дає вам контроль над тим, де ви ставите слайдер. Це дійсно дозволяє вам використовувати JavaScript, який ви знаєте та любите з настільки багатою безпекою, наскільки ви цього хочете. Є багато параметрів компілятора, які дозволяють контролювати саме цей слайдер, тому давайте подивимося на них.
 
-## Boolean Options
+## Булеві параметри
 
-`compilerOptions` that are `boolean` can be specified as `compilerOptions` in `tsconfig.json`:
+`compilerOptions`, які є `boolean`, можуть бути вказані як `compilerOptions` в `tsconfig.json`:
 
 ```json
 {
@@ -16,12 +16,12 @@ That said, traditionally programming languages have a hard boundary between what
 }
 ```
 
-or on the command line
+або в командному рядку
 
 ```sh
 tsc --someBooleanOption
 ```
 
-> All of these are `false` by default.
+> За замовчуванням всі вони є `false`.
 
-Click [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html) to see all compiler options.
+Натисніть [тут](https://www.typescriptlang.org/docs/handbook/compiler-options.html), щоб побачити всі параметри компілятора.

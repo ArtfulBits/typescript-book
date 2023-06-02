@@ -1,23 +1,23 @@
 # `strictNullChecks`
 
-By default `null` and `undefined` are assignable to all types in TypeScript e.g.
+За замовчуванням в TypeScript `null` та `undefined` можна призначити будь-якому типу, наприклад:
 
 ```ts
 let foo: number = 123;
-foo = null; // Okay
-foo = undefined; // Okay
+foo = null; // Добре
+foo = undefined; // Добре
 ```
 
-This is modelled after how a lot of people write JavaScript. However, like all things, TypeScript allows you to be *explicit* about what *can and cannot be* assigned a `null` or `undefined`.
+Це моделюється після того, як багато людей пишуть JavaScript. Однак, як і у всьому, TypeScript дозволяє бути *явним* щодо того, що *може бути* призначено `null` або `undefined`.
 
-In strict null checking mode, `null` and `undefined` are different:
+У режимі строго перевірки на `null`, `null` та `undefined` є різними:
 
 ```ts
 let foo = undefined;
-foo = null; // NOT Okay
+foo = null; // НЕ добре
 ```
 
-Let's say we have a `Member` interface:
+Допустимо, є інтерфейс `Member`:
 
 ```ts
 interface Member {
@@ -26,68 +26,68 @@ interface Member {
 }
 ```
 
-Not every `Member` will provide their age, so `age` is an optional property, meaning the value of `age` may or may not be `undefined`.
+Не кожен `Member` надасть свій вік, тому `age` є необов'язковою властивістю, що означає, що значення `age` може бути або не бути `undefined`.
 
-`undefined` is the root of all evil. It often leads to runtime errors. It is easy to write code that will throw `Error` at runtime:
-
-```ts
-getMember()
-  .then(member: Member => {
-    const stringifyAge = member.age.toString() // Cannot read property 'toString' of undefined
-  })
-```
-
-But in strict null checking mode, this error will be caught at compile time:
+`undefined` є коренем усього зла. Він часто призводить до помилок під час виконання. Легко написати код, який викличе помилку `Error` під час виконання:
 
 ```ts
 getMember()
   .then(member: Member => {
-    const stringifyAge = member.age.toString() // Object is possibly 'undefined'
+    const stringifyAge = member.age.toString() // Неможливо прочитати властивість 'toString' для 'undefined'
   })
 ```
 
-## Non-Null Assertion Operator
-
-A new `!` post-fix expression operator may be used to assert that its operand is non-null and non-undefined in contexts where the type checker is unable to conclude that fact. For example:
+Але в режимі строго перевірки на `null` ця помилка буде виявлена на етапі компіляції:
 
 ```ts
-// Compiled with --strictNullChecks
+getMember()
+  .then(member: Member => {
+    const stringifyAge = member.age.toString() // Об'єкт може бути 'undefined'
+  })
+```
+
+## Оператор позначення не-нульового значення
+
+Новий оператор постфіксної виразу `!` може використовуватися для того, щоб заявити, що його операнд є не-нульовим та не-визначеним в контекстах, де перевірка типу не може зробити висновок про це. Наприклад:
+
+```ts
+// Скомпільовано з --strictNullChecks
 function validateEntity(e?: Entity) {
-    // Throw exception if e is null or invalid entity
+    // Викинути виняток, якщо e є null або недійсною сутністю
 }
 
 function processEntity(e?: Entity) {
     validateEntity(e);
-    let a = e.name;  // TS ERROR: e may be null.
-    let b = e!.name;  // OKAY. We are asserting that e is non-null.
+    let a = e.name;  // TS ПОМИЛКА: e може бути null.
+    let b = e!.name;  // ДОБРЕ. Ми заявляємо, що e є не-нульовим.
 }
 ```
 
-> Note that it is just an assertion, and just like type assertions *you are responsible* for making sure the value is not null. A non-null assertion is essentially you telling the compiler "I know it's not null so let me use it as though it's not null".
+> Зверніть увагу, що це просто заява, і, як і у випадку заяв про тип, *ви відповідальні* за те, щоб значення не було null. Не-нульове заявлення - це в основному ви говорите компілятору "Я знаю, що це не null, тому дозвольте мені використовувати його так, ніби воно не null".
 
-### Definite Assignment Assertion Operator
+### Оператор позначення визначеного призначення
 
-TypeScript will also complain about properties in classes not being initialized e.g.:
+TypeScript також буде скаржитися на властивості в класах, які не ініціалізовані, наприклад:
 
 ```ts
 class C {
-  foo: number; // OKAY as assigned in constructor
-  bar: string = "hello"; // OKAY as has property initializer
-  baz: boolean; // TS ERROR: Property 'baz' has no initializer and is not assigned directly in the constructor.
+  foo: number; // ДОБРЕ, якщо призначено в конструкторі
+  bar: string = "hello"; // ДОБРЕ, якщо має ініціалізатор властивості
+  baz: boolean; // TS ПОМИЛКА: Властивість 'baz' не має ініціалізатора та не призначена безпосередньо в конструкторі.
   constructor() {
     this.foo = 42;
   }
 }
 ```
 
-You can use the definite assignment assertion postfixed to the property name to tell TypeScript that you are initializing it somewhere other than the constructor e.g.
+Ви можете використовувати оператор позначення визначеного призначення після імені властивості, щоб повідомити TypeScript, що ви ініціалізуєте її десь, окрім конструктора, наприклад:
 
 ```ts
 class C {
   foo!: number;
   // ^
-  // Notice this exclamation point!
-  // This is the "definite assignment assertion" modifier.
+  // Зверніть увагу на цю окличну точку!
+  // Це модифікатор "оператора позначення визначеного призначення".
   
   constructor() {
     this.initialize();
@@ -98,16 +98,16 @@ class C {
 }
 ```
 
-You can also use this assertion with simple variable declarations e.g.:
+Ви також можете використовувати цю заяву з простими заявами змінних, наприклад:
 
 ```ts
-let a: number[]; // No assertion
-let b!: number[]; // Assert
+let a: number[]; // Без заяви
+let b!: number[]; // Заява
 
 initialize();
 
-a.push(4); // TS ERROR: variable used before assignment
-b.push(4); // OKAY: because of the assertion
+a.push(4); // TS ПОМИЛКА: змінна використовується до призначення
+b.push(4); // ДОБРЕ: через заяву
 
 function initialize() {
   a = [0, 1, 2, 3];
@@ -115,4 +115,4 @@ function initialize() {
 }
 ```
 
-> Like all assertions, you are telling the compiler to trust you. The compiler will not complain even if the code doesn't actually always assign the property.
+> Як і всі заяви, ви говорите компілятору довіряти вам. Компілятор не буде скаржитися, навіть якщо код насправді не завжди призначає властивість.
