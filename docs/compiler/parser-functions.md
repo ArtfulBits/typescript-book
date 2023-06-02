@@ -23,7 +23,7 @@ function parseEmptyStatement(): Statement {
 
 Він показує три критичні функції `createNode`, `parseExpected` та `finishNode`.
 
-#### Функція`createNode`
+#### Функція `createNode`
 Функція `createNode` парсера `function createNode(kind: SyntaxKind, pos?: number): Node` відповідає за створення вузла, встановлення його `SyntaxKind` переданого значення та задання початкової позиції (якщо передано) або використання позиції з поточного стану сканера.
 
 #### Функція `parseExpected`

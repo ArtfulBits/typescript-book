@@ -1,5 +1,5 @@
 ### Функція `emitFiles`
-Сигнатура функціі віизначена в файлі `emitter.ts`:
+Сигнатура функції визначена в файлі `emitter.ts`:
 
 ```ts
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
@@ -122,14 +122,18 @@ function emitSourceFile(sourceFile: SourceFile): void {
 }
 ```
 
-Функція `emit` відповідає за генерацію *коментарів* emit + *фактичного JavaScript* emit. Завданням функції `emitJavaScriptWorker` є генерація *фактичного JavaScript* коду.
+Функція `emit` відповідає за генерацію *коментарів* `emit` + *фактичного JavaScript* `emit`. Завданням функції `emitJavaScriptWorker` є генерація *фактичного JavaScript* коду.
 
 ### Функція `emitJavaScriptWorker`
-Повний код функціі:
+```javascript
+function emitJavaScriptWorker() {
+  // код функції
+}
+```
 
 ```ts
 function emitJavaScriptWorker(node: Node) {
-    // Check if the node can be emitted regardless of the ScriptTarget
+    // Перевірка, чи можна вивести вузол незалежно від ScriptTarget
     switch (node.kind) {
         case SyntaxKind.Identifier:
             return emitIdentifier(<Identifier>node);
@@ -303,42 +307,42 @@ function emitJavaScriptWorker(node: Node) {
 Рекурсія виконується простим викликом іншої функції `emitFoo` з цих функцій за потреби, наприклад. з `emitFunctionDeclaration`:
 
 ```ts
-function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
-    if (nodeIsMissing(node.body)) {
-        return emitOnlyPinnedOrTripleSlashComments(node);
+функція emitFunctionDeclaration(node: FunctionLikeDeclaration) {
+    якщо (nodeIsMissing(node.body)) {
+        повернути emitOnlyPinnedOrTripleSlashComments(node);
     }
 
-    if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
-        // Methods will emit the comments as part of emitting method declaration
+    якщо (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
+        // Методи відправлять коментарі як частину відправлення оголошення методу
         emitLeadingComments(node);
     }
 
-    // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
-    // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
-    if (!shouldEmitAsArrowFunction(node)) {
-        if (isES6ExportedDeclaration(node)) {
+    // Для таргетування нижче es6 відправляє функції-подібне оголошення, включаючи стрілкову функцію з використанням ключового слова function.
+    // При таргетуванні ES6 відправляє стрілкову функцію нативно в ES6, пропускаючи ключове слово function та використовуючи жирну стрілку замість цього
+    якщо (!shouldEmitAsArrowFunction(node)) {
+        якщо (isES6ExportedDeclaration(node)) {
             write("export ");
-            if (node.flags & NodeFlags.Default) {
+            якщо (node.flags & NodeFlags.Default) {
                 write("default ");
             }
         }
 
         write("function");
-        if (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
+        якщо (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
             write("*");
         }
         write(" ");
     }
 
-    if (shouldEmitFunctionName(node)) {
+    якщо (shouldEmitFunctionName(node)) {
         emitDeclarationName(node);
     }
 
     emitSignatureAndBody(node);
-    if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
+    якщо (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
         emitExportMemberAssignments((<FunctionDeclaration>node).name);
     }
-    if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
+    якщо (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
         emitTrailingComments(node);
     }
 }

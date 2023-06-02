@@ -17,10 +17,22 @@
 #### `bindFoo`
 Існують кілька типових шаблонів для функцій `bindFoo`, а також кілька вспоміжних функцій, якими вони користуються. Одна функція, яка майже завжди використовується, - це функція `createSymbol`. Нижче наведено її повний варіант:
 
-```ts
+```typescript
 function createSymbol(flags: SymbolFlags, name: string): Symbol {
-    symbolCount++;
-    return new Symbol(flags, name);
+    return {
+        flags,
+        name,
+        declarations: undefined,
+        valueDeclaration: undefined
+    };
 }
 ```
+
+```ts
+функція createSymbol(flags: SymbolFlags, name: string): Symbol {
+    symbolCount++;
+    повернути новий Symbol(flags, name);
+}
+```
+
 Як можна побачити, `bindFoo` просто оновлює значення `symbolCount` (локальної змінної в функції `bindSourceFile`) та створює символ із вказаними параметрами.

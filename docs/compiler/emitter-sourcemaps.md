@@ -63,6 +63,7 @@ function emitJavaScript(jsFilePath: string, root?: SourceFile) {
 
     /// BUNCH OF LOCAL FUNCTIONS
 ```
+
 Важливий викликом є виклик функціі `initializeEmitterWithSourceMaps`. Вона представляє собою локальну функцію `emitJavaScript` і перевизначає деякі раніше визначені локальні змінні. У кінці функції `initializeEmitterWithSourceMaps` ви помітите ці перевизначення:
 
 ```ts
