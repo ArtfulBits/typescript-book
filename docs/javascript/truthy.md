@@ -1,6 +1,6 @@
-## Truthy
+## Істинність (тruthy)
 
-JavaScript has a concept of `truthy` i.e. things that evaluate like `true` would in certain positions (e.g. `if` conditions and the boolean `&&` `||` operators). The following things are truthy in JavaScript. An example is any number other than `0` e.g.
+JavaScript має концепцію "істинності" (`truthy`), тобто речей, які оцінюються як `true` в певних контекстах (наприклад, в умовах оператора `if` та логічних операторах `&&` та `||`). Наступні речі є істинними в JavaScript. Наприклад, будь-яке число, крім `0`, наприклад:
 
 ```ts
 if (123) { // Will be treated like `true`
@@ -8,27 +8,29 @@ if (123) { // Will be treated like `true`
 }
 ```
 
-Something that isn't truthy is called `falsy`.
+Те, що не є істиною (truthy), зветься хибним (falsy). 
 
-Here's a handy table for your reference.
+Ось зручна таблиця для вашої довідки:
 
-| Variable Type   | When it is *falsy*       | When it is *truthy*      |
+| Значення        |  *falsy*       |  *truthy*      |
 |-----------------|--------------------------|--------------------------|
 | `boolean`       | `false`                  | `true`                   |
-| `string`        | `''` (empty string)      | any other string         |
-| `number`        | `0`  `NaN`               | any other number         |
-| `null`          | always                   | never                    |
-| `undefined`     | always                   | never                    |
-| Any other Object including empty ones like `{}`,`[]` | never | always |
+| `string`        | `''` (empty string)      | будь-який string         |
+| `number`        | `0`  `NaN`               | будь-який number         |
+| `null`          | завжди                   | ніколи                    |
+| `undefined`     | завжди                   | ніколи                    |
+| Будь-який Object, в тому числі порожній `{}`,`[]` | ніколи | завжди |
+
+<br>
+
+### Бути явним:
+
+> Шаблон !!:
+
+Досить часто буває корисно чітко вказати, що ви хочете розглядати значення як `boolean` і перетворити його  в *правильне булеве значення* (одне з `true`|`false`). Ви можете легко перетворити значення на істинний булевий вираз, додавши до нього префікс `!!`, наприклад `!!foo`. Просто `!` використовується *двічі*. Перший `!` перетворює змінну (у цьому випадку `foo`) на булеве значення, але інвертує логіку (*truthy* -`!`> `false`, *falsy* -`!`> `true`). Другий перемикає її знову, щоб відповідати природі початкового об'єкта (наприклад, *truthy* -`!`> `false` -`!`> `true`).
 
 
-### Being explicit
-
-> The `!!` pattern
-
-Quite commonly it helps to be explicit that the intent is to treat the value as a `boolean` and convert it into a *true boolean* (one of `true`|`false`). You can easily convert values to a true boolean by prefixing it with `!!` e.g. `!!foo`. Its just `!` used *twice*. The first `!` converts the variable (in this case `foo`) to a boolean but inverts the logic (*truthy* -`!`> `false`, *falsy* -`!`> `true`). The second one toggles it again to match the nature of the original object (e.g. *truthy* -`!`> `false` -`!`> `true`).
-
-It is common to use this pattern in lots of places e.g.
+Цей шаблон часто використовується в багатьох місцях, наприклад:
 
 ```js
 // Direct variables

@@ -1,29 +1,29 @@
-## Number
-Whenever you are handling numbers in any programming language you need to be aware of the idiosyncrasies of how the language handles numbers. Here are a few critical pieces of information about numbers in JavaScript that you should be aware of.
+## Число
+Кожного разу, коли ви працюєте з числами в будь-якій мові програмування, ви повинні знати про особливості роботи з числами в цій мові. Ось кілька важливих фрагментів інформації про числа в JavaScript, про які вам варто знати.
 
-### Core Type
-JavaScript has only one number type. It is a double-precision 64-bit `Number`. Below we discuss its limitations along with a recommended solution.
+### Основний тип
+У JavaScript є лише один тип чисел. Це 64-бітне число подвійної точності `Number`. Нижче ми обговоримо його обмеження разом з рекомендованим рішенням.
 
-### Decimal
-For those familiar with doubles / float in other languages, you would know that binary floating point numbers *do not* map correctly to Decimal numbers. A trivial (and famous) example with JavaScript's built in numbers is shown below:
+### Десятковий тип
+Для тих, хто знайомий з типами даних "double" або "float" в інших мовах програмування, відомо, що двійкові плаваючі числа *не відображаються правильно* на десяткові числа. На приведеному нижче прикладі з використанням вбудованих чисел JavaScript це можна побачити:
 
 ```js
 console.log(.1 + .2); // 0.30000000000000004
 ```
 
-> For true decimal math use `big.js` mentioned below.
+> Для справжньої десяткової математики використовуйте `big.js`, згаданий нижче.
 
-### Integer
-The integer limits represented by the built in number type are `Number.MAX_SAFE_INTEGER` and `Number.MIN_SAFE_INTEGER`.
+### Цілі числа
+Максимальне та мінімальне значення цілих чисел, представлене вбудованим типом `Number`, це `Number.MAX_SAFE_INTEGER` та `Number.MIN_SAFE_INTEGER`.
 
 ```js
 console.log({max: Number.MAX_SAFE_INTEGER, min: Number.MIN_SAFE_INTEGER});
 // {max: 9007199254740991, min: -9007199254740991}
 ```
 
-**Safe** in this context refers to the fact that the value *cannot be the result of a rounding error*.
+**Безпечне** в цьому контексті означає, що значення *не може бути результатом помилки округлення*.
 
-The unsafe values are `+1 / -1` away from these safe values and any amount of addition / subtraction will *round* the result.
+Небезпечні значення знаходяться на відстані `+1 / -1` від цих безпечних значень, і будь-яке додавання / віднімання призведе до *округлення* результату.
 
 ```js
 console.log(Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2); // true!
@@ -36,7 +36,7 @@ console.log(Number.MAX_SAFE_INTEGER + 3);  // 9007199254740994 - Rounded - corre
 console.log(Number.MAX_SAFE_INTEGER + 4);  // 9007199254740996 - Rounded!
 ```
 
-To check safety you can use ES6 `Number.isSafeInteger`:
+Для перевірки безпеки можна використовувати ES6 `Number.isSafeInteger`:
 
 ```js
 // Safe value
@@ -49,19 +49,19 @@ console.log(Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1)); // false
 console.log(Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 10)); // false
 ```
 
-> JavaScript will eventually get [BigInt](https://developers.google.com/web/updates/2018/05/bigint) support. For now, if you want arbitrary precision integer math use `big.js` mentioned below.
+> JavaScript з часом отримає підтримку [BigInt](https://developers.google.com/web/updates/2018/05/bigint). Наразі, якщо вам потрібна цілочисельна математика довільної точності, використовуйте `big.js`, згаданий нижче.
 
 ### big.js
-Whenever you use math for financial calculations (e.g. GST calculation, money with cents, addition etc) use a library like [big.js](https://github.com/MikeMcl/big.js/) which is designed for
-* Perfect decimal math
-* Safe out of bound integer values
+Кожного разу, коли ви використовуєте математику для фінансових розрахунків (наприклад, розрахунок GST, гроші з центами, додавання тощо), використовуйте бібліотеку на кшталт [big.js](https://github.com/MikeMcl/big.js/), яка призначена для
+* Точної десяткової математики
+* Захисту цілочисельних значень поза межами обмежень
 
-Installation is simple:
+Встановлення просте:
 ```bash
 npm install big.js @types/big.js
 ```
 
-Quick Usage example:
+Приклад швидкого використання:
 
 ```js
 import { Big } from 'big.js';
@@ -73,16 +73,16 @@ export const bar = foo.plus(new Big('0.00000000000000000001'));
 const x: number = Number(bar.toString()); // Loses the precision
 ```
 
-> Do not use this library for math used for UI / performance intensive purposes e.g charts, canvas drawing etc.
+> Не використовуйте цю бібліотеку для математичних обчислень, що застосовуються в інтерфейсах, вимогливих до продуктивності, наприклад, для побудови діаграм, малювання на canvas тощо.
 
 ### NaN
-When some number calculation is not representable by a valid number, JavaScript returns a special `NaN` value. A  classic example is imaginary numbers:
+Коли деякі обчислення не можуть бути представлені дійсним числом, JavaScript повертає спеціальне значення `NaN`. Класичним прикладом є уявні числа:
 
 ```js
 console.log(Math.sqrt(-1)); // NaN
 ```
 
-Note: Equality checks **don't** work on `NaN` values. Use `Number.isNaN` instead:
+Зауваження: Перевірка на рівність **не** працює для значень `NaN`. Замість цього використовуйте `Number.isNaN`:
 
 ```js
 // Don't do this
@@ -92,61 +92,61 @@ console.log(NaN === NaN); // false!!
 console.log(Number.isNaN(NaN)); // true
 ```
 
-### Infinity
-The outer bounds of values representable in Number are available as static `Number.MAX_VALUE` and `-Number.MAX_VALUE` values.
+### Нескінченність (Infinity)
+Зовнішні межі значень, які можна представити в Number, доступні у вигляді статичних значень `Number.MAX_VALUE` та `-Number.MAX_VALUE`.
 
 ```js
 console.log(Number.MAX_VALUE);  // 1.7976931348623157e+308
 console.log(-Number.MAX_VALUE); // -1.7976931348623157e+308
 ```
 
-Values outside the range where precision isn't changed are clamped to these limits e.g.
+Значення, які виходять за межі діапазону, де точність не змінюється, обмежуються цими межами, наприклад:
 
 ```js
 console.log(Number.MAX_VALUE + 1 == Number.MAX_VALUE);   // true!
 console.log(-Number.MAX_VALUE - 1 == -Number.MAX_VALUE); // true!
 ```
 
-Values outside the range where precision is changed resolve to special values `Infinity`/`-Infinity` e.g.
+Значення, які виходять за межі діапазону, де точність змінюється, перетворюються на спеціальні значення `Infinity`/`-Infinity`, наприклад:
 
 ```js
 console.log(Number.MAX_VALUE + 1e292);  // Infinity
 console.log(-Number.MAX_VALUE - 1e292); // -Infinity
 ```
 
-Of-course, these special infinity values also show up with arithmetic that requires it e.g.
+Звичайно, ці спеціальні значення "Infinity" також виникають при арифметичних операціях, що вимагають їх використання, наприклад:
 
 ```js
 console.log( 1 / 0); // Infinity
 console.log(-1 / 0); // -Infinity
 ```
 
-You can use these `Infinity` values manually or using static members of the `Number` class as shown below:
+Ви можете використовувати ці значення `Infinity` вручну або використовувати статичні члени класу `Number`, як показано нижче:
 
 ```js
 console.log(Number.POSITIVE_INFINITY === Infinity);  // true
 console.log(Number.NEGATIVE_INFINITY === -Infinity); // true
 ```
 
-Fortunately comparison operators (`<` / `>`) work reliably on infinity values:
+На щастя, оператори порівняння (`<` / `>`) надійно працюють зі значеннями "Infinity":
 
 ```js
 console.log( Infinity >  1); // true
 console.log(-Infinity < -1); // true
 ```
 
-### Infinitesimal
+### Інфінітезимальний (Infinitesimal)
 
-The smallest non-zero value representable in Number is available as static `Number.MIN_VALUE`
+Найменше ненульове значення, яке можна представити в Number, доступне як статичне `Number.MIN_VALUE`.
 
 ```js
 console.log(Number.MIN_VALUE);  // 5e-324
 ```
 
-Values smaller than `MIN_VALUE` ("underflow values") are converted to 0.
+Значення, менші за `MIN_VALUE` ("значення недоповнення"), перетворюються на 0.
 
 ```js
 console.log(Number.MIN_VALUE / 10);  // 0
 ```
 
-> Further intuition: Just like values bigger than `Number.MAX_VALUE` get clamped to INFINITY, values smaller than `Number.MIN_VALUE` get clamped to `0`.
+> Далі за аналогією: Подібно до того, як значення, більші за `Number.MAX_VALUE` обмежуються  до INFINITY, значення, менші за `Number.MIN_VALUE` обмежуються до `0`.

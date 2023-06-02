@@ -1,21 +1,21 @@
-# Your JavaScript is TypeScript
+# Ваш JavaScript – це TypeScript
 
-There were (and will continue to be) a lot of competitors in *Some syntax* to *JavaScript* compilers. TypeScript is different from them in that *Your JavaScript is TypeScript*. Here's a diagram:
+Було (і надалі буде) багато конкурентів між різними компіляторами, які перетворюють іншу *синтаксичну форму* на *JavaScript*. У порівнянні з цими конкурентами, TypeScript відрізняється тим, що ви можете використовувати JavaScript-код безпосередньо у TypeScript. Ви не повинні переписувати весь код, ви можете використовувати існуючий JavaScript як частину свого TypeScript-проекту. TypeScript є розширенням JavaScript і надає додаткову функціональність та можливості, але ви можете використовувати його як підмножину JavaScript. Ось діаграма:
 
-![JavaScript is TypeScript](https://raw.githubusercontent.com/basarat/typescript-book/master/images/venn.png)
+![JavaScript – це TypeScript](https://raw.githubusercontent.com/basarat/typescript-book/master/images/venn.png)
 
-However, it does mean that *you need to learn JavaScript* (the good news is *you **only** need to learn JavaScript*). TypeScript is just standardizing all the ways you provide *good documentation* on JavaScript.
+Однак це означає, що вам потрібно вивчити JavaScript (хороша новина в тому, що вам потрібно вивчити *лише* JavaScript). TypeScript просто стандартизує всі способи надання *документації* для JavaScript.
 
-* Just giving you a new syntax doesn't help catch bugs - but might help you write cleaner / less bugs (e.g. CoffeeScript).
-* Creating a new language abstracts you too far from your runtimes and communities - but might help on-board you easier if its an already familiar flavour (e.g. Dart - closer for Java / C# devs).
+* Просте надання нового синтаксису не допомагає виявляти помилки, але може допомогти писати більш чистий код з меншою кількістю помилок (наприклад, CoffeeScript).
+* Створення нової мови віддаляє вас від вашого середовища виконання та спільнот, але може сприяти легшому впровадженню, якщо це вже знайомий стиль програмування (наприклад, Dart - ближчий до розробників Java / C#).
 
-TypeScript is just JavaScript with docs.
+TypeScript - це просто JavaScript з документацією.
 
-> JSNext is open to interpretation - not everything proposed for the next version of JS actually makes it to browsers. TypeScript only adds support for proposals once they reach [stage 3](https://tc39.es/process-document/).
+> JSNext є відкритим для інтерпретації. Насправді не все, що пропонується для наступної версії JS, потрапляє до браузерів. TypeScript додає підтримку пропозицій лише тоді, коли вони досягають [стадії 3](https://tc39.es/process-document/).
 
-## Making JavaScript Better
+## Покращення JavaScript
 
-TypeScript will try to protect you from portions of JavaScript that never worked (so you don't need to remember this stuff):
+TypeScript спробує захистити вас від частин JavaScript, які ніколи не працювали (тому вам не потрібно пам’ятати ці речі):
 
 ```ts
 [] + []; // JavaScript will give you "" (which makes little sense), TypeScript will error
@@ -36,10 +36,10 @@ function add(a,b) {
 }
 ```
 
-Essentially TypeScript is linting JavaScript. Just doing a better job at it than other linters that don't have *type information*.
+По суті, TypeScript аналізує JavaScript, подібно до інших лінтерів, але робить це краще за рахунок наявності *інформації про типи*.
 
-## You still need to learn JavaScript
+## Ви все одно повинні вивчити JavaScript.
 
-That said TypeScript is very pragmatic about the fact that *you do write JavaScript* so there are some things about JavaScript that you still need to know in order to not be caught off-guard. Let's discuss them next.
+Це правда, TypeScript дуже прагматично відноситься до факту, що ви все ж таки *використовуєте JavaScript*, тому є кілька речей про JavaScript, які вам все одно потрібно знати, щоб не потрапити в незручне положення. Давайте обговоримо їх далі.
 
-> Note: TypeScript is a superset of JavaScript. Just with documentation that can actually be used by compilers / IDEs ;)
+> Примітка: TypeScript - це підмножина JavaScript. Тільки з документацією, яка може бути використана компіляторами / IDE ;)
