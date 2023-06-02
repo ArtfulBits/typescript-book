@@ -1,16 +1,16 @@
-## Declaration Spaces
+## Простори оголошень
 
-There are two declaration spaces in TypeScript: the *variable* declaration space and the *type* declaration space. These concepts are explored below.
+У TypeScript існує два простори оголошень: простір оголошень *змінних* та простір оголошень *типів*. Ці концепції розглянуто нижче.
 
-### Type Declaration Space
-The type declaration space contains stuff that can be used as a type annotation. E.g. the following are a few type declarations:
+### Простір оголошень типів
+Простір оголошень типів містить речі, які можна використовувати як анотації типів. Наприклад, наступні оголошення типів:
 
 ```ts
 class Foo {};
 interface Bar {};
 type Bas = {};
 ```
-This means that you can use `Foo`, `Bar`, `Bas`, etc. as a type annotation. E.g.:
+Це означає, що ви можете використовувати `Foo`, `Bar`, `Bas` і т.д. як анотацію типу. Наприклад:
 
 ```ts
 var foo: Foo;
@@ -18,31 +18,31 @@ var bar: Bar;
 var bas: Bas;
 ```
 
-Notice that even though you have `interface Bar`, *you can't use it as a variable* because it doesn't contribute to the *variable declaration space*. This is shown below:
+Зверніть увагу, що навіть якщо у вас є `interface Bar`, *ви не можете використовувати його як змінну*, оскільки він не сприяє *простору оголошень змінних*. Це показано нижче:
 
 ```ts
 interface Bar {};
-var bar = Bar; // ERROR: "cannot find name 'Bar'"
+var bar = Bar; // ПОМИЛКА: "не вдалося знайти ім'я 'Bar'"
 ```
 
-The reason why it says `cannot find name` is because the name `Bar` *is not defined* in the *variable* declaration space. That brings us to the next topic "Variable Declaration Space".
+Причина, чому він каже `не вдалося знайти ім'я`, полягає в тому, що ім'я `Bar` *не визначене* в просторі оголошень *змінних*. Це приводить нас до наступної теми "Простір оголошень змінних".
 
-### Variable Declaration Space
-The variable declaration space contains stuff that you can use as a variable. We saw that having `class Foo` contributes a type `Foo` to the *type* declaration space. Guess what? It also contributes a *variable* `Foo` to the *variable* declaration space as shown below:
+### Простір оголошень змінних
+Простір оголошень змінних містить речі, які ви можете використовувати як змінні. Ми бачили, що наявність `class Foo` додає тип `Foo` до простору оголошень *типів*. Здогадайтеся, що він також додає *змінну* `Foo` до простору оголошень *змінних*, як показано нижче:
 
 ```ts
 class Foo {};
 var someVar = Foo;
 var someOtherVar = 123;
 ```
-This is great as sometimes you want to pass classes around as variables. Remember that:
+Це чудово, оскільки іноді ви хочете передавати класи як змінні. Пам'ятайте, що:
 
-* we couldn't use something like an `interface` that is *only* in the *type* declaration space as a variable.
+* ми не могли б використовувати щось, наприклад `interface`, яке є *тільки* в просторі оголошень *типів*, як змінну.
 
-Similarly something that you declare with `var`, is *only* in the *variable* declaration space and cannot be used as a type annotation:
+Аналогічно, щось, що ви оголошуєте з `var`, є *тільки* в просторі оголошень *змінних* і не може бути використано як анотація типу:
 
 ```ts
 var foo = 123;
-var bar: foo; // ERROR: "cannot find name 'foo'"
+var bar: foo; // ПОМИЛКА: "не вдалося знайти ім'я 'foo'"
 ```
-The reason why it says `cannot find name` is because the name `foo` *is not defined* in the *type* declaration space.
+Причина, чому він каже `не вдалося знайти ім'я`, полягає в тому, що ім'я `foo` *не визначене* в просторі оголошень *типів*.

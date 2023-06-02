@@ -1,16 +1,16 @@
 # global.d.ts
 
-We discussed *global* vs. *file* modules when covering [projects](./modules.md) and recommended using file based modules and not polluting the global namespace.
+Ми обговорювали модулі *global* та *file* під час розгляду [проектів](./modules.md) та рекомендували використовувати модулі на основі файлів та не забруднювати глобальний простір імен.
 
-Nevertheless, if you have beginner TypeScript developers you can give them a `global.d.ts` file to put interfaces / types in the global namespace to make it easy to have some *types* just *magically* available for consumption in *all* your TypeScript code.
+Тим не менш, якщо у вас є початківці розробники TypeScript, ви можете дати їм файл `global.d.ts`, щоб помістити інтерфейси / типи в глобальний простір імен, щоб легко мати деякі *типи*, які просто *магічно* доступні для використання в *усьому* вашому коді TypeScript.
 
-Another use case for a `global.d.ts` file is to declare compile-time constants that are being injected into the source code by Webpack via the standard [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) plugin.
+Іншим випадком використання файлу `global.d.ts` є оголошення констант компіляції, які вводяться в початковий код Webpack за допомогою стандартного плагіна [DefinePlugin](https://webpack.js.org/plugins/define-plugin/).
 
 ```ts
-declare const BUILD_MODE_PRODUCTION: boolean; // can be used for conditional compiling
+declare const BUILD_MODE_PRODUCTION: boolean; // може використовуватися для умовної компіляції
 declare const BUILD_VERSION: string;
 ```
 
-> For any code that is going to generate *JavaScript* we highly recommend using *file modules*, and only use `global.d.ts` to declare compile-time constants and/or to extend standard type declarations declared in `lib.d.ts`.
+> Для будь-якого коду, який буде генерувати *JavaScript*, ми настійно рекомендуємо використовувати *файлові модулі*, і використовувати `global.d.ts` лише для оголошення констант компіляції та / або розширення стандартних оголошень типів, оголошених в `lib.d.ts`.
 
-* Bonus: The `global.d.ts` file is also good for quick `declare module "some-library-you-dont-care-to-get-defs-for";` when doing JS to TS migrations.
+* Бонус: файл `global.d.ts` також добре підходить для швидкого `declare module "some-library-you-dont-care-to-get-defs-for";` під час міграції з JS на TS.
