@@ -1,1 +1,1 @@
-analogy with c headers
+Аналогія з заголовками С.

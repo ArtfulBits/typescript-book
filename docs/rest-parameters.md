@@ -1,5 +1,5 @@
-### Rest Parameters
-Rest parameters (denoted by `...argumentName` for the last argument) allow you to quickly accept multiple arguments in your function and get them as an array. This is demonstrated in the below example.
+### Параметри Rest
+Параметри Rest (позначені як `...ім'яАргументу` для останнього аргументу) дозволяють швидко приймати кілька аргументів у функції та отримувати їх у вигляді масиву. Це демонструється у наступному прикладі.
 
 ```ts
 function iTakeItAll(first, second, ...allOthers) {
@@ -9,4 +9,4 @@ iTakeItAll('foo', 'bar'); // []
 iTakeItAll('foo', 'bar', 'bas', 'qux'); // ['bas','qux']
 ```
 
-Rest parameters can be used in any function be it `function`/`()=>`/`class member`.
+Параметри Rest можуть бути використані в будь-якій функції, будь то `function`/`()=>`/`член класу`.

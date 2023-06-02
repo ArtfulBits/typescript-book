@@ -1,7 +1,7 @@
-// mention Pinned comments
+Закріплені коментарі:
 
 ```ts
 /*!
- * License
+ * Ліцензія
  */
 ```
