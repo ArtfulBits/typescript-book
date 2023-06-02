@@ -1,22 +1,22 @@
-# TypeScript with Node.js
-TypeScript has had *first class* support for Node.js since inception. Here's how to setup a quick Node.js project:
+# TypeScript з Node.js
+TypeScript має *першокласну* підтримку Node.js з моменту свого створення. Ось як налаштувати швидкий проект Node.js:
 
-> Note: many of these steps are actually just common practice Node.js setup steps
+> Примітка: багато з цих кроків насправді є загальноприйнятими кроками налаштування Node.js
 
-1. Setup a Node.js project `package.json`. Quick one : `npm init -y`
-1. Add TypeScript (`npm install typescript --save-dev`)
-1. Add `node.d.ts` (`npm install @types/node --save-dev`)
-1. Init a `tsconfig.json` for TypeScript options with a few key options in your tsconfig.json (`npx tsc --init --rootDir src --outDir lib --esModuleInterop --resolveJsonModule --lib es6,dom  --module commonjs`)
+1. Налаштуйте проект Node.js `package.json`. Швидкий варіант: `npm init -y`
+1. Додайте TypeScript (`npm install typescript --save-dev`)
+1. Додайте `node.d.ts` (`npm install @types/node --save-dev`)
+1. Ініціалізуйте `tsconfig.json` для налаштування TypeScript з декількома ключовими параметрами у вашому tsconfig.json (`npx tsc --init --rootDir src --outDir lib --esModuleInterop --resolveJsonModule --lib es6,dom  --module commonjs`)
 
-That's it! Fire up your IDE (e.g. `code .`) and play around. Now you can use all the built in node modules (e.g. `import * as fs from 'fs';`) with all the safety and developer ergonomics of TypeScript! 
+Це все! Запустіть свій редактор коду (наприклад, `code .`) та поекспериментуйте. Тепер ви можете використовувати всі вбудовані модулі Node (наприклад, `import * as fs from 'fs';`) з усіма перевагами безпеки та ергономіки розробника TypeScript!
 
-All your TypeScript code goes in `src` and the generated JavaScript goes in `lib`. 
+Весь ваш код TypeScript знаходиться в `src`, а згенерований JavaScript - в `lib`.
 
-## Bonus: Live compile + run
-* Add `ts-node` which we will use for live compile + run in node (`npm install ts-node --save-dev`)
-* Add `nodemon` which will invoke `ts-node` whenever a file is changed (`npm install nodemon --save-dev`)
+## Бонус: Жива компіляція + запуск
+* Додайте `ts-node`, який ми використовуватимемо для живої компіляції та запуску в Node (`npm install ts-node --save-dev`)
+* Додайте `nodemon`, який буде викликати `ts-node` кожного разу, коли змінюється файл (`npm install nodemon --save-dev`)
 
-Now just add a `script` target to your `package.json` based on your application entry e.g. assuming its `index.ts`:
+Тепер просто додайте ціль `script` до вашого `package.json` на основі вхідного файлу вашої програми, наприклад, припускаючи, що це `index.ts`:
 
 ```json
   "scripts": {
@@ -26,15 +26,14 @@ Now just add a `script` target to your `package.json` based on your application 
   },
 ```
 
-So you can now run `npm start` and as you edit `index.ts`:
+Тепер ви можете запустити `npm start`, і коли ви редагуєте `index.ts`:
 
-* nodemon reruns its command (ts-node)
-* ts-node transpiles automatically picking up tsconfig.json and the installed TypeScript version,
-* ts-node runs the output JavaScript through Node.js.
+* nodemon перезапускає свою команду (ts-node)
+* ts-node автоматично транспілює, використовуючи tsconfig.json та встановлену версію TypeScript,
+* ts-node запускає вихідний JavaScript через Node.js.
 
-And when you are ready to deploy your JavaScript application run `npm run build`.
+А коли ви готові розгорнути свою JavaScript-програму, запустіть `npm run build`.
 
+## Бонусні бали
 
-## Bonus points
-
-Such NPM modules work just fine with browserify (using tsify) or webpack (using ts-loader).
+Такі модулі NPM працюють прекрасно з browserify (з використанням tsify) або webpack (з використанням ts-loader).
