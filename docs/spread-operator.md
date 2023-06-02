@@ -1,9 +1,9 @@
 ### Spread Operator
 
-The main objective of the spread operator is to *spread* the elements of an array or object. This is best explained with examples.
+Основна мета "Spread" оператора (...) — *розповсюдження* елементів масиву або об’єкта. Це найкраще пояснити на прикладах.
 
 #### Apply
-A common use case is to spread an array into the function arguments. Previously you would need to use `Function.prototype.apply`:
+Поширеним випадком використання є розподіл масиву на аргументи функції. Раніше вам потрібно було використовувати `Function.prototype.apply`:
 
 ```ts
 function foo(x, y, z) { }
@@ -11,7 +11,7 @@ var args = [0, 1, 2];
 foo.apply(null, args);
 ```
 
-Now you can do this simply by prefixing the arguments with `...` as shown below:
+Зараз ви можете зробити це простіше за допомогою оператора `...`:
 
 ```ts
 function foo(x, y, z) { }
@@ -19,27 +19,32 @@ var args = [0, 1, 2];
 foo(...args);
 ```
 
-Here we are *spreading* the `args` array into positional `arguments`.
+Тут ми *розширюєме* масив `args`в `arguments`.
 
 #### Destructuring
-We've already seen one usage of this in *destructuring*:
+Деструктурізація.
+
+Ви вже познаймилися з одним прикладом *destructuring*:
 
 ```ts
 var [x, y, ...remaining] = [1, 2, 3, 4];
 console.log(x, y, remaining); // 1,2,[3,4]
 ```
-The motivation here is to simply make it easy for you to capture the remaining elements of an array when destructuring.
+Мотивація тут полягає в тому, щоб просто полегшити вам захоплення решти елементів масиву під час деструктуризації.
 
 #### Array Assignment
-The spread operator allows you to easily place an *expanded version* of an array into another array. This is demonstrated in the example below:
+Присвоєння масиву.
 
+Оператор поширення дозволяє легко розмістити *розширену версію* масиву в інший масив. Це показано на прикладі нижче:
+
+ʼ
 ```ts
 var list = [1, 2];
 list = [...list, 3, 4];
 console.log(list); // [1,2,3,4]
 ```
 
-You can put the expanded array in at any position, and get the effect you'd expect:
+Ви маєте змогу помістити розширений масив в будь-яку позицію масива:
 
 ```ts
 var list = [1, 2];
@@ -48,15 +53,15 @@ console.log(list); // [0,1,2,4]
 ```
 
 #### Object spread
-You can also spread an object into another object. A common use case is to simply add a property to an object without mutating the original:
+Розширення обʼєкту.
+Ві также можете расширить один обʼект іншим. Типичною є задача розжирення обʼєкту без зміни його базового стану:
 
 ```ts
 const point2D = {x: 1, y: 2};
 /** Create a new object by using all the point2D props along with z */
 const point3D = {...point2D, z: 3};
 ```
-
-For objects, the order of where you put the spread matters.  This works something like `Object.assign`, and does what you'd expect: what comes first is 'overridden' by what comes later:
+Для обʼєктом місце, куди ви дадаєте розширення, має значення.  Це працює схоже на  `Object.assign`, і робить те, що ви очікуєте: те, що приходить першим, «замінюється» тим, що приходить пізніше:
 
 ```ts
 const point2D = {x: 1, y: 2};
@@ -66,7 +71,7 @@ const yetAnotherPoint3D = {...point2D, x: 5, z: 4}
 console.log(yetAnotherPoint3D); // {x: 5, y: 2, z: 4}
 ```
 
-Another common use case is a simple shallow extend:
+Іншим поширеним випадком використання є просте дрібне розширення:
 
 ```ts
 const foo = {a: 1, b: 2, c: 0};
@@ -77,7 +82,7 @@ const fooBar = {...foo, ...bar};
 ```
 
 #### Summary
-`apply` is something that you often use in JavaScript, so it's good to have a better syntax where you don't have that ugly `null` for the `this` argument. Also having a dedicated syntax for moving arrays out of (destructuring) or into (assignment) other arrays provides a neat syntax for when you are doing array processing on partial arrays.
+`apply` ви часто використовуєте в JavaScript, тому було би добре мати кращий синтаксис, без `null` для `this`. Крім того, наявність спеціального синтаксису для переміщення масивів з (деструктурування) або в (присвоєння) інших масивів забезпечує чіткий синтаксис для обробки часткових масивів.
 
 
 [](https://github.com/Microsoft/TypeScript/pull/1931)
