@@ -1,17 +1,18 @@
 ## Build Toggles
+Перемикачі побудови
 
-It is common to switch in JavaScript projects based on where they are being run. You can do this quite easily with webpack as it supports *dead code elimination* based on environment variables.
+Зазвичай проекти JavaScript перемикаються залежно від того, де вони виконуються. Ви можете зробити це досить легко за допомогою webpack, оскільки він підтримує *усунення мертвого коду* на основі змінних середовища.
 
-Add different targets in your `package.json` `scripts`:
+Ви можете додати це у ваш `package.json` `scripts`:
 
 ```json
 "build:test": "webpack -p --config ./src/webpack.config.js",
 "build:prod": "webpack -p --define process.env.NODE_ENV='\"production\"' --config ./src/webpack.config.js",
 ```
 
-Of course I am assuming you have `npm install webpack --save-dev`. Now you can run `npm run build:test` etc.
+Звичайно, я припускаю, що у вас є `npm install webpack --save-dev`. Зараз ви можете використовувати `npm run build:test`.
 
-Using this variable is super easy as well:
+Використовувати цю змінну також дуже просто:
 
 ```ts
 /**
@@ -45,4 +46,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 ```
 
-> We use `process.env.NODE_ENV` just because it is conventional in a lot of JavaScript libraries themselves e.g. `React`.
+> Ви використовуєте `process.env.NODE_ENV` просто тому, що це традиційно у багатьох бібліотеках JavaScript, наприклад, `React`.

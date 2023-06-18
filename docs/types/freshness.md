@@ -5,9 +5,9 @@
 
 ## Freshness
 
-TypeScript provides a concept of **Freshness** (also called *strict object literal checking*) to make it easier to type check object literals that would otherwise be structurally type compatible.
+TypeScript забезпечує концепцію **Freshness** (також звану *strict object literal checking*) щоб полегшити перевірку літеральних об’єктів, які в іншому випадку були б структурно сумісними з типами.
 
-Structural typing is *extremely convenient*. Consider the following piece of code. This allows you to *very conveniently* upgrade your JavaScript to TypeScript while still preserving a level of type safety:
+Структурна типізація *extremely convenient*. Розглянемо наступний фрагмент коду. Це дозволяє *очень удачно* оновити ваш JavaScript до TypeScript, зберігаючи при цьому рівень безпеки типу:
 
 ```ts
 function logName(something: { name: string }) {
@@ -23,7 +23,7 @@ logName(animal); // okay
 logName(random); // Error: property `name` is missing
 ```
 
-However, *structural* typing has a weakness in that it allows you to misleadingly think that something accepts more data than it actually does. This is demonstrated in the following code which TypeScript will error on as shown:
+Однак *structural* типізація має слабкість у тому, що вона дозволяє вам оманливо думати, що щось приймає більше даних, ніж насправді. Це продемонстровано в наступному коді, у якому TypeScript генерує помилку, як показано:
 
 ```ts
 function logName(something: { name: string }) {
@@ -31,12 +31,12 @@ function logName(something: { name: string }) {
 }
 
 logName({ name: 'matt' }); // okay
-logName({ name: 'matt', job: 'being awesome' }); // Error: object literals must only specify known properties. `job` is excessive here.
+logName({ name: 'matt', job: 'being awesome' }); // Помилка: літерали об’єктів повинні вказувати лише відомі властивості. "job" тут надмірна.
 ```
 
-Note that this error *only happens on object literals*. Without this error one might look at the call `logName({ name: 'matt', job: 'being awesome' })` and think that *logName* would do something useful with `job` where as in reality it will completely ignore it.
+Зауважте, що ця помилка *виникає лише в object literals*. Без цієї помилки можна було б подивитися на виклик `logName({ name: 'matt', job: 'being awesome' })` і подумати, що *logName* зробить щось корисне з `job`, але, як насправді, він повністю ігноруватиме це.
 
-Another big use case is with interfaces that have optional members, without such object literal checking, a typo would type check just fine. This is demonstrated below:
+Інший доцільний випадок використання – це інтерфейси, які мають необов’язкові члени, без такої перевірки об’єктного літералу помилка буде цілком нормальною. Це показано нижче:
 
 ```ts
 function logIfHasName(something: { name?: string }) {
@@ -49,14 +49,14 @@ var animal = { name: 'cow', diet: 'vegan, but has milk of own species' };
 
 logIfHasName(person); // okay
 logIfHasName(animal); // okay
-logIfHasName({neme: 'I just misspelled name to neme'}); // Error: object literals must only specify known properties. `neme` is excessive here.
+logIfHasName({neme: 'I just misspelled name to neme'}); // Error: обʼєкт має лише відомі властивості. `neme` не існує.
 ```
 
-The reason why only object literals are type checked this way is because in this case additional properties *that aren't actually used* is almost always a typo or a misunderstanding of the API.
+Причина, чому лише літерали об’єктів перевіряються таким чином, полягає в тому, що в цьому випадку додаткові властивості, *that aren't actually used* майже завжди є помилкою або неправильним розумінням API.
 
 ### Allowing extra properties
 
-A type can include an index signature to explicitly indicate that excess properties are permitted:
+Тип може містити сигнатуру індексу, щоб явно вказати, що надлишкові властивості дозволені:
 
 ```ts
 var x: { foo: number, [x: string]: unknown };
@@ -65,7 +65,7 @@ x = { foo: 1, baz: 2 };  // Ok, `baz` matched by index signature
 
 ### Use Case: React State
 
-[Facebook ReactJS](https://facebook.github.io/react/) offers a nice use case for object freshness. Quite commonly in a component you call `setState` with only a few properties instead of passing in all the properties, i.e.: 
+[Facebook ReactJS](https://facebook.github.io/react/) пропонує гарний варіант використання freshness. Досить часто в компоненті ви викликаєте `setState` лише з кількома властивостями замість того, щоб передати всі властивості, тобто:
 
 ```ts
 // Assuming
@@ -75,13 +75,13 @@ interface State {
 }
 
 // You want to do: 
-this.setState({foo: "Hello"}); // Error: missing property bar
+this.setState({foo: "Hello"}); // Error: немає властивісті bar
 
-// But because state contains both `foo` and `bar` TypeScript would force you to do: 
+// Але оскільки стан містить і `foo`, і `bar`, TypeScript змусить вас це зробити: 
 this.setState({foo: "Hello", bar: this.state.bar});
 ```
 
-Using the idea of freshness you would mark all the members as optional and *you still get to catch typos*!: 
+Використовуючи цей принцип, ви б позначили всіх учасників як необов’язкові, і *you still get to catch typos*!:
 
 ```ts
 // Assuming
@@ -93,9 +93,9 @@ interface State {
 // You want to do: 
 this.setState({foo: "Hello"}); // Yay works fine!
 
-// Because of freshness it's protected against typos as well!
-this.setState({foos: "Hello"}); // Error: Objects may only specify known properties
+// Завдяки freshness він також захищений від друкарських помилок!
+this.setState({foos: "Hello"}); // Error: Об’єкти можуть визначати лише відомі властивості
 
-// And still type checked
-this.setState({foo: 123}); // Error: Cannot assign number to a string
+// перевірка типів
+this.setState({foo: 123}); // Error: Неможливо призначити number в string
 ```

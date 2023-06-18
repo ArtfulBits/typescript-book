@@ -1,14 +1,14 @@
 # Moving Types
 
-TypeScript's type system is extremely powerful and allows moving and slicing types in ways not possible in any other single language out there.
+Система типів TypeScript є надзвичайно потужною та дозволяє переміщувати та нарізати типи способами, неможливими в жодній іншій окремій мові.
 
-This is because TypeScript is designed to allow you to work seamlessly with a *highly dynamic* language like JavaScript. Here we cover a few tricks for moving types around in TypeScript.
+Це пов’язано з тим, що TypeScript розроблено, щоб дозволити вам бездоганно працювати з *highly dynamic* мовою, такою як JavaScript. Тут ми розглянемо кілька прийомів для переміщення типів у TypeScript.
 
-Key motivation for these : You change one thing and everything else just updates automatically and you get nice errors if something is going to break, like a well designed constraint system.
+Основна мотивація для них: ви змінюєте щось одне, а все інше просто оновлюється автоматично, і ви отримуєте приємні помилки, якщо щось збирається зламатися, наприклад добре розроблена система обмежень.
 
 ## Copying both the Type + Value
 
-If you want to move a class around, you might be tempted to do the following:
+Якщо ви хочете перемістити клас, у вас може виникнути спокуса зробити наступне:
 
 ```ts
 class Foo { }
@@ -16,7 +16,7 @@ var Bar = Foo;
 var bar: Bar; // ERROR: cannot find name 'Bar'
 ```
 
-This is an error because `var` only copied the `Foo` into the *variable* declaration space and you therefore cannot use `Bar` as a type annotation. The proper way is to use the `import` keyword. Note that you can only use the `import` keyword in such a way if you are using *namespaces* or *modules* (more on these later):
+Це помилка, оскільки `var` скопіював лише `Foo` в простір оголошення *variable* тому ви не можете використовувати `Bar` як анотацію типу. Правильним способом є використання ключового слова `import`. Зверніть увагу, що ви можете використовувати ключове слово `import` таким чином, лише якщо ви використовуєте *namespaces* або *modules* (докладніше про це пізніше):
 
 ```ts
 namespace importing {
@@ -27,62 +27,63 @@ import Bar = importing.Foo;
 var bar: Bar; // Okay
 ```
 
-This `import` trick only works for things that are *both type and variable*.
+Цей трюк `import` працює лише для речей, які є *both type and variable*.
 
 ## Capturing the type of a variable
 
-You can actually use a variable in a type annotation using the `typeof` operator. This allows you to tell the compiler that one variable is the same type as another. Here is an example to demonstrate this:
+Ви можете використовувати змінну в анотації типу за допомогою оператора `typeof`. Це дозволяє повідомити компілятору, що одна змінна має той самий тип, що й інша. Ось приклад, щоб продемонструвати це:
 
 ```ts
 var foo = 123;
-var bar: typeof foo; // `bar` has the same type as `foo` (here `number`)
+var bar: typeof foo; // `bar` має тей самий тип як `foo` (`number`)
 bar = 456; // Okay
-bar = '789'; // ERROR: Type `string` is not `assignable` to type `number`
+bar = '789'; // ERROR: Тип `string` не співпадає з `number`
 ```
 
 ## Capturing the type of a class member
 
-You can traverse into any non-nullable object type to retrieve the type of a property:
+Ви можете перейти до будь-якого типу об’єкта, який не допускає значення NULL, щоб отримати тип властивості:
 
 ```ts
 class Foo {
-  foo: number; // some member whose type we want to capture
+  foo: number; // деякий член, тип якого ми хочемо захопити
 }
 
-let bar: Foo['foo']; // `bar` has type `number`
+let bar: Foo['foo']; // `bar` має тип `number`
 ```
 
-Alternatively, similar to capturing the type of a variable, you just declare a variable purely for type capturing purposes:
+Крім того, подібно до захоплення типу змінної, ви просто оголошуєте змінну виключно для цілей захоплення типу:
 
 ```ts
-// Purely to capture type
+// Чисто для захоплення типу
 declare let _foo: Foo;
 
-// Same as before
-let bar: typeof _foo.foo; // `bar` has type `number`
+// Те саме, що й раніше
+let bar: typeof _foo.foo; // `bar` має тип `number`
 ```
 
 ## Capturing the type of magic strings
 
-Lots of JavaScript libraries and frameworks work off of raw JavaScript strings. You can use `const` variables to capture their type e.g.
+Багато бібліотек і фреймворків JavaScript працюють на необроблених рядках JavaScript. Ви можете використовувати змінні `const`, щоб зафіксувати їх тип, наприклад.
 
 ```ts
-// Capture both the *type* _and_ *value* of magic string:
+// Зберіть *тип* і *значення* магічного рядка:
 const foo = "Hello World";
 
-// Use the captured type:
+// Использование типа:
 let bar: typeof foo;
 
-// bar can only ever be assigned to `Hello World`
+// bar можна призначати лише для `Hello World`
+
 bar = "Hello World"; // Okay!
 bar = "anything else "; // Error!
 ```
 
-In this example `bar` has the literal type `"Hello World"`. We cover this more in the [literal type section](./literal-types.md).
+У цьому прикладі `bar` має буквальний тип `"Hello World"`. Ми докладніше розглядаємо це в [literal type section](./literal-types.md).
 
 ## Capturing Key Names
 
-The `keyof` operator lets you capture the key names of a type. E.g. you can use it to capture the key names of a variable by first grabbing its type using `typeof`:
+Оператор `keyof` дозволяє фіксувати назви ключів типу. наприклад ви можете використовувати його для захоплення імен ключів змінної, спершу захопивши її тип за допомогою `typeof`:
 
 ```ts
 const colors = {
@@ -91,10 +92,10 @@ const colors = {
 }
 type Colors = keyof typeof colors;
 
-let color: Colors; // same as let color: "red" | "blue"
+let color: Colors; // теж саме let color: "red" | "blue"
 color = 'red'; // okay
 color = 'blue'; // okay
-color = 'anythingElse'; // Error: Type '"anythingElse"' is not assignable to type '"red" | "blue"'
+color = 'anythingElse'; // Error: тип '"anythingElse"' не співпадає з '"red" | "blue"'
 ```
 
-This allows you to have stuff like string enums + constants quite easily, as you just saw in the above example.
+Це дозволяє досить легко мати такі речі, як рядок enum + константи, як ви щойно бачили в прикладі вище.

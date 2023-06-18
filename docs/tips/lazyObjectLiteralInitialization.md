@@ -1,6 +1,7 @@
 ## Lazy Object Literal Initialization
+Лінива ініціалізація літерального обʼєкту.
 
-Quite commonly in JavaScript code bases you would initialize object literals in the following manner:
+Досить часто в базах коду JavaScript ви ініціалізуєте літерали об’єктів наступним чином:
 
 ```ts
 let foo = {};
@@ -8,19 +9,20 @@ foo.bar = 123;
 foo.bas = "Hello World";
 ```
 
-As soon as you move the code to TypeScript you will start to get Errors like the following:
+Щойно ви перемістите код у TypeScript, ви почнете отримувати такі помилки:
 
 ```ts
 let foo = {};
-foo.bar = 123; // Error: Property 'bar' does not exist on type '{}'
-foo.bas = "Hello World"; // Error: Property 'bas' does not exist on type '{}'
+foo.bar = 123; // Error: Властивість 'bar' не існує в обʼєкті '{}'
+foo.bas = "Hello World"; // Error: Властивість 'bas' dне існує в обʼєкті '{}'
 ```
 
-This is because from the state `let foo = {}`, TypeScript *infers* the type of `foo` (left hand side of initializing assignment) to be the type of the right hand side `{}` (i.e. an object with no properties). So, it error if you try to assign to a property it doesn't know about.
+Це тому, що `let foo = {}`, TypeScript *розуміє* що тип `foo` (лівостороння ініціалізації призначення) також є типом виразу праворуч `{}` (це обʼєкт, який немає властивостей). Отже, виникає помилка, якщо ви намагаєтеся призначити властивість, про яку він не знає.
 
 ### Ideal Fix
+Ідеальний фікс.
 
-The *proper* way to initialize an object in TypeScript is to do it in the assignment:
+*Правильний* спосіб ініціалізації об’єкта в TypeScript полягає в тому, щоб зробити це у призначенні:
 
 ```ts
 let foo = {
@@ -29,14 +31,15 @@ let foo = {
 };
 ```
 
-This is also great for code review and code maintainability purposes.
+Це також чудово підходить для перевірки та підтримки коду.
 
-> The quick fix and middle ground *lazy* initialization patterns described below suffer from *mistakenly forgetting to initialize a property*. 
+The quick fix and middle ground *lazy* initialization patterns described below suffer from *mistakenly forgetting to initialize a property*. 
+>  Описані нижче шаблони швидкого виправлення та  *лінивої* ініціалізації описані нижче виправляють припад коли *помилково забувають ініціалізувати властивість*
 
 ### Quick Fix
+Швидкий фікс.
 
-If you have a large JavaScript code base that you are migrating to TypeScript the ideal fix might not be a viable solution for you. In that case you can carefully use a *type assertion* to silence the compiler:
-
+Якщо у вас є велика база коду JavaScript, яку ви переносите на TypeScript, ідеальне виправлення може бути не життєздатним рішенням для вас. У цьому випадку ви можете обережно використовувати *твердження типу*, щоб заглушити компілятор:
 ```ts
 let foo = {} as any;
 foo.bar = 123;
@@ -44,13 +47,13 @@ foo.bas = "Hello World";
 ```
 
 ### Middle Ground
+Середній рівень.
 
-Of course using the `any` assertion can be very bad as it sort of defeats the safety of TypeScript. The middle ground fix is to create an `interface` to ensure
+Звичайноб викоростання `any` твердження може бути дуже поганим, оскільки воно порушує безпеку TypeScript. Золотий шлях — створити `interface`, щоб забезпечити
+* добру документацію
+* безпеку
 
-* Good Docs
-* Safe assignment
-
-This is shown below:
+Код нижче:
 
 ```ts
 interface Foo {
@@ -63,8 +66,7 @@ foo.bar = 123;
 foo.bas = "Hello World";
 ```
 
-Here is a quick example that shows the fact that using the interface can save you:
-
+Ось короткий приклад, який показує, що використання інтерфейсу може допомогти:
 ```ts
 interface Foo {
     bar: number
@@ -75,6 +77,6 @@ let foo = {} as Foo;
 foo.bar = 123;
 foo.bas = "Hello World";
 
-// later in the codebase:
-foo.bar = 'Hello Stranger'; // Error: You probably misspelled `bas` as `bar`, cannot assign string to number
+// пізніше в коді:
+foo.bar = 'Hello Stranger'; // Error: Можливо, ви неправильно написали `bas` як `bar`, не можете призначити рядок числу
 ```

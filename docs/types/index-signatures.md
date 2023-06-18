@@ -1,8 +1,8 @@
 # Index Signatures
 
-An `Object` in JavaScript (and hence TypeScript) can be accessed with a **string** to hold a reference to any other JavaScript **object**.
+До `Object` у JavaScript (і, отже, TypeScript) можна отримати доступ за допомогою **string** який містить посилання на будь-який інший JavaScript **object**.
 
-Here is a quick example:
+Ось короткий приклад:
 
 ```ts
 let foo: any = {};
@@ -10,7 +10,7 @@ foo['Hello'] = 'World';
 console.log(foo['Hello']); // World
 ```
 
-We store a string `"World"` under the key `"Hello"`. Remember we said it can store any JavaScript **object**, so lets store a class instance just to show the concept:
+Ми зберігаємо рядок `"World"` під ключем `"Hello"`. Пам’ятайте, ми сказали, що він може зберігати будь-який **object** JavaScript, тому давайте збережемо екземпляр класу, щоб показати концепцію:
 
 ```ts
 class Foo {
@@ -25,7 +25,7 @@ foo['Hello'] = new Foo('World');
 foo['Hello'].log(); // World
 ```
 
-Also remember that we said that it can be accessed with a **string**. If you pass any other object to the index signature the JavaScript runtime actually calls `.toString` on it before getting the result. This is demonstrated below:
+акож пам’ятайте, що ми сказали, що до нього можна отримати доступ за допомогою **string**. Якщо ви передаєте будь-який інший об’єкт до сигнатури індексу, середовище виконання JavaScript фактично викликає для нього `.toString` перед отриманням результату. Це показано нижче:
 
 ```ts
 let obj = {
@@ -41,20 +41,20 @@ console.log(foo[obj]); // toString called, World
 console.log(foo['Hello']); // World
 ```
 
-Note that `toString` will get called whenever the `obj` is used in an index position.
+Зауважте, що `toString` буде викликатися кожного разу, коли `obj` використовується в позиції індексу.
 
-Arrays are slightly different. For `number` indexing JavaScript VMs will try to optimise (depending on things like is it actually an array and do the structures of items stored match etc.). So `number` should be considered as a valid object accessor in its own right (distinct from `string`). Here is a simple array example:
+Масиви трохи відрізняються. Віртуальні машини JavaScript намагатимуться оптимізувати індексацію за числом (залежно від того, чи це насправді масив, чи збігаються структури збережених елементів тощо). Тому `number` слід розглядати як дійсний засіб доступу до об’єкта сам по собі (на відміну від `string`). Ось простий приклад масиву:
 
 ```ts
 let foo = ['World'];
 console.log(foo[0]); // World
 ```
 
-So that's JavaScript. Now let's look at TypeScript's graceful handling of this concept.
+Отже, це JavaScript. Тепер давайте подивимося, як TypeScript витончено використовує цю концепцію.
 
 ## TypeScript Index Signature
 
-First off, because JavaScript *implicitly* calls `toString` on any object index signature, TypeScript will give you an error to prevent beginners from shooting themselves in the foot (I see users shooting themselves in the foot when using JavaScript all the time on stackoverflow):
+По-перше, оскільки JavaScript *implicitly* викликає `toString` для будь-якого підпису індексу об’єкта, TypeScript видасть вам помилку, щоб запобігти початківцям стріляти собі в ногу (я бачу, як користувачі стріляють собі в ногу, коли весь час використовують JavaScript на stackoverflow ):
 
 ```ts
 let obj = {
@@ -72,7 +72,7 @@ foo[obj] = 'World';
 foo[obj.toString()] = 'World';
 ```
 
-The reason for forcing the user to be explicit is because the default `toString` implementation on an object is pretty awful, e.g. on v8 it always returns `[object Object]`:
+Причина примушування користувача бути явним полягає в тому, що реалізація `toString` за замовчуванням для об’єкта є досить жахливою, напр. на v8 завжди повертає `[object Object]`:
 
 ```ts
 let obj = {message:'Hello'}
@@ -85,27 +85,27 @@ foo[obj] = 'World';
 console.log(foo["[object Object]"]); // World
 ```
 
-Of course `number` is supported because
+Звичайно, `number` підтримується, оскільки
 
-1. its needed for excellent Array / Tuple support.
-1. even if you use it for an `obj` its default `toString` implementation is nice (not `[object Object]`).
+1. це необхідно для відмінної підтримки масиву / кортежу.
+1. навіть якщо ви використовуєте його для `obj`, його типова реалізація `toString` є гарною (а не `[object Object]`).
 
-Point 2 is shown below:
+Пункт 2 показано нижче:
 
 ```ts
 console.log((1).toString()); // 1
 console.log((2).toString()); // 2
 ```
 
-So lesson 1:
+Отже, урок 1:
 
-> TypeScript index signatures must be either `string` or `number`
+> Сигнатури індексу TypeScript мають бути або `string` або `number`
 
-Quick note: `symbols` are also valid and supported by TypeScript. But let's not go there just yet. Baby steps.
+Коротка примітка: `symbols` також дійсні та підтримуються TypeScript. Але не будемо поки що туди. Маленькі кроки.
 
 ### Declaring an index signature
 
-So we've been using `any` to tell TypeScript to let us do whatever we want. We can actually specify an *index* signature explicitly. E.g. say you want to make sure that anything that is stored in an object using a string conforms to the structure `{message: string}`. This can be done with the declaration `{ [index:string] : {message: string} }`. This is demonstrated below:
+Тож ми використовували `any`, щоб сказати TypeScript дозволяти нам робити все, що ми хочемо. Насправді ми можемо вказати підпис *index* явно. наприклад скажімо, ви хочете переконатися, що все, що зберігається в об’єкті за допомогою рядка, відповідає структурі `{message: string}`. Це можна зробити за допомогою оголошення `{ [index:string] : {message: string} }`. Це показано нижче:
 
 ```ts
 let foo:{ [index:string] : {message: string} } = {};
@@ -127,13 +127,13 @@ foo['a'].message;
 foo['a'].messages;
 ```
 
-> TIP: the name of the index signature e.g. `index` in `{ [index:string] : {message: string} }` has no significance for TypeScript and is only for readability. e.g. if it's user names you can do `{ [username:string] : {message: string} }` to help the next dev who looks at the code (which just might happen to be you).
+> ПОРАДА: назва підпису індексу, напр. `index` в `{ [index:string] : {message: string} }` не має значення для TypeScript і призначений лише для читабельності. напр. якщо це імена користувачів, ви можете зробити `{ [username:string] : {message: string} }`, щоб допомогти наступному розробнику, який перегляне код (яким випадково можете бути ви).
 
-Of course `number` indexes are also supported e.g. `{ [count: number] : SomeOtherTypeYouWantToStoreEgRebate }`
+Звичайно, також підтримуються «числові» індекси, напр. `{ [count: number] : SomeOtherTypeYouWantToStoreEgRebate }`
 
 ### All members must conform to the `string` index signature
 
-As soon as you have a `string` index signature, all explicit members must also conform to that index signature. This is shown below:
+Як тільки у вас є підпис індексу `string` усі явні члени також повинні відповідати цьому підпису індексу. Це показано нижче:
 
 ```ts
 /** Okay */
@@ -150,7 +150,7 @@ interface Bar {
 }
 ```
 
-This is to provide safety so that any string access gives the same result:
+Це робиться для забезпечення безпеки, щоб будь-який доступ до рядка давав однаковий результат:
 
 ```ts
 interface Foo {
@@ -169,7 +169,7 @@ foo[x]; // number
 
 ### Using a limited set of string literals
 
-An index signature can require that index strings be members of a union of literal strings by using *Mapped Types* e.g.:
+Сигнатура індексу може вимагати, щоб рядки індексу були членами об’єднання літеральних рядків за допомогою *Mapped Types* наприклад:
 
 ```ts
 type Index = 'a' | 'b' | 'c'
@@ -177,15 +177,15 @@ type FromIndex = { [k in Index]?: number }
 
 const good: FromIndex = {b:1, c:2}
 
-// Error:
-// Type '{ b: number; c: number; d: number; }' is not assignable to type 'FromIndex'.
-// Object literal may only specify known properties, and 'd' does not exist in type 'FromIndex'.
+// Помилка:
+// Типу '{ b: число; в: число; d: число; }" не можна призначити типу "FromIndex".
+// Літерал об’єкта може вказувати лише відомі властивості, а «d» не існує в типі «FromIndex».
 const bad: FromIndex = {b:1, c:2, d:3};
 ```
 
-This is often used together with `keyof typeof` to capture vocabulary types, described on the next page.
+Це часто використовується разом із `keyof typeof` для захоплення типів словника, описаного на наступній сторінці.
 
-The specification of the vocabulary can be deferred generically:
+Специфікація словника може бути відкладена узагальнено:
 
 ```ts
 type FromSomeIndex<K extends string> = { [key in K]: number }
@@ -193,9 +193,9 @@ type FromSomeIndex<K extends string> = { [key in K]: number }
 
 ### Having both `string` and `number` indexers
 
-This is not a common use case, but TypeScript compiler supports it nonetheless.
+Це не поширений випадок використання, але компілятор TypeScript все одно підтримує його.
 
-However, it has the restriction that the `string` indexer is more strict than the `number` indexer. This is intentional e.g. to allow typing stuff like:
+Однак він має обмеження, що індексатор `string` є більш суворим, ніж індексатор `number`. Це навмисно, напр. щоб дозволити вводити такі речі, як:
 
 ```ts
 interface ArrStr {
@@ -210,9 +210,9 @@ interface ArrStr {
 
 ### Design Pattern: Nested index signature
 
-> API consideration when adding index signatures
+> Розгляд API під час додавання підписів індексу
 
-Quite commonly in the JS community you will see APIs that abuse string indexers. e.g. a common pattern among CSS in JS libraries:
+Досить часто в спільноті JS ви бачите API, які зловживають індексаторами рядків. напр. загальний шаблон серед CSS у бібліотеках JS:
 
 ```ts
 interface NestedCSS {
@@ -228,15 +228,14 @@ const example: NestedCSS = {
 }
 ```
 
-Try not to mix string indexers with *valid* values this way. E.g. a typo in the padding will remain uncaught:
-
+Намагайтеся не змішувати рядкові індексатори з *valid* значеннями таким чином. наприклад помилка в заповненні залишиться невиявленою:
 ```ts
 const failsSilently: NestedCSS = {
   colour: 'red', // No error as `colour` is a valid string selector
 }
 ```
 
-Instead separate out the nesting into its own property e.g. in a name like `nest` (or `children` or `subnodes` etc.):
+Натомість відокремте вкладення у власну властивість, наприклад. в назві на зразок `nest` (або `children` або `subnodes` тощо):
 
 ```ts
 interface NestedCSS {
@@ -262,9 +261,9 @@ const failsSilently: NestedCSS = {
 
 ### Excluding certain properties from the index signature
 
-Sometimes you need to combine properties into the index signature. This is not advised, and you *should* use the Nested index signature pattern mentioned above. 
+Іноді потрібно об’єднати властивості в підпис індексу. Це не рекомендовано, і ви *повинні* uвикористовувати шаблон підпису вкладеного індексу, згаданий вище.
 
-However, if you are modeling *existing JavaScript* you can get around it with an intersection type. The following shows an example of the error you will encounter without using an intersection:
+Однак, якщо ви моделюєте *existing JavaScript* ви можете обійти його за допомогою типу перехрестя. Нижче показано приклад помилки, з якою ви зіткнетеся без використання перехрестя:
 
 ```ts
 type FieldState = {
@@ -277,7 +276,7 @@ type FormState = {
 }
 ```
 
-Here is the workaround using an intersection type:
+Ось обхідний шлях за допомогою типу перетину:
 
 ```ts
 type FieldState = {
@@ -289,7 +288,7 @@ type FormState =
   & { [fieldName: string]: FieldState }
 ```
 
-Note that even though you can declare it to model existing JavaScript, you cannot create such an object using TypeScript:  
+Зауважте, що навіть якщо ви можете оголосити його для моделювання існуючого JavaScript, ви не можете створити такий об’єкт за допомогою TypeScript:  
 
 ```ts
 type FieldState = {

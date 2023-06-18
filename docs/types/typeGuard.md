@@ -2,12 +2,12 @@
 * [User Defined Type Guards](#user-defined-type-guards)
 
 ## Type Guard
-Type Guards allow you to narrow down the type of an object within a conditional block. 
+Захисники типу дозволяють звузити тип об’єкта в межах умовного блоку.
 
 
 ### typeof
 
-TypeScript is aware of the usage of the JavaScript `instanceof` and `typeof` operators. If you use these in a conditional block, TypeScript will understand the type of the variable to be different within that conditional block. Here is a quick example where TypeScript realizes that a particular function does not exist on `string` and points out what was probably a user typo:
+TypeScript знає про використання операторів `instanceof` і `typeof` JavaScript. Якщо ви використовуєте їх в умовному блоці, TypeScript зрозуміє, що тип змінної буде іншим у цьому умовному блоці. Ось короткий приклад, коли TypeScript розуміє, що певна функція не існує в `string`, і вказує на те, що, ймовірно, було помилкою користувача:
 
 ```ts
 function doSomething(x: number | string) {
@@ -21,7 +21,7 @@ function doSomething(x: number | string) {
 
 ### instanceof
 
-Here is an example with a class and `instanceof`:
+Ось приклад із класом і `instanceof`:
 
 ```ts
 class Foo {
@@ -53,7 +53,7 @@ doStuff(new Foo());
 doStuff(new Bar());
 ```
 
-TypeScript even understands `else` so when an `if` narrows out one type it knows that within the else *it's definitely not that type*. Here is an example:
+TypeScript навіть розуміє `else`, тому, коли `if` звужує один тип, він знає, що всередині else *it's definitely not that type*. Ось приклад:
 
 ```ts
 class Foo {
@@ -81,7 +81,7 @@ doStuff(new Bar());
 
 ### in 
 
-The `in` operator does a safe check for the existence of a property on an object and can be used as a type guard. E.g. 
+Оператор `in` виконує безпечну перевірку наявності властивості об'єкта та може використовуватися як захист типу. наприклад
 
 ```ts
 interface A {
@@ -103,7 +103,7 @@ function doStuff(q: A | B) {
 
 ### Literal Type Guard
 
-You can use `===` / `==` / `!==` / `!=` to distinguish between literal values
+Ви можете використовувати `===` / `==` / `!==` / `!=`, щоб розрізняти літеральні значення
 
 ```ts
 type TriState = 'yes' | 'no' | 'unknown';
@@ -119,7 +119,7 @@ function logOutState(state:TriState) {
 }
 ```
 
-This even works when you have literal types in a union. You can check the value of a shared property name to discriminate the union e.g. 
+Це навіть працює, коли у вас є буквальні типи в об’єднанні. Ви можете перевірити значення назви спільної властивості, щоб розрізнити об’єднання, наприклад.
 
 ```ts
 type Foo = {
@@ -145,7 +145,7 @@ function doStuff(arg: Foo | Bar) {
 
 ### null and undefined with `strictNullChecks`
 
-TypeScript is smart enough to rule out both `null` and `undefined` with a `== null` / `!= null` check. For example:
+TypeScript достатньо розумний, щоб виключити як `null`, так і `undefined` за допомогою перевірки `== null` / `!= null`. Наприклад:
 
 ```ts
 function foo(a?: number | null) {
@@ -156,7 +156,7 @@ function foo(a?: number | null) {
 ```
 
 ### User Defined Type Guards
-JavaScript doesn't have very rich runtime introspection support built in. When you are using just plain JavaScript Objects (using structural typing to your advantage), you do not even have access to `instanceof` or `typeof`. For these cases you can create *User Defined Type Guard functions*. These are just functions that return `someArgumentName is SomeType`. Here is an example:
+У JavaScript не надто багато вбудованої підтримки інтроспекції під час виконання. Коли ви використовуєте звичайні об’єкти JavaScript (використовуючи структурну типізацію для вашої переваги), ви навіть не маєте доступу до `instanceof` або `typeof`. Для цих випадків ви можете створити *User Defined Type Guard functions*. Це лише функції, які повертають `someArgumentName is SomeType`. Ось приклад:
 
 ```ts
 /**
@@ -199,7 +199,7 @@ doStuff({ bar: 123, common: '123' });
 
 ### Type Guards and callbacks
 
-TypeScript doesn't assume type guards remain active in callbacks as making this assumption is dangerous. e.g. 
+TypeScript не передбачає, що guards залишаються активними у зворотних викликах, оскільки робити це припущення небезпечно.
 
 ```js
 // Example Setup
@@ -218,7 +218,7 @@ if (foo.bar) {
 }
 ```
 
-The fix is as easy as storing the inferred safe value in a local variable, automatically ensuring it doesn't get changed externally, and TypeScript can easily understand that: 
+Виправити це так само просто, як зберегти виведене безпечне значення в локальній змінній, автоматично гарантуючи, що воно не буде змінено ззовні, і TypeScript може легко зрозуміти, що:
 
 ```js
 // Type Guard

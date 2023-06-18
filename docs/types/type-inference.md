@@ -1,25 +1,24 @@
 # Type Inference in TypeScript
 
-TypeScript can infer (and then check) the type of a variable based on a few simple rules. Because these rules
-are simple you can train your brain to recognize safe / unsafe code (it happened for me and my teammates quite quickly).
+TypeScript може визначити (а потім перевірити) тип змінної на основі кількох простих правил. Тому що ці правила
+прості, ви можете навчити свій мозок розпізнавати безпечний/небезпечний код (це сталося зі мною та моїми товаришами по команді досить швидко).
 
-> The types flowing is just how I imagine in my brain the flow of type information.
+> Потік типів – це саме те, як я уявляю в своєму мозку потік інформації про типи.
 
 ## Variable Definition
 
-Types of a variable are inferred by definition.
-
+Типи змінної виводяться за визначенням.
 ```ts
 let foo = 123; // foo is a `number`
 let bar = "Hello"; // bar is a `string`
 foo = bar; // Error: cannot assign `string` to a `number`
 ```
 
-This is an example of types flowing from right to left.
+Це приклад типів, що перетікають справа наліво.
 
 ## Function Return Types
 
-The return type is inferred by the return statements e.g. the following function is inferred to return a `number`.
+Тип повернення визначається операторами return, наприклад. передбачається, що наступна функція повертає `number`.
 
 ```ts
 function add(a: number, b: number) {
@@ -27,18 +26,18 @@ function add(a: number, b: number) {
 }
 ```
 
-This is an example of types flowing bottom out.
+Це приклад типів, що випливають знизу.
 
 ## Assignment
 
-The type of function parameters / return values can also be inferred by assignment e.g. here we say that `foo` is an `Adder`, that makes `number` the type of `a` and `b`.
+Тип параметрів функції/повернених значень також можна визначити за допомогою призначення, наприклад. тут ми говоримо, що `foo` є `Adder`, що робить `number` типом `a` і `b`.
 
 ```ts
 type Adder = (a: number, b: number) => number;
 let foo: Adder = (a, b) => a + b;
 ```
 
-This fact can be demonstrated by the below code which raises an error as you would hope:
+Цей факт можна продемонструвати наведеним нижче кодом, який викликає помилку, як ви сподіваєтесь:
 
 ```ts
 type Adder = (a: number, b: number) => number;
@@ -48,9 +47,9 @@ let foo: Adder = (a, b) => {
 }
 ```
 
-This is an example of types flowing from left to right.
+Це приклад типів, що перетікають зліва направо.
 
-The same *assignment* style type inference works if you create a function for a callback argument. After all an `argument -> parameter`is just another form of variable assignment.
+Той самий спосіб визначення типу *призначення* працює, якщо ви створюєте функцію для аргументу зворотного виклику. Зрештою, `argument -> parameter` - це просто інша форма призначення змінних.
 
 ```ts
 type Adder = (a: number, b: number) => number;
@@ -65,8 +64,7 @@ iTakeAnAdder((a, b) => {
 
 ## Structuring
 
-These simple rules also work in the presence of **structuring** (object literal creation). For example in the following case the type of `foo` is inferred to be `{a:number, b:number}`
-
+Ці прості правила також працюють за наявності **structuring** (створення буквального об’єкта). Наприклад, у наступному випадку тип `foo` вважається `{a:number, b:number}`
 ```ts
 let foo = {
     a: 123,
@@ -75,14 +73,14 @@ let foo = {
 // foo.a = "hello"; // Would Error: cannot assign `string` to a `number`
 ```
 
-Similarly for arrays:
+Аналогічно для масивів:
 
 ```ts
 const bar = [1,2,3];
 // bar[0] = "hello"; // Would error: cannot assign `string` to a `number`
 ```
 
-And of course any nesting:
+І звичайно будь-яке вкладення:
 
 ```ts
 let foo = {
@@ -93,7 +91,7 @@ let foo = {
 
 ## Destructuring
 
-And of course, they also work with destructuring, both objects:
+І, звичайно, вони також працюють з деструктуризацією обох об’єктів:
 
 ```ts
 let foo = {
@@ -112,7 +110,7 @@ let [a, b] = bar;
 // a = "hello"; // Would Error: cannot assign `string` to a `number`
 ```
 
-And if the function parameter can be inferred, so can its destructured properties. For example here we destructure the argument into its `a`/`b` members.
+І якщо параметр функції можна вивести, то можна вивести і його деструктуровані властивості. Наприклад, тут ми деструктуруємо аргумент на члени `a`/`b`.
 
 ```ts
 type Adder = (numbers: { a: number, b: number }) => number;
@@ -127,19 +125,19 @@ iTakeAnAdder(({a, b}) => { // Types of `a` and `b` are inferred
 
 ## Type Guards
 
-We have already seen how [Type Guards](./typeGuard.md) help change and narrow down types (particularly in the case of unions). Type guards are just another form of type inference for a variable in a block.
+Ми вже бачили, як [Type Guards](./typeGuard.md) допомагає змінювати та звужувати типи (зокрема, у випадку об’єднань). Захисники типу — це просто інша форма виведення типу для змінної в блоці.
 
 ## Warnings
 
 ### Be careful around parameters
 
-Types do not flow into the function parameters if it cannot be inferred from an assignment. For example in the following case the compiler does not know the type of `foo` so it cannot infer the type of `a` or `b`.
+Типи не входять у параметри функції, якщо це не можна вивести з призначення. Наприклад, у наступному випадку компілятор не знає типу `foo`, тому він не може визначити тип `a` або `b`.
 
 ```ts
 const foo = (a,b) => { /* do something */ };
 ```
 
-However, if `foo` was typed the function parameters type can be inferred (`a`,`b` are both inferred to be of type `number` in the example below).
+Однак, якщо було введено `foo`, можна визначити тип параметрів функції (обидва `a`, `b` вважаються типом `number` у прикладі нижче).
 
 ```ts
 type TwoNumberFunction = (a: number, b: number) => void;
@@ -148,7 +146,7 @@ const foo: TwoNumberFunction = (a, b) => { /* do something */ };
 
 ### Be careful around return
 
-Although TypeScript can generally infer the return type of a function, it might not be what you expect. For example here function `foo` has a return type of `any`.
+Хоча TypeScript загалом може визначити тип повернення функції, це може бути не те, що ви очікуєте. Наприклад, тут функція `foo` має тип повернення `any`.
 
 ```ts
 function foo(a: number, b: number) {
@@ -160,15 +158,15 @@ function addOne(c) {
 }
 ```
 
-This is because the return type is impacted by the poor type definition for `addOne` (`c` is `any` so the return of `addOne` is `any` so the return of `foo` is `any`).
+Це тому, що на тип повернення впливає погане визначення типу для `addOne` (`c` - це `any`, тому повернення `addOne` є `any`, тому повернення `foo` є `any`).
 
-> I find it simplest to always be explicit about function returns. After all, these annotations are a theorem and the function body is the proof.
+> Я вважаю найпростішим завжди чітко говорити про повернення функції. Зрештою, ці анотації є теоремою, а тіло функції є доказом.
 
-There are other cases that one can imagine, but the good news is that there is a compiler flag that can help catch such bugs.
+Є й інші випадки, які можна уявити, але хороша новина полягає в тому, що існує прапор компілятора, який може допомогти виявити такі помилки.
 
 ## `noImplicitAny`
 
-The flag `noImplicitAny` instructs the compiler to raise an error if it cannot infer the type of a variable (and therefore can only have it as an *implicit* `any` type). You can then
+Прапор `noImplicitAny` в наказує компілятору викликати помилку, якщо він не може визначити тип змінної (і тому може мати її лише як *implicit* `any` тип). Тоді можна
 
-* either say that *yes I want it to be of type `any`* by *explicitly* adding an `: any` type annotation
-* help the compiler out by adding a few more *correct* annotations.
+* або скажіть, що *yes I want it to be of type `any`* додавши *explicitly* анотацію типу `: any`
+* допоможіть компілятору, додавши ще кілька *вірних* анотацій.

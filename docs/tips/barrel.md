@@ -1,8 +1,8 @@
 ## Barrel
 
-A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
+Barrel це спосіб згортання експорту з кількох модулів в один зручний модуль. Сам барель є файлом модуля, який повторно експортує вибрані експорти інших модулів.
 
-Imagine the following class structure in a library: 
+Уявіть наступну структуру класів у бібліотеці: 
 
 ```ts
 // demo/foo.ts
@@ -14,8 +14,7 @@ export class Bar {}
 // demo/baz.ts
 export class Baz {}
 ```
-
-Without a barrel, a consumer would need three import statements:
+Без barrel користувач потребує зробити 3 import:
 
 ```ts
 import { Foo } from '../demo/foo';
@@ -23,7 +22,7 @@ import { Bar } from '../demo/bar';
 import { Baz } from '../demo/baz';
 ```
 
-You can instead add a barrel `demo/index.ts` containing the following: 
+Замість цього можно використовувати barrel `demo/index.ts` який реекспортує: 
 
 ```ts
 // demo/index.ts
@@ -32,14 +31,16 @@ export * from './bar'; // re-export all of its exports
 export * from './baz'; // re-export all of its exports
 ```
 
-Now the consumer can import what it needs from the barrel:
+Зараз можно використати простий синтансис:
 
 ```ts
 import { Foo, Bar, Baz } from '../demo'; // demo/index.ts is implied
 ```
 
 ### Named exports
-Instead of exporting `*`, you can choose to export the module in a name. E.g., assume that `baz.ts` has functions:
+Іменований експорт.
+
+Замість експорту всього через  `*`, ви можете вибрати модуль для експорту по назві. Наприклад, `baz.ts` має функції:
 
 ```ts
 // demo/foo.ts
@@ -53,7 +54,7 @@ export function getBaz() {}
 export function setBaz() {}
 ```
 
-If you would rather not export `getBaz` / `setBaz` from demo you can instead put them in a variable by importing them in a name and exporting that name as shown below: 
+Якщо ви не хочете експортовать `getBaz` / `setBaz` з demoнатомість ви можете помістити їх у змінну, імпортувавши їх у назву та експортувавши цю назву, як показано нижче: 
 
 ```ts
 // demo/index.ts
@@ -64,7 +65,7 @@ import * as baz from './baz'; // import as a name
 export { baz }; // export the name
 ```
 
-And now the consumer would look like: 
+Зараз ви маєте такий імпорт: 
 
 ```ts
 import { Foo, Bar, baz } from '../demo'; // demo/index.ts is implied

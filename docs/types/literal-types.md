@@ -1,22 +1,21 @@
 ## Literals
-Literals are *exact* values that are JavaScript primitives. 
+Літерали — це *точні* значення, які є примітивами JavaScript.
 
 ### String Literals
 
-You can use a string literal as a type. For example:
-
+Ви можете використовувати рядковий літерал як тип. Наприклад:
 ```ts
 let foo: 'Hello';
 ```
 
-Here we have created a variable called `foo` that *will only allow the literal value `'Hello'` to be assigned to it*. This is demonstrated below:
+Тут ми створили змінну під назвою `foo`, яка *дозволить лише призначити йому літеральне значення `'Hello'`*. Це показано нижче:
 
 ```ts
 let foo: 'Hello';
-foo = 'Bar'; // Error: "Bar" is not assignable to type "Hello"
+foo = 'Bar'; // Error: "Bar" не можна призначити типу "Hello"
 ```
 
-They are not very useful on their own but can be combined in a type union to create a powerful (and useful) abstraction e.g.:
+Вони не дуже корисні самі по собі, але їх можна об’єднати в об’єднання типів для створення потужної (і корисної) абстракції, наприклад:
 
 ```ts
 type CardinalDirection =
@@ -34,7 +33,7 @@ move(1,"Nurth"); // Error!
 ```
 
 ### Other literal types
-TypeScript also supports `boolean` and `number` literal types, e.g.: 
+TypeScript також підтримує типи літералів `boolean` і `number`, наприклад:
 
 ```ts
 type OneToFive = 1 | 2 | 3 | 4 | 5;
@@ -42,7 +41,7 @@ type Bools = true | false;
 ```
 
 ### Inference 
-Quite commonly you get an error like `Type string is not assignable to type "foo"`. The following example demonstrates this.
+Досить часто ви отримуєте помилку на зразок `Тип string не можна призначити типу "foo"`. Наступний приклад демонструє це.
 
 ```js
 function iTakeFoo(foo: 'foo') { }
@@ -52,7 +51,7 @@ const test = {
 iTakeFoo(test.someProp); // Error: Argument of type string is not assignable to parameter of type 'foo'
 ```
 
-This is because `test` is inferred to be of type `{someProp: string}`. The fix here is to use a simple type assertion to tell TypeScript the literal you want it to infer as shown below: 
+Це тому, що `test` має тип `{someProp: string}`. Виправлення тут полягає у використанні простого твердження типу, щоб повідомити TypeScript літерал, який ви хочете, щоб він визнав, як показано нижче:
 
 ```js
 function iTakeFoo(foo: 'foo') { }
@@ -62,7 +61,7 @@ const test = {
 iTakeFoo(test.someProp); // Okay!
 ```
 
-or use a type annotation that helps TypeScript infer the correct thing at the point of declaration: 
+або використовуйте анотацію типу, яка допомагає TypeScript вивести правильний висновок у точці оголошення:
 
 ```ts
 function iTakeFoo(foo: 'foo') { }
@@ -76,11 +75,11 @@ iTakeFoo(test.someProp); // Okay!
 ```
 
 ### Use cases
-Valid use cases for string literal types are:
+Допустимі варіанти використання типів рядкових літералів:
 
 #### String based enums
 
-[TypeScript enums are number based](../enums.md). You can use string literals with union types to mock a string based enum as we did in the `CardinalDirection` example above. You can even generate a `Key:Value` structure using the following function: 
+[TypeScript enums are number based](../enums.md). Ви можете використовувати рядкові літерали з типами об’єднання, щоб імітувати перелік на основі рядків, як ми робили у прикладі `CardinalDirection` вище. Ви навіть можете створити структуру `Key:Value` за допомогою такої функції:
 
 ```ts
 /** Utility function to create a K:V from a list of strings */
@@ -92,7 +91,7 @@ function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
 }
 ```
 
-And then generate the literal type union using `keyof typeof`. Here is a complete example:
+А потім згенеруйте літеральне об’єднання типів за допомогою `keyof typeof`. Ось повний приклад:
 
 ```ts
 /** Utility function to create a K:V from a list of strings */
@@ -129,7 +128,7 @@ sample = 'AnythingElse'; // ERROR!
 
 #### Modelling existing JavaScript APIs
 
-E.g. [CodeMirror editor has an option `readOnly`](https://codemirror.net/doc/manual.html#option_readOnly) that can either be a `boolean` or the literal string `"nocursor"` (effective valid values `true,false,"nocursor"`).  It can be declared as:
+наприклад [CodeMirror editor has an option `readOnly`](https://codemirror.net/doc/manual.html#option_readOnly), яка може бути або `логічним значенням`, або літеральним рядком `"nocursor"` (дійсні дійсні значення `true ,false,"nocursor"`). Його можна оголосити так:
 
 ```ts
 readOnly: boolean | 'nocursor';
@@ -137,7 +136,7 @@ readOnly: boolean | 'nocursor';
 
 #### Discriminated Unions
 
-We will cover [this later in the book](./discriminated-unions.md).
+Ми розглянемо [this later in the book](./discriminated-unions.md).
 
 
 [](https://github.com/Microsoft/TypeScript/pull/5185)

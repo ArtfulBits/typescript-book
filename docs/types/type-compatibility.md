@@ -15,7 +15,7 @@
 
 ## Type Compatibility
 
-Type Compatibility (as we discuss here) determines if one thing can be assigned to another. E.g. `string` and `number` are not compatible:
+Сумісність типу (як ми обговорюємо тут) визначає, чи можна призначити один предмет іншому. наприклад `string` i `number` несумісні:
 
 ```ts
 let str: string = "Hello";
@@ -27,7 +27,7 @@ num = str; // ERROR: `string` is not assignable to `number`
 
 ## Soundness
 
-TypeScript's type system is designed to be convenient and allows for *unsound* behaviours e.g. anything can be assigned to `any` which means telling the compiler to allow you to do whatever you want:
+Система типів TypeScript розроблена так, щоб бути зручною та допускати *unsound* поведінку, напр. будь-що можна призначити будь-якому, що означає, що компілятор повинен дозволити вам робити все, що завгодно:
 
 ```ts
 let foo: any = 123;
@@ -39,7 +39,7 @@ foo.toPrecision(3); // Allowed as you typed it as `any`
 
 ## Structural
 
-TypeScript objects are structurally typed. This means the *names* don't matter as long as the structures match
+Об'єкти TypeScript є структурно типізованими. Це означає, що *іменуванняs* не мають значення, якщо структури збігаються
 
 ```ts
 interface Point {
@@ -56,9 +56,9 @@ let p: Point;
 p = new Point2D(1,2);
 ```
 
-This allows you to create objects on the fly (like you do in vanilla JS) and still have safety whenever it can be inferred.
+Це дозволяє вам створювати об’єкти на льоту (як ви це робите у vanilla JS) і залишатися в безпеці, коли це можна зробити.
 
-Also *more* data is considered fine:
+Також *більше* даних вважається правильним
 
 ```ts
 interface Point2D {
@@ -81,28 +81,28 @@ iTakePoint2D({ x: 0 }); // Error: missing information `y`
 
 ## Variance
 
-Variance is an easy to understand and important concept for type compatibility analysis.
+Дисперсія — це легке для розуміння та важливе поняття для аналізу сумісності типів.
 
-For simple types `Base` and `Child`, if `Child` is a child of `Base`, then instances of `Child` can be assigned to a variable of type `Base`.
+Для простих типів `Base` і `Child`, якщо `Child` є дочірнім типом `Base`, тоді екземпляри `Child` можна призначити змінній типу `Base`.
 
-> This is polymorphism 101
+> Це поліморфізм 101
 
-In type compatibility of complex types composed of such `Base` and `Child` types depends on where the `Base` and `Child` in similar scenarios is driven by *variance*.
+Сумісність типів складних типів, що складаються з таких типів `Base` і `Child`, залежить від того, де `Base` і `Child` у подібних сценаріях керуються *variance*.
 
-* Covariant : (co aka joint) only in *same direction*
-* Contravariant : (contra aka negative) only in *opposite direction*
-* Bivariant : (bi aka both) both co and contra.
-* Invariant : if the types aren't exactly the same then they are incompatible.
+* Коваріант: (співпраця, він же спільний) тільки в *спільному напрямку*
+* Контраваріант: (контра, він же негативний) тільки в*oпротилежний напрямок*
+* Біваріант : (bi або обидва) і co, і contra.
+* Invariant : якщо типи не зовсім однакові, вони несумісні.* 
 
-> Note: For a completely sound type system in the presence of mutable data like JavaScript, `invariant` is the only valid option. But as mentioned *convenience* forces us to make unsound choices.
+> Примітка: для повністю надійної системи за наявності змінних даних, таких як JavaScript, `invariant` є єдиним дійсним варіантом. Але, як уже згадувалося, *зручність* змушує нас робити необґрунтований вибір.
 
 ## Functions
 
-There are a few subtle things to consider when comparing two functions.
+Порівнюючи дві функції, слід враховувати кілька тонких моментів.
 
 ### Return Type
 
-`covariant`: The return type must contain at least enough data.
+`covariant`: тип повернення має містити принаймні достатньо даних.
 
 ```ts
 /** Type Hierarchy */
@@ -120,7 +120,7 @@ iMakePoint3D = iMakePoint2D; // ERROR: Point2D is not assignable to Point3D
 
 ### Number of arguments
 
-Fewer arguments are okay (i.e. functions can choose to ignore additional parameters). After all you are guaranteed to be called with at least enough arguments.
+Менша кількість аргументів — це добре (тобто функції можуть ігнорувати додаткові параметри). Адже вам гарантовано викличете їх із як мінімум достатніми аргументами.
 
 ```ts
 let iTakeSomethingAndPassItAnErr
@@ -136,7 +136,7 @@ iTakeSomethingAndPassItAnErr((err, data, more) => null);
 
 ### Optional and Rest Parameters
 
-Optional (pre determined count) and Rest parameters (any count of arguments) are compatible, again for convenience.
+Необов’язкові (попередньо визначена кількість) і параметри Rest (будь-яка кількість аргументів) сумісні, знову ж для зручності.
 
 ```ts
 let foo = (x:number, y: number) => { /* do something */ }
@@ -147,11 +147,11 @@ foo = bar = bas;
 bas = bar = foo;
 ```
 
-> Note: optional (in our example `bar`) and non optional (in our example `foo`) are only compatible if strictNullChecks is false.
+> Примітка: необов’язковий (у нашому прикладі `bar`) і необов’язковий (у нашому прикладі `foo`) сумісні, лише якщо strictNullChecks має значення false.
 
 ### Types of arguments
 
-`bivariant` : This is designed to support common event handling scenarios
+`bivariant` : це розроблено для підтримки типових сценаріїв обробки подій
 
 ```ts
 /** Event Hierarchy */
@@ -176,9 +176,9 @@ addEventListener(EventType.Mouse, <(e: Event) => void>((e: MouseEvent) => consol
 addEventListener(EventType.Mouse, (e: number) => console.log(e));
 ```
 
-Also makes `Array<Child>` assignable to `Array<Base>` (covariance) as the functions are compatible. Array covariance requires all `Array<Child>` functions to be assignable to `Array<Base>` e.g. `push(t:Child)` is assignable to `push(t:Base)` which is made possible by function argument bivariance.
+Крім того, `Array<Child>` можна призначити `Array<Base>` (коваріація), оскільки функції сумісні. Коваріація масиву вимагає, щоб усі функції `Array<Child>` можна було призначити `Array<Base>`, наприклад. `push(t:Child)` можна призначити `push(t:Base)`, що стало можливим завдяки біваріантності аргументів функції.
 
-**This can be confusing for people coming from other languages** who would expect the following to error but will not in TypeScript:
+**Це може збити з пантелику людей, які знають інші мови**, які очікували б наступного помилки, але не в TypeScript:
 
 ```ts
 /** Type Hierarchy */
@@ -195,7 +195,7 @@ iTakePoint2D = iTakePoint3D; // Okay : WHAT
 
 ## Enums
 
-* Enums are compatible with numbers, and numbers are compatible with enums.
+* Enum сумісні з числами, а числа сумісні з enum.
 
 ```ts
 enum Status { Ready, Waiting };
@@ -207,7 +207,7 @@ status = num; // OKAY
 num = status; // OKAY
 ```
 
-* Enum values from different enum types are considered incompatible. This makes enums useable *nominally* (as opposed to structurally)
+** Значення Enum з різних типів enum вважаються несумісними. Це робить переліки придатними для використання *номінально* (на відміну від структурних)
 
 ```ts
 enum Status { Ready, Waiting };
@@ -221,7 +221,7 @@ status = color; // ERROR
 
 ## Classes
 
-* Only instance members and methods are compared. *constructors* and *statics* play no part.
+* Порівнюються лише члени екземпляра та методи.*constructors* і *statics* не грають ролі.
 
 ```ts
 class Animal {
@@ -241,7 +241,7 @@ a = s;  // OK
 s = a;  // OK
 ```
 
-* `private` and `protected` members *must originate from the same class*. Such members essentially make the class *nominal*.
+* `private` та `protected` члени *повинні походити з того самого класу*. Такі члени по суті роблять клас *nominal*.
 
 ```ts
 /** A class hierarchy */
@@ -265,7 +265,7 @@ size = animal; // ERROR
 
 ## Generics
 
-Since TypeScript has a structural type system, type parameters only affect compatibility when used by a member. For example, in the  following `T` has no impact on compatibility:
+Оскільки TypeScript має структурну систему типів, параметри типу впливають на сумісність лише тоді, коли вони використовуються членом. Наприклад, у наступному `T` не впливає на сумісність:
 
 ```ts
 interface Empty<T> {
@@ -276,7 +276,7 @@ let y: Empty<string>;
 x = y;  // okay, y matches structure of x
 ```
 
-However, if `T` is used, it will play a role in compatibility based on its *instantiation* as shown below:
+Однак, якщо використовується `T`, він відіграватиме роль у сумісності на основі свого *екземпляру*, як показано нижче:
 
 ```ts
 interface NotEmpty<T> {
@@ -288,7 +288,7 @@ let y: NotEmpty<string>;
 x = y;  // error, x and y are not compatible
 ```
 
-In cases where generic arguments haven't been *instantiated* they are substituted by `any` before checking compatibility:
+У випадках, коли загальні аргументи не були *інстанцировані*, вони замінюються на `any` перед перевіркою сумісності:
 
 ```ts
 let identity = function<T>(x: T): T {
@@ -299,10 +299,10 @@ let reverse = function<U>(y: U): U {
     // ...
 }
 
-identity = reverse;  // Okay because (x: any)=>any matches (y: any)=>any
+identity = reverse; // Добре, тому що ((x: any)=>any відповідає (y: any)=>any
 ```
 
-Generics involving classes are matched by relevant class compatibility as mentioned before. e.g. 
+Універсали, що включають класи, відповідають відповідній сумісності класів, як згадувалося раніше
 
 ```ts
 class List<T> {
@@ -323,7 +323,7 @@ cats.add(new Cat()); // Okay
 
 ## FootNote: Invariance
 
-We said invariance is the only sound option. Here is an example where both `contra` and `co` variance are shown to be unsafe for arrays.
+Ми сказали, що інваріантність — це єдиний правильний варіант. Ось приклад, коли дисперсія `contra` і `co` небезпечна для масивів.
 
 ```ts
 /** Hierarchy */
@@ -351,7 +351,7 @@ let catArr: Cat[] = [cat];
  * Animal[] >= Cat[]
  */
 catArr = animalArr; // Okay if contravariant
-catArr[0].meow(); // Allowed but BANG 🔫 at runtime
+catArr[0].meow(); // Дозволено, але BANG 🔫 під час виконання
 
 
 /**
@@ -361,5 +361,5 @@ catArr[0].meow(); // Allowed but BANG 🔫 at runtime
  */
 animalArr = catArr; // Okay if covariant
 animalArr.push(new Animal('another animal')); // Just pushed an animal into catArr!
-catArr.forEach(c => c.meow()); // Allowed but BANG 🔫 at runtime
+catArr.forEach(c => c.meow()); // Дозволено, але BANG 🔫 під час виконання
 ```
