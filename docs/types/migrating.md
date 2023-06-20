@@ -1,32 +1,33 @@
 ## Migrating From JavaScript
 
-Assuming:
-* you know JavaScript.
-* you know patterns and build tools (e.g. webpack) used in the project. 
+Припускаючи:
 
-With that assumption out of the way, in general the process consists of the following steps:
+* ви знаєте JavaScript.
+* ви знаєте шаблони та інструменти створення (наприклад, webpack), які використовуються в проекті.
 
-* Add a `tsconfig.json`.
-* Change your source code file extensions from `.js` to `.ts`. Start *suppressing* errors using `any`.
-* Write new code in TypeScript and make as little use of `any` as possible.
-* Go back to the old code and start adding type annotations and fix identified bugs.
-* Use ambient definitions for third party JavaScript code.
+Відкинувши це припущення, загалом процес складається з таких кроків:
 
-Let us discuss a few of these points further.
+* Додайте `tsconfig.json`.
+* Змініть розширення файлу вихідного коду з `.js` на `.ts`. Почніть *suppressing* помилки за допомогою `any`.
+* Напишіть новий код на TypeScript і якомога менше використовуйте `any`.
+* Поверніться до старого коду та почніть додавати анотації типів і виправляйте виявлені помилки.
+* Використовуйте визначення навколишнього середовища для стороннього коду JavaScript.
 
-Note that all JavaScript is *valid* TypeScript. That is to say that if you give the TypeScript compiler some JavaScript -> the JavaScript emitted by the TypeScript compiler will behave exactly the same as the original JavaScript. This means that changing the extension from `.js` to `.ts` will not adversely affect your codebase.
+Давайте обговоримо деякі з цих пунктів далі.
+
+Зауважте, що весь JavaScript є *valid* TypeScript. Тобто якщо ви надасте компілятору TypeScript деякий JavaScript -> JavaScript, створений компілятором TypeScript, поводитиметься точно так само, як оригінальний JavaScript. Це означає, що зміна розширення з `.js` на `.ts` не вплине негативно на вашу кодову базу.
 
 ### Suppressing Errors
-TypeScript will immediately start TypeChecking your code and your original JavaScript code *might not be as neat as you thought it was* and hence you get diagnostic errors. Many of these errors you can suppress with using `any` e.g.:
+TypeScript негайно почне перевірку типу вашого коду, і ваш вихідний код JavaScript *може бути не таким охайним, як ви думали*, і, отже, ви отримуєте діагностичні помилки. Багато з цих помилок можна придушити за допомогою `any`, наприклад:
 
 ```ts
 var foo = 123;
 var bar = 'hey';
 
-bar = foo; // ERROR: cannot assign a number to a string
+bar = foo; // ERROR: не може призначити number в string
 ```
 
-Even though the **error is valid** (and in most cases the inferred information will be better than what the original authors of different portions of the code bases imagined), your focus will probably be writing new code in TypeScript while progressively updating the old code base. Here you can suppress this error with a type assertion as shown below:
+Незважаючи на те, що **error is valid** (і в більшості випадків отримана інформація буде кращою, ніж те, що уявляли оригінальні автори різних частин бази коду), ви, ймовірно, зосередитеся на написанні нового коду на TypeScript, поступово оновлюючи стару кодову базу. Тут ви можете придушити цю помилку за допомогою твердження типу, як показано нижче:
 
 ```ts
 var foo = 123;
@@ -35,14 +36,14 @@ var bar = 'hey';
 bar = foo as any; // Okay!
 ```
 
-In other places you might want to annotate something as `any` e.g.:
+В інших місцях ви можете позначити щось як `any`, наприклад:
 
 ```ts
 function foo() {
     return 1;
 }
 var bar = 'hey';
-bar = foo(); // ERROR: cannot assign a number to a string
+bar = foo(); // ERROR: не може призначити number в string
 ```
 
 Suppressed:
@@ -55,62 +56,62 @@ var bar = 'hey';
 bar = foo(); // Okay!
 ```
 
-> Note: Suppressing errors is dangerous, but it allows you to take notice of errors in your *new* TypeScript code. You might want to leave `// TODO:` comments as you go along.**
+> Примітка: придушення помилок небезпечно, але це дозволяє вам помічати помилки у вашому *new* коді TypeScript. Ви можете залишати коментарі `// TODO:` під час роботи.**
 
 ### Third Party JavaScript
-You can change your JavaScript to TypeScript, but you can't change the whole world to use TypeScript. This is where TypeScript's ambient definition support comes in. In the beginning we recommend you create a `vendor.d.ts` (the `.d.ts` extension specifies the fact that this is a *declaration file*) and start adding dirty stuff to it. Alternatively create a file specific for the library e.g. `jquery.d.ts` for jquery.
+Ви можете змінити свій JavaScript на TypeScript, але ви не можете змінити весь світ на використання TypeScript. Ось тут і з’являється підтримка навколишнього визначення TypeScript. На початку ми рекомендуємо вам створити `vendor.d.ts` (розширення `.d.ts` вказує на те, що це *declaration file*) і почати додавати брудні речі до нього. Крім того, можна створити спеціальний файл для бібліотеки, наприклад. `jquery.d.ts` для jquery.
 
-> Note: Well maintained and strongly typed definitions for nearly the top 90% JavaScript libraries out there exists in an OSS Repository called [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). We recommend looking there before creating your own definitions as we present here. Nevertheless this quick and dirty way is vital knowledge to decrease your initial friction with TypeScript**.
+> Примітка: добре підтримувані та чітко типізовані визначення для майже 90% найпопулярніших бібліотек JavaScript існують у репозиторії OSS під назвою[DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). Ми рекомендуємо переглянути там, перш ніж створювати власні визначення, як ми наводимо тут. Тим не менш, цей швидкий і брудний спосіб є життєво важливим знанням, щоб зменшити початкове тертя з TypeScript**.
 
-Consider the case of `jquery`, you can create a *trivial* definition for it quite easily:
+Розглянемо випадок `jquery`, ви можете легко створити *trivial* визначення для нього:
 
 ```ts
 declare var $: any;
 ```
 
-Sometimes you might want to add an explicit annotation on something (e.g. `JQuery`) and you need something in *type declaration space*. You can do that quite easily using the `type` keyword:
+Іноді ви можете додати явну анотацію до чогось (наприклад, `JQuery`), і вам потрібно щось у *type declaration space*. Ви можете зробити це досить легко, використовуючи ключове слово `type`:
 
 ```ts
 declare type JQuery = any;
 declare var $: JQuery;
 ```
 
-This provides you an easier future update path.
+Це спрощує шлях оновлення в майбутньому.
 
-Again, a high quality `jquery.d.ts` exists at [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). But you now know how to overcome any JavaScript -> TypeScript friction *quickly* when using third party JavaScript. We will look at ambient declarations in detail next.
+Знову ж таки, високоякісний `jquery.d.ts` існує на [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped). Але тепер ви знаєте, як *швидко* подолати будь-яке протиріччя JavaScript -> TypeScript під час використання стороннього JavaScript. Далі ми детально розглянемо декларації середовища.
 
 
 # Third Party NPM modules
 
-Similar to global variable declaration you can declare a global module quite easily. E.g. for `jquery` if you want to use it as a module (https://www.npmjs.com/package/jquery) you can write the following yourself: 
+Подібно до оголошення глобальної змінної, ви можете легко оголосити глобальний модуль. наприклад для `jquery`, якщо ви хочете використовувати його як модуль (<https://www.npmjs.com/package/jquery>), ви можете написати наступне самостійно:
 
 ```ts
 declare module "jquery";
 ```
 
-And then you can import it in your file as needed: 
+А потім ви можете імпортувати його у свій файл за потреби:
 
 ```ts
 import * as $ from "jquery";
 ```
 
-> Again, a high quality `jquery.d.ts` exists at [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) that provides a much higher quality jquery module declaration. But it might not exist for your library, so now you have a quick low friction way of continuing the migration 🌹
+> Знову ж таки, високоякісний `jquery.d.ts` існує на [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped), який забезпечує набагато вищу якість оголошення модуля jquery. Але він може не існувати для вашої бібліотеки, тож тепер у вас є швидкий спосіб продовжити міграцію з низьким рівнем тертя 🌹
 
 # External non js resources
 
-You can even allow import of any file e.g. `.css` files (if you are using something like webpack style loaders or css modules) with a simple `*` style declaration (ideally in a [`global.d.ts` file](../project/globals.md)): 
+Ви навіть можете дозволити імпорт будь-якого файлу, напр. Файли `.css` (якщо ви використовуєте щось на кшталт завантажувачів стилю webpack або модулів css) із простою декларацією стилю `*` (ідеально у файлі[`global.d.ts` file](../project/globals.md)):
 
 ```ts
 declare module "*.css";
 ```
 
-Now people can `import * as foo from "./some/file.css";`
+Тепер люди можуть `імпортувати * як foo з "./some/file.css";`
 
-Similarly if you are using html templates (e.g. angular) you can: 
+Так само, якщо ви використовуєте шаблони html (наприклад, angular), ви можете:
 
 ```ts
 declare module "*.html";
 ```
 
 # More 
-If you want to be more silent about your upgrade because you couldn't get team buy in to move to TypeScript, [TypeScript has a blog post on upgrading silently without having to convince your team up front](https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/).
+Якщо ви хочете приховати своє оновлення, оскільки ви не змогли залучити команду для переходу на TypeScript, [TypeScript has a blog post on upgrading silently without having to convince your team up front](https://devblogs.microsoft.com/typescript/how-to-upgrade-to-typescript-without-anybody-noticing-part-1/).

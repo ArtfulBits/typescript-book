@@ -1,8 +1,8 @@
 ### Discriminated Union
 
-If you have a class with a [*literal member*](./literal-types.md) then you can use that property to discriminate between union members.
+Якщо у вас є клас із[*literal member*](./literal-types.md), ви можете використовувати цю властивість для розрізнення членів об’єднання.
 
-As an example consider the union of a `Square` and `Rectangle`, here we have a member `kind` that exists on both union members and is of a particular *literal type*:
+Як приклад розглянемо об’єднання `Square` і `Rectangle`, тут ми маємо член `kind` який існує в обох членах об’єднання та має певний *literal type*:
 
 ```ts
 interface Square {
@@ -18,25 +18,27 @@ interface Rectangle {
 type Shape = Square | Rectangle;
 ```
 
-If you use a type guard style check (`==`, `===`, `!=`, `!==`) or `switch` on the *discriminant property* (here `kind`) TypeScript will realize that the object must be of the type that has that specific literal and do a type narrowing for you :)
+Якщо ви використовуєте перевірку стилю захисту типу (`==`, `===`, `!=`, `!==`) або `switch` на *discriminant property* (тут `kind`) TypeScript зрозуміє що об’єкт має бути типу, який має цей конкретний літерал, і додасть тип за вас :)
 
 ```ts
 function area(s: Shape) {
     if (s.kind === "square") {
-        // Now TypeScript *knows* that `s` must be a square ;)
-        // So you can use its members safely :)
+        // Зараз TypeScript *знає* що `s` має бути square ;)
+        // Тож ви можете безпечно використовувати його учасників :)
         return s.size * s.size;
     }
     else {
-        // Wasn't a square? So TypeScript will figure out that it must be a Rectangle ;)
-        // So you can use its members safely :)
+        // Це не square? TypeScript зрозуміє, що це має бути Rectangle ;)
+        // Тож ви можете безпечно використовувати його учасників :)
         return s.width * s.height;
     }
 }
 ```
 
 ### Exhaustive Checks
-Quite commonly you want to make sure that all members of a union have some code(action) against them.
+Вичерпні перевірки.
+
+Досить часто ви хочете переконатися, що всі члени мають певний код
 
 ```ts
 interface Square {
@@ -49,9 +51,9 @@ interface Rectangle {
     width: number;
     height: number;
 }
+// Хтось щойно додав цей новий тип`Circle`
+// Ми хотіли б дозволити TypeScript видавати помилку в будь-якому місці, яке *needs* обробити це
 
-// Someone just added this new `Circle` Type
-// We would like to let TypeScript give an error at any place that *needs* to cater for this
 interface Circle {
     kind: "circle";
     radius: number;
@@ -60,7 +62,7 @@ interface Circle {
 type Shape = Square | Rectangle | Circle;
 ```
 
-As an example of where stuff goes bad:
+Як приклад того, де все йде погано:
 
 ```ts
 function area(s: Shape) {
@@ -70,11 +72,11 @@ function area(s: Shape) {
     else if (s.kind === "rectangle") {
         return s.width * s.height;
     }
-    // Would it be great if you could get TypeScript to give you an error?
+    // Було б чудово, якби ви могли змусити TypeScript видавати вам помилку?
 }
 ```
 
-You can do that by simply adding a fall through and making sure that the inferred type in that block is compatible with the `never` type. For example if you add the exhaustive check you get a nice error:
+Ви можете зробити це, просто додавши пропуск і переконавшись, що виведений тип у цьому блоці сумісний із типом `never`. Наприклад, якщо ви додасте вичерпну перевірку, ви отримаєте гарну помилку:
 
 ```ts
 function area(s: Shape) {
@@ -85,13 +87,13 @@ function area(s: Shape) {
         return s.width * s.height;
     }
     else {
-        // ERROR : `Circle` is not assignable to `never`
+        // ERROR : `Circle` не може бути зведений до `never`
         const _exhaustiveCheck: never = s;
     }
 }
 ```
 
-That forces you to handle this new case : 
+Це змушує вас розглядати цю нову справу:
 
 ```ts
 function area(s: Shape) {
@@ -113,7 +115,7 @@ function area(s: Shape) {
 
 
 ### Switch
-TIP: of course you can also do it in a `switch` statement:
+ПОРАДА: звичайно, ви також можете зробити це в операторі `switch`:
 
 ```ts
 function area(s: Shape) {
@@ -130,7 +132,7 @@ function area(s: Shape) {
 
 ### strictNullChecks
 
-If using *strictNullChecks* and doing exhaustive checks, TypeScript might complain "not all code paths return a value". You can silence that by simply returning the `_exhaustiveCheck` variable (of type `never`). So:
+Якщо використовується *strictNullChecks* і виконуються вичерпні перевірки, TypeScript може скаржитися, що «не всі шляхи коду повертають значення». Ви можете заглушити це, просто повернувши змінну `_exhaustiveCheck` (типу `never`). Так:
 
 ```ts
 function area(s: Shape) {
@@ -146,7 +148,7 @@ function area(s: Shape) {
 ```
 
 ### Throw in exhaustive checks
-You can write a function that takes a `never` (and therefore can only be called with a variable that is inferred as `never`) and then throws an error if its body ever executes: 
+Ви можете написати функцію, яка приймає `never` (і тому може бути викликана лише зі змінною, яка виводиться як `never`), а потім видає помилку, якщо її тіло коли-небудь виконується:
 
 ```ts
 function assertNever(x:never): never {
@@ -154,7 +156,7 @@ function assertNever(x:never): never {
 }
 ```
 
-Example use with the area function: 
+Приклад використання функції площі:
 
 ```ts
 interface Square {
@@ -172,22 +174,22 @@ function area(s: Shape) {
     switch (s.kind) {
         case "square": return s.size * s.size;
         case "rectangle": return s.width * s.height;
-		// If a new case is added at compile time you will get a compile error
-		// If a new value appears at runtime you will get a runtime error
+     // Якщо під час компіляції додається новий випадок, ви отримаєте помилку компіляції
+     // Якщо під час виконання з’являється нове значення, ви отримаєте помилку виконання
         default: return assertNever(s);
     }
 }
 ```
 
 ### Retrospective Versioning
-Say you have a data structure of the form: 
+Скажімо, у вас є структура даних у формі:
 
 ```ts
 type DTO = {
   name: string
 }
 ```
-And after you have a bunch of `DTO`s you realize that `name` was a poor choice. You can add versioning retrospectively by creating a new *union* with *literal number* (or string if you want) of DTO. Mark the version 0 as `undefined` and if you have *strictNullChecks* enabled it will just work out: 
+І після того, як у вас є купа `DTO`, ви розумієте, що `name` було поганим вибором. Ви можете додати керування версіями ретроспективно, створивши новий *union* з *literal number* (або рядком, якщо хочете) DTO. Позначте версію 0 як `undefined` якщо у вас увімкнено *strictNullChecks*, це просто спрацює:
 
 ```ts
 type DTO = 
@@ -210,7 +212,7 @@ type DTO =
 // So on
 ```
 
- Example usage of such a DTO:
+Приклад використання такого DTO:
 
 ```ts
 function printDTO(dto:DTO) {
@@ -228,9 +230,9 @@ function printDTO(dto:DTO) {
 
 ### Redux
 
-A popular library that makes use of this is redux.
+Популярною бібліотекою, яка використовує це, є redux.
 
-Here is the [*gist of redux*](https://github.com/reactjs/redux#the-gist) with TypeScript type annotations added:
+Ось [*gist of redux*](https://github.com/reactjs/redux#the-gist)із доданими анотаціями типу TypeScript:
 
 ```ts
 import { createStore } from 'redux'
@@ -242,19 +244,18 @@ type Action
   | {
     type: 'DECREMENT'
   }
-
 /**
- * This is a reducer, a pure function with (state, action) => state signature.
- * It describes how an action transforms the state into the next state.
- *
- * The shape of the state is up to you: it can be a primitive, an array, an object,
- * or even an Immutable.js data structure. The only important part is that you should
- * not mutate the state object, but return a new object if the state changes.
- *
- * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) if it makes sense for your
- * project.
- */
+* Це редʼюсер, чиста функція з (стан, дія) =>  стан.
+  * Описує, як дія перетворює початковий стан на наступний.
+  *
+  * Форма стану залежить від вас: це може бути примітив, масив, об’єкт,
+  * або навіть структуру даних Immutable.js. Єдина важлива частина полягає в тому, що ви повинні
+  * не змінювати об'єкт стану, але повертати новий об'єкт, якщо стан змінюється.
+  *
+  * У цьому прикладі ми використовуємо оператор `switch` і рядки, але ви можете використовувати помічник який
+  * дотримується іншої конвенції (наприклад, функція map), якщо це має сенс для вас
+  * демонструвати.
+  */
 function counter(state = 0, action: Action) {
   switch (action.type) {
   case 'INCREMENT':
@@ -266,20 +267,20 @@ function counter(state = 0, action: Action) {
   }
 }
 
-// Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
+// Створення сховища Redux, що зберігає стан вашої програми.
+// Його API — { subscribe, dispatch, getState }.
 let store = createStore(counter)
 
-// You can use subscribe() to update the UI in response to state changes.
-// Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
-// However, it can also be handy to persist the current state in the localStorage.
+// Ви можете використовувати subscribe() для оновлення інтерфейсу користувача у відповідь на зміни стану.
+// Зазвичай ви використовуєте бібліотеку прив’язки перегляду (наприклад, React Redux), а не subscribe() безпосередньо.
+// Однак також може бути зручно зберегти поточний стан у localStorage.
 
 store.subscribe(() =>
   console.log(store.getState())
 )
 
-// The only way to mutate the internal state is to dispatch an action.
-// The actions can be serialized, logged or stored and later replayed.
+// Єдиний спосіб змінити внутрішній стан - це відправити action.
+// Аction можна серіалізувати, реєструвати або зберігати, а потім відтворювати.
 store.dispatch({ type: 'INCREMENT' })
 // 1
 store.dispatch({ type: 'INCREMENT' })
@@ -288,5 +289,5 @@ store.dispatch({ type: 'DECREMENT' })
 // 1
 ```
 
-Using it with TypeScript gives you safety against typo errors, increased refactor-ability and self documenting code.
+Використання його з TypeScript забезпечує захист від друкарських помилок, покращує здатність до рефакторингу та самодокументування коду.
 

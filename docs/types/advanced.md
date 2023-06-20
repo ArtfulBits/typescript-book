@@ -5,12 +5,17 @@
 # Functions
 
 ## Optional
-The `?` annotation can be used before a function argument or member of an interface to denote that a member is optional. That is to say that you can provide it if you want (and it will be type checked), but if it is ommited its *okay*. This is shown in the following example:
+Опціональні.
+
+Анотацію `?` можна використовувати перед аргументом функції або членом інтерфейсу, щоб позначити, що член є необов’язковим. Тобто ви можете надати його, якщо хочете (і його тип буде перевірено), але якщо він пропущений, це *okay*. Це показано в наступному прикладі:
 
 ## Specialized Parameters
+Спеціалізовані параметри.
 
 ## Function Overloads
-The JavaScript runtime does not have runtime support for function overloading. There can be only a single function body for any given name in scope. However, people do support function overloading by utilizing the highly dynamic nature of JavaScript e.g. a getter and a setter:
+Перезавантаження функцій.
+
+Середовище виконання JavaScript не підтримує перевантаження функцій. Для будь-якого даного імені функції в області бачення (scope) може бути лише одне тіло функції. Однак люди підтримують перевантаження функцій, використовуючи високодинамічний характер JavaScript, наприклад. геттер і сеттер:
 
 ```ts
 var _value;
@@ -26,7 +31,7 @@ getOrSet(1); // set : 1
 console.log(getOrSet()); // get : 1
 ```
 
-Such implementation can be captured by the TypeScript's type system by providing function signatures before the function implementation:
+Така реалізація може бути зафіксована системою типів TypeScript шляхом надання сигнатур функції перед реалізацією функції:
 
 ```ts
 var _value;
@@ -44,42 +49,44 @@ getOrSet(1); // set : 1
 console.log(getOrSet()); // get : 1
 ```
 
-Note that when you define function overloads this way, *the last signature is actually not callable*. You have to provide it however, to help the implementer of the function be aware of the consequences of his overload signatures. For example, in the following example the function with the signature `function callMe(v1?: any, v2?: any): any` is not open to public use:
+Зауважте, що коли ви визначаєте перевантаження функцій таким чином, *the last signature is actually not callable*. Однак ви повинні надати це, щоб допомогти реалізатору функції знати про наслідки його перевантаження підписів. Наприклад, у наступному прикладі функція з сигнатурою `function callMe(v1?: any, v2?: any): any` не відкрита для загального використання:
 
 ```ts
 function callMe(): number;
 function callMe(v1: number);
 function callMe(v1: string, v2: number);
 function callMe(v1?: any, v2?: any): any {
-    // Implementation body goes here
+    // тіло функції
 }
 
-// Allowed calls
+// доступні виклики
 callMe();
 callMe(1);
 callMe('jenny', 5309);
 
-// COMPILER ERROR: invalid calls
+// COMPILER ERROR: помилкові виклики
 callMe('jenny');
 callMe('jenny', '5309');
 ```
 
-TIP: Note that there is a slight overlap between union types and function overloading. If two function signatures only differ by a single parameter having different types just use a union type for that parameter instead of creating an overload signature.
+ПОРАДА. Зверніть увагу, що типи об’єднань і перевантаження функцій незначно збігаються. Якщо дві сигнатури функцій відрізняються лише одним параметром, що має різні типи, просто використовуйте тип об’єднання для цього параметра замість створення сигнатури перевантаження.
 
 
 # Interfaces
+Інтерфейси.
 
-Interfaces have a lot of power in TypeScript. This is because they are designed to capture all the complexity of
+Інтерфейси мають велику силу в TypeScript. Це тому, що вони розроблені, щоб охопити всю складність
 
 
 
 
 # Ambient Declarations
+Декларації середовища.
 
-We previously had a brief look at ambient declarations in the section *why typescript?*. One of the core design goals of TypeScript is to allow easy consumption of existing JavaScript libraries. You can declare the type information for existing JavaScript using *ambient declarations*. You declare ambient stuff using the `declare` keyword. In fact this is how a bunch of stuff available by default in a browser environment (e.g `window`, `document` etc) is declared in a file called `lib.d.ts`
+Раніше ми мали короткий огляд декларацій середовища в розділі *why typescript?*. Однією з основних цілей розробки TypeScript є можливість легкого використання існуючих бібліотек JavaScript. Ви можете оголосити інформацію про тип для існуючого JavaScript за допомогою *ambient declarations*. Ви оголошуєте навколишній матеріал за допомогою ключового слова `declare`. Насправді це те, як купа речей, доступних за замовчуванням у середовищі браузера (наприклад, `window`, `document` тощо), оголошується у файлі під назвою `lib.d.ts`
 
 
-Note: You can find type definitions for nearly 90% of the most popular JavaScript libraries at [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) with contributions from [lots of  developers](https://github.com/borisyankov/DefinitelyTyped/graphs/contributors).
+Примітка. Ви можете знайти визначення типів для майже 90% найпопулярніших бібліотек JavaScript на [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) за допомогою [lots of  developers](https://github.com/borisyankov/DefinitelyTyped/graphs/contributors).
 
 
 
@@ -96,18 +103,18 @@ Note: You can find type definitions for nearly 90% of the most popular JavaScrip
 ## Type Alias
 
 ## Union Types
-needed for configuration objects
+необхідні для конфігурації об’єктів
 
 ## Type Inference
-It tries to *infer* as much as it can *so that you don't need to explicitly type* your code.
+Він намагається *вивести* стільки, скільки може, *щоб вам не потрібно було явно вводити* свій код.
 
 ## Function Signatures
 
-Specialized
+Спеціалізовані
 
 ## Type Assertion
 
-If A is a subtype of B or B is a subtype of A.
+Якщо A є підтипом B або B є підтипом A.
 
 
 
@@ -116,7 +123,7 @@ If A is a subtype of B or B is a subtype of A.
 
 
 
-[more on interfaces]
-Structural so more information is okay, but less information is an error. Duck typing is baked deep into the language design.
-Open Ended
-Type Compatibility
+[більше про інтерфейси]
+Структурний, тому більше інформації — це добре, але менше інформації — це помилка. Збиточна типізація глибоко вкорінений у мовний дизайн.
+Відкритий для доповнення
+Сумісность типів

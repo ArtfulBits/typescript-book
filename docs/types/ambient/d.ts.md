@@ -1,5 +1,5 @@
 ### Declaration file
-You can tell TypeScript that you are trying to describe code that exists elsewhere (e.g. written in JavaScript/CoffeeScript/The runtime environment like the browser or Node.js) using the `declare` keyword. As a quick example:
+Ви можете повідомити TypeScript, що ви намагаєтеся описати код, який існує в іншому місці (наприклад, написаний у JavaScript/CoffeeScript/середовищі виконання, як-от браузер або Node.js), використовуючи ключове слово `declare`. Як короткий приклад:
 
 ```ts
 foo = 123; // Error: `foo` is not defined
@@ -10,9 +10,10 @@ declare var foo: any;
 foo = 123; // allowed
 ```
 
-You have the option of putting these declarations in a `.ts` file or in a `.d.ts` file. We highly recommend that in your real world projects you use a separate `.d.ts` (start with one called something like `global.d.ts` or `vendor.d.ts`).
+Ви можете розмістити ці оголошення у файлі `.ts` або у файлі `.d.ts`. Ми настійно рекомендуємо, щоб у ваших реальних проектах ви використовували окремий `.d.ts` (почніть з такого, який називається щось на зразок `global.d.ts` або `vendor.d.ts`).
 
-If a file has the extension `.d.ts` then each root level definition must have the `declare` keyword prefixed to it. This helps make it clear to the author that there will be *no code emitted by TypeScript*. The author needs to ensure that the declared item will exist at runtime.
+Якщо файл має розширення `.d.ts`, тоді кожне визначення кореневого рівня має мати префікс ключового слова `declare`. Це допомагає автору зрозуміти, що *no code emitted by TypeScript*. Автор повинен переконатися, що оголошений елемент існуватиме під час виконання.
 
-> * Ambient declarations is a promise that you are making with the compiler. If these do not exist at runtime and you try to use them, things will break without warning.
-* Ambient declarations are like docs. If the source changes the docs need to be kept updated. So you might have new behaviours that work at runtime but no one's updated the ambient declaration and hence you get compiler errors.
+> * Оголошення навколишнього середовища - це обіцянка, яку ви робите з компілятором. Якщо вони не існують під час виконання, і ви спробуєте їх використати, все буде зламано без попередження.
+>
+* Оголошення середовища схожі на документи. Якщо джерело змінюється, документи потрібно постійно оновлювати. Отже, у вас може бути нова поведінка, яка працює під час виконання, але ніхто не оновив декларацію середовища, і, отже, ви отримуєте помилки компілятора.

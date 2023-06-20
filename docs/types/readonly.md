@@ -1,5 +1,5 @@
 ## readonly
-TypeScript's type system allows you to mark individual properties on an interface as `readonly`. This allows you to work in a functional way (unexpected mutation is bad):
+Система типів TypeScript дозволяє позначати окремі властивості інтерфейсу як `readonly`. Це дозволяє вам працювати функціонально (неочікувана мутація погана):
 
 ```ts
 function foo(config: {
@@ -11,10 +11,10 @@ function foo(config: {
 
 let config = { bar: 123, bas: 123 };
 foo(config);
-// You can be sure that `config` isn't changed 🌹
+// Ви можете бути впевнені, що `config` не змінено 🌹
 ```
 
-Of course you can use `readonly` in `interface` and `type` definitions as well e.g.:
+Звичайно, ви також можете використовувати `readonly` у визначеннях `interface` і `type`, наприклад:
 
 ```ts
 type Foo = {
@@ -29,7 +29,7 @@ let foo: Foo = { bar: 123, bas: 456 };
 foo.bar = 456; // Error: Left-hand side of assignment expression cannot be a constant or a read-only property
 ```
 
-You can even declare a class property as `readonly`. You can initialize them at the point of declaration or in the constructor as shown below:
+Ви навіть можете оголосити властивість класу як `readonly`. Ви можете ініціалізувати їх у точці оголошення або в конструкторі, як показано нижче:
 
 ```ts
 class Foo {
@@ -42,7 +42,7 @@ class Foo {
 ```
 
 ## Readonly
-There is a type `Readonly` that takes a type `T` and marks all of its properties as `readonly` using mapped types. Here is a demo that uses it in practice: 
+Існує тип `Readonly` який приймає тип `Т` і позначає всі його властивості як `readonly` за допомогою зіставлених типів. Ось демо, яке використовує це на практиці:
 
 ```ts
 type Foo = {
@@ -62,7 +62,7 @@ fooReadonly.bar = 456; // ERROR: bar is readonly
 ### Various Use Cases
 
 #### ReactJS
-One library that loves immutability is ReactJS, you *could* mark your `Props` and `State` to be immutable e.g.:
+Однією з бібліотек, яка любить незмінність, є ReactJS, ви  *можете* позначити свої `Props` і `State` як незмінні, наприклад:
 
 ```ts
 interface Props {
@@ -80,7 +80,7 @@ export class Something extends React.Component<Props,State> {
 }
 ```
 
-You do not need to, however, as the type definitions for React mark these as `readonly` already (by internally wrapping the passed in generic types with the `Readonly` type mentioned above).
+Однак вам не потрібно, оскільки визначення типів для React уже позначають їх як `readonly` (шляхом внутрішнього обгортання переданих загальних типів у тип `Readonly`, згаданий вище).
 
 ```ts
 export class Something extends React.Component<{ foo: number }, { baz: number }> {
@@ -94,7 +94,7 @@ export class Something extends React.Component<{ foo: number }, { baz: number }>
 
 #### Seamless Immutable
 
-You can even mark index signatures as readonly:
+Ви навіть можете позначити підписи індексу як лише для читання:
 
 ```ts
 /**
@@ -112,7 +112,7 @@ console.log(foo[0]);   // Okay (reading)
 foo[0] = 456;          // Error (mutating): Readonly
 ```
 
-This is great if you want to use native JavaScript arrays in an *immutable* fashion. In fact TypeScript ships with a `ReadonlyArray<T>` interface to allow you to do just that:
+Це чудово, якщо ви хочете використовувати рідні масиви JavaScript у *незмінному* вигляді. Насправді TypeScript постачається з інтерфейсом `ReadonlyArray<T>`, який дозволяє вам робити саме це:
 
 ```ts
 let foo: ReadonlyArray<number> = [1, 2, 3];
@@ -122,7 +122,7 @@ foo = foo.concat([4]); // Okay: create a copy
 ```
 
 #### Automatic Inference
-In some cases the compiler can automatically infer a particular item to be readonly e.g. within a class if you have a property that only has a getter but no setter, it is assumed readonly e.g.:
+У деяких випадках компілятор може автоматично зробити висновок, що певний елемент є лише для читання, наприклад. у класі, якщо у вас є властивість, яка має лише геттер, але не сеттер, передбачається, що вона лише для читання, наприклад:
 
 ```ts
 class Person {
@@ -139,17 +139,18 @@ person.fullName = "Dear Reader"; // Error! fullName is readonly
 ```
 
 ### Difference from `const`
+Різниця з `const`
 `const`
 
-1. is for a variable reference
-1. the variable cannot be reassigned to anything else.
+1. для посилання на змінну
+1. змінна не може бути перепризначена ні на що інше.
 
-`readonly` is
+`readonly`
 
-1. for a property
-1. the property can be modified because of aliasing
+1. для властивості класу
+1. властивість можна змінити через псевдонім
 
-Sample explaining 1:
+Зразок пояснення 1:
 
 ```ts
 const foo = 123; // variable reference
@@ -158,7 +159,7 @@ var bar: {
 }
 ```
 
-Sample explaining 2:
+Зразок пояснення 2:
 
 ```ts
 let foo: {
@@ -175,7 +176,7 @@ iMutateFoo(foo); // The foo argument is aliased by the foo parameter
 console.log(foo.bar); // 456!
 ```
 
-Basically `readonly` ensures that a property *cannot be modified by me*, but if you give it to someone that doesn't have that guarantee (allowed for type compatibility reasons) they can modify it. Of course if `iMutateFoo` said that they do not mutate `foo.bar` the compiler would correctly flag it as an error as shown:
+По суті, `readonly` гарантує, що властивість *не може буди змінена самостійно*, але якщо ви надасте її комусь, хто не має такої гарантії (дозволено з причин сумісності типів), вони можуть змінити її. Звичайно, якщо `iMutateFoo` сказав, що вони не змінюють `foo.bar`, компілятор правильно позначить це як помилку, як показано:
 
 ```ts
 interface Foo {

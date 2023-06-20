@@ -3,33 +3,33 @@
 
 > [Egghead: Video lesson on the never type](https://egghead.io/lessons/typescript-use-the-never-type-to-avoid-code-with-dead-ends-using-typescript)
 
-Programming language design does have a concept of *bottom* type that is a **natural** outcome as soon as you do *code flow analysis*. TypeScript does *code flow analysis* (😎) and so it needs to reliably represent stuff that might never happen.
+Дизайн мови програмування дійсно має концепцію *низького* типу, що є **natural** результатом, щойно ви виконуєте *code flow analysis*, тому йому потрібно надійно представляти те, що може ніколи не статися.
 
-The `never` type is used in TypeScript to denote this *bottom* type. Cases when it occurs naturally:
+Тип `never` використовується в TypeScript для позначення цього *bottom* Випадки, коли це відбувається природним шляхом:
 
-* A function never returns (e.g. if the function body has `while(true){}`)
-* A function always throws (e.g. in `function foo(){throw new Error('Not Implemented')}` the return type of `foo` is `never`)
+* Функція ніколи не повертає керування (наприклад, якщо тіло функції має `while(true){}`)
+* Функція завжди видає помилку (наприклад, у `function foo(){throw new Error('Not Implemented')}` тип повернення `foo` - `never`)
 
-Of course you can use this annotation yourself as well
+Звичайно, ви також можете використовувати цю анотацію самостійно
 
 ```ts
 let foo: never; // Okay
 ```
 
-However, *only `never` can be assigned to another never*. e.g.
+Однак *тільки `never` може бути значення іншого never*.
 
 ```ts
-let foo: never = 123; // Error: Type number is not assignable to never
+let foo: never = 123; // Error: Tип number не зпівпадає з типом never
 
-// Okay as the function's return type is `never`
+// Okay ця функція повертає `never`
 let bar: never = (() => { throw new Error(`Throw my hands in the air like I just don't care`) })();
 ```
 
-Great. Now let's just jump into its key use case :)
+Чудово Тепер давайте просто перейдемо до його ключового випадку використання :)
 
 # Use case: Exhaustive Checks
 
-You can call never functions in a never context.
+Ви можете викликати функції never у контексті never.
 
 ```ts
 function foo(x: string | number): boolean {
@@ -39,42 +39,42 @@ function foo(x: string | number): boolean {
     return false;
   }
 
-  // Without a never type we would error :
-  // - Not all code paths return a value (strict null checks)
-  // - Or Unreachable code detected
-  // But because TypeScript understands that `fail` function returns `never`
-  // It can allow you to call it as you might be using it for runtime safety / exhaustive checks.
+  // Без типу never ми б мали помилку:
+   // - Не всі шляхи коду повертають значення (суворі перевірки на нуль)
+   // - Або виявлено недоступний код
+   // Але оскільки TypeScript розуміє, що функція `fail` повертає `never`
+   // Це може дозволити вам викликати його, оскільки ви, можливо, використовуєте його для безпеки під час виконання / вичерпних перевірок.
   return fail("Unexhaustive!");
 }
 
 function fail(message: string): never { throw new Error(message); }
 ```
 
-And because `never` is only assignable to another `never` you can use it for *compile time* exhaustive checks as well. This is covered in the [*discriminated union* section](./discriminated-unions.md).
+А оскільки `never` можна призначити лише іншому `never`, ви також можете використовувати його для *compile time* вичерпних перевірок. Це описано в розділі [*discriminated union* section](./discriminated-unions.md).
 
 # Confusion with `void`
 
-As soon as someone tells you that `never` is returned when a function never exits gracefully you intuitively want to think of it as the same as `void`. However, `void` is a Unit. `never` is a falsum.
+Як тільки хтось скаже вам, що `never` повертається, коли функція ніколи не виходить витончено, ви інтуїтивно хочете думати про це як про те саме, що `void`. Однак `void` є істотою. `never` є завжди неіснуючим.
 
-A function that *returns* nothing returns a Unit `void`. However, a function *that never returns* (or always throws) returns `never`. `void` is something that can be assigned (without `strictNullChecking`) but `never` can *never* be assigned to anything other than `never`.
+Функція, яка *повертає* нічого, повертає Unit `void`. Однак функція, *яка ніколи не повертає* (або завжди викидає), повертає `never`. `void` — це те, що можна призначити (без `strictNullChecking`), але `never` не можна *ніколи* призначити нічого іншого, крім `never`.
 
 # Type inference in never returning functions
 
-For function declarations TypeScript infers `void` by default as shown below:
+Для оголошень функцій TypeScript за замовчуванням визначає `void`, як показано нижче:
 
 ```ts
-// Inferred return type: void
+// Виявлений тип повернення: void
 function failDeclaration(message: string) {
   throw new Error(message);
 }
 
-// Inferred return type: never
+// Виявлений тип повернення: never
 const failExpression = function(message: string) {
   throw new Error(message);
 };
 ```
 
-Of course you can fix it by an explict annotation: 
+Звичайно, ви можете виправити це за допомогою явної анотації:
 
 ```ts
 function failDeclaration(message: string): never {
@@ -82,7 +82,7 @@ function failDeclaration(message: string): never {
 }
 ```
 
-Key reason is backword compatability with real world JavaScript code: 
+Основною причиною є сумісність зворотного слова з реальним кодом JavaScript:
 
 ```ts
 class Base {
@@ -100,8 +100,7 @@ class Derived extends Base {
 
 If `Base.overrideMe` . 
 
-> Real world TypeScript can overcome this with `abstract` functions but this inferrence is maintained for compatability.
-
+> Реальний TypeScript може подолати це за допомогою `abstract` функцій, але цей висновок підтримується для сумісності.
 <!--
 PR: https://github.com/Microsoft/TypeScript/pull/8652
 Issue : https://github.com/Microsoft/TypeScript/issues/3076
