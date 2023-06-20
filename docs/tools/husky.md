@@ -1,10 +1,11 @@
 # Husky 
 
-> Husky can prevent bad commits, pushes and more 🐶!
+> Husky може захистити вас від поганих комітів та відправок 🐶!
 
-If you want to run some JavaScript / TypeScript code before a commit takes place, husky is the tool for that. 
+Якщо ви хочете запустити деякий код JavaScript / TypeScript до того, як відбудеться коміт, інструментом для цього є Husky.
 
-For example, you can use husky to make sure files are formatted by prettier automatically so you don't have to worry about manually formatting files ever again and focus on the objective of the code instead. Here is the setup: 
+Наприклад, ви можете використовувати Husky, щоб переконатися, що файли форматуються prettier автоматично, тож вам більше не доведеться турбуватися про форматування файлів вручну, а натомість зосередитися на меті коду. Ось налаштування:
+
 
 * `npm install husky -D`
 * Add `scripts` to `package.json`: 
@@ -13,7 +14,7 @@ For example, you can use husky to make sure files are formatted by prettier auto
     "precommit": "npm run prettier:write",
 ```
 
-Now whenever you commit code and there are any formatting changes that need to be made, you'd get them as a *modified* file in your git log. You can now 
+Тепер щоразу, коли ви фіксуєте код і потрібно внести будь-які зміни форматування, ви отримуватимете їх як *modified* файл у своєму журналі git. Ви можете спробувати зараз
 
-* If you have pushed your code already, simply commit them with a comment `pretty`.
-* If you haven't pushed your code, amend your last commit and look like a superhero.
+* Якщо ви вже просунули (push) свій код, просто зафіксуйте їх у коментарі  `pretty`.
+* Якщо ви не просунули свій код, змініть свій останній комміт і виглядайте як супергерой.

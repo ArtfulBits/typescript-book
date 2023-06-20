@@ -1,26 +1,30 @@
 # ESLint
 
-ESLint existed to lint JavaScript, but now it is also becoming the defacto linter for [TypeScript](https://github.com/Microsoft/TypeScript/issues/29288), thanks to the [collaboration](https://eslint.org/blog/2019/01/future-typescript-eslint) between the two teams.
+ESLint існував для лінтування JavaScript, але тепер він також стає дефакто лінтером для [TypeScript](https://github.com/Microsoft/TypeScript/issues/29288), завдяки 
+[співпраці](https://eslint.org/blog/2019/01/future-typescript-eslint) між двома командами.
 
 ## Install
+Встановлення
 
-To setup ESLint for TypeScript you need the following packages:
+Щоб налаштувати ESLint для TypeScript, вам потрібні такі пакети:
 
 ```sh
 npm i eslint eslint-plugin-react @typescript-eslint/parser @typescript-eslint/eslint-plugin
 ```
 
-> TIP: eslint calls packages that contain lint rules as "plugin"
+> TIP: eslint називає свої пакети з правилами "plugin"
 
 * eslint : Core eslint 
-* eslint-plugin-react : For react rules provided by eslint. [Supported rules list](https://github.com/yannickcr/eslint-plugin-react#list-of-supported-rules)
-* @typescript-eslint/parse : To allow eslint to understand ts / tsx files 
-* @typescript-eslint/eslint-plugin : For TypeScript rules. [Supported rules list](https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules)
+* eslint-plugin-react : Правіла для react від eslint. [Supported rules list](https://github.com/yannickcr/eslint-plugin-react#list-of-supported-rules)
+* @typescript-eslint/parse : Дозволяє eslint розуміти ts / tsx files 
+* @typescript-eslint/eslint-plugin : Для правил TypeScript. [Supported rules list](https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules)
 
-> As you can see there are two eslint packages (for use with js or ts) and two @typescript-eslint packages (for use with ts). So the overhead for TypeScript is not *that much*.
+> Как ви бачите, 2 eslint пакети (для використання js та ts) та 2 @typescript-eslint пакета (для ts). Така звишена увага для TypeScript не *that much*.
 
 ## Configure 
-Create `.eslintrc.js`: 
+Конфігурація
+
+Створіть `.eslintrc.js`:
 
 ```js
 module.exports = {
@@ -34,15 +38,15 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   rules:  {
-    // Overwrite rules specified from the extended configs e.g. 
-    // "@typescript-eslint/explicit-function-return-type": "off",
-  }
+  // Правила перезапису, указані в розширених конфігураціях, наприклад
+   // "@typescript-eslint/explicit-function-return-type": "off",
 }
 ```
 
 ## Run
+Використання
 
-In your `package.json` add to `scripts`: 
+У вашому `package.json` додайте до `scripts`:
 
 ```json
 {
@@ -52,12 +56,14 @@ In your `package.json` add to `scripts`:
 }
 ```
 
-Now you can `npm run lint` to validate.
+Тепер ви можете `npm run lint` для перевірки.
 
 ## Configure VSCode 
+Конфігурація VSCode 
 
-* Install extension https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
-* Add to `settings.json`:
+* Встановіть розширення https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+
+* Додайте до `settings.json`:
 ```js
 "eslint.validate":  [
   "javascript",
