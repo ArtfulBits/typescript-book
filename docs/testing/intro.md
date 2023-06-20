@@ -1,4 +1,4 @@
 # Testing
-TypeScript can be used with any JavaScript testing framework that you want. In the worst case you can always do a simple `TypeScript -> JavaScript` transform and go your merry way. 
+TypeScript можна використовувати з будь-якою платформою для тестування JavaScript. У гіршому випадку ви завжди можете виконати просте перетворення `TypeScript -> JavaScript` і йти своїм шляхом.
 
-That said, in this section look at options that we have enjoyed greatly 🌹
+Проте в цьому розділі перегляньте варіанти, які нам дуже сподобалися 🌹

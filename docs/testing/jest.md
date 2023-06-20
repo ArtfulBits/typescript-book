@@ -2,13 +2,13 @@
 
 > [Pro egghead lesson on Jest / TypeScript](https://egghead.io/lessons/typescript-getting-started-with-jest-using-typescript)
 
-No testing solution out there is perfect. That said, jest is an excellent unit testing option which provides great TypeScript support.
+Жодне тестове рішення не є ідеальним. Тим не менш, jеst є чудовим варіантом модульного тестування, який забезпечує чудову підтримку TypeScript.
 
-> Note: We assume you start off with a simple node package.json setup. Also all TypeScript files should be in a `src` folder which is always recommended (even without Jest) for a clean project setup.
+> Примітка: ми припускаємо, що ви починаєте з простого налаштування вузла package.json. Також усі файли TypeScript мають бути в папці `src`, що завжди рекомендується (навіть без Jest) для чистого налаштування проекту.
 
 ## Step 1: Install
 
-Install the following using npm:
+Встановіть наступне за допомогою npm:
 
 ```shell
 npm i jest @types/jest ts-jest typescript -D
@@ -16,15 +16,15 @@ npm i jest @types/jest ts-jest typescript -D
 
 Explanation:
 
-* Install `jest` framework (`jest`)
-* Install the types for `jest` (`@types/jest`)
-* Install the TypeScript preprocessor for jest (`ts-jest`) which allows jest to transpile TypeScript on the fly and have source-map support built in.
-* Install the TypeScript compiler ('typescript') which is prerequisite for 'ts-jest'.
-* Save all of these to your dev dependencies (testing is almost always a npm dev-dependency)
+* Встановити фреймворк `jest` (`jest`)
+* Встановіть типи для `jest` (`@types/jest`)
+* Встановіть препроцесор TypeScript для jest (`ts-jest`), який дозволяє jest транспілювати TypeScript на льоту та має вбудовану підтримку source-map.
+* Встановіть компілятор TypeScript ('typescript'), який є передумовою для 'ts-jest'.
+* Збережіть усе це у своїх залежностях розробника (тестування майже завжди в dev-dependency npm)
 
 ## Step 2: Configure Jest
 
-Add the following `jest.config.js` file to the root of your project:
+Додайте наступний файл `jest.config.js` до кореня вашого проекту:
 
 ```js
 module.exports = {
@@ -41,21 +41,21 @@ module.exports = {
 }
 ```
 
-(If your `package.json` file contains `"type": "module"`, which causes Node to assume modules are in es6 format, you can convert the above to es6 format by replacing the top line to `export default { ` .)
+(Якщо ваш файл `package.json` містить `"type": "module"`, через що Node припускає, що модулі мають формат es6, ви можете конвертувати наведене вище у формат es6, замінивши верхній рядок на `export default {` .)
 
-Explanation:
+Пояснення:
 
-* We always recommend having *all* TypeScript files in a `src` folder in your project. We assume this is true and specify this using the `roots` option.
-* The `testMatch` config is a glob pattern matcher for discovering .test / .spec files in ts / tsx / js format.
-* The `transform` config just tells `jest` to use `ts-jest` for ts / tsx files.
+* Ми завжди рекомендуємо зберігати *всі* файли TypeScript у папці `src` вашого проекту. Ми вказуємо це за допомогою параметра `roots`.
+* Конфігурація `testMatch` — це глобальний відповідник шаблонів для виявлення файлів .test / .spec у форматі ts / tsx / js.
+* Конфігурація `transform` просто повідомляє `jest` використовувати `ts-jest` для файлів ts / tsx.
 
 ## Step 3: Run tests
 
-Run `npx jest` from your project root and jest will execute any tests you have.
+Запустіть `npx jest` з кореня вашого проекту, і jest виконає будь-які ваші тести.
 
 ### Optional: Add script target for npm scripts
 
-Add `package.json`:
+додайте `package.json`:
 
 ```json
 {
@@ -63,8 +63,8 @@ Add `package.json`:
 }
 ```
 
-* This allows you to run the tests with a simple `npm t`.
-* And even in watch mode with `npm t -- --watch`.
+* Це дозволяє запускати тести за допомогою простого `npm t`.
+* І навіть у режимі перегляду з `npm t -- --watch`.
 
 ### Optional: Run jest in watch mode
 
@@ -72,7 +72,7 @@ Add `package.json`:
 
 ### Example
 
-* For a file `foo.ts`:
+* для `foo.ts`:
 
     ```js
     export const sum
@@ -80,7 +80,7 @@ Add `package.json`:
         a.reduce((acc, val) => acc + val, 0);
     ```
 
-* A simple `foo.test.ts`:
+* простий `foo.test.ts`:
 
     ```js
     import { sum } from '../foo';
@@ -94,14 +94,14 @@ Add `package.json`:
     });
     ```
 
-Notes:
+Примітки:
 
-* Jest provides the global `test` function.
-* Jest comes prebuilt with assertions in the form of the global `expect`.
+* Jest надає функцію глобального тестування.
+* Jest поставляється попередньо зібраним із твердженнями у формі глобального `expect`.
 
 ### Example async
 
-Jest has built-in async/await support. e.g.
+Jest має вбудовану підтримку async/await.
 
 ```js
 test('basic',async () => {
@@ -117,10 +117,10 @@ test('basic again', async () => {
 
 > [Pro egghead lesson on Enzyme / Jest / TypeScript](https://egghead.io/lessons/react-test-react-components-and-dom-using-enzyme)
 
-Enzyme allows you to test react components with dom support. There are three steps to setting up enzyme:
+Enzyme дозволяє тестувати реагують компоненти з підтримкою dom. Існує три етапи налаштування:
 
-1. Install enzyme, types for enzyme, a better snapshot serializer for enzyme, enzyme-adapter-react for your react version `npm i enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D`
-2. Add `"snapshotSerializers"` and `"setupTestFrameworkScriptFile"` to your `jest.config.js`:  
+1. Встановіть enzyme, типи для enzyme, a better snapshot serializer for enzyme, enzyme-adapter-react для вашої версії react `npm i enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D`
+2. Додайте `"snapshotSerializers"` і `"setupTestFrameworkScriptFile"` до вашого `jest.config.js`:  
 
     ```js
     module.exports = {
@@ -132,7 +132,7 @@ Enzyme allows you to test react components with dom support. There are three ste
     }
     ```
 
-3. Create `src/setupEnzyme.ts` file.
+3. створіть `src/setupEnzyme.ts` файл.
 
     ```js
     import { configure } from 'enzyme';
@@ -140,7 +140,7 @@ Enzyme allows you to test react components with dom support. There are three ste
     configure({ adapter: new EnzymeAdapter() });
     ```
 
-Now here is an example react component and test:
+Ось приклад компонента react і тесту:
 
 * `checkboxWithLabel.tsx`:
 
@@ -202,9 +202,9 @@ Now here is an example react component and test:
 
 > [For details on these features see jest website](http://facebook.github.io/jest/)
 
-* Built-in assertion library.
-* Great TypeScript support.
-* Very reliable test watcher.
-* Snapshot testing.
-* Built-in coverage reports.
-* Built-in async/await support.
+* Вбудована бібліотека тверджень.
+* Чудова підтримка TypeScript.
+* Дуже надійний спостерігач за тестами.
+* Тестування Snapshot.
+* Вбудовані звіти про покриття.
+* Вбудована підтримка async/await.
