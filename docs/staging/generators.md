@@ -1,7 +1,7 @@
 ### Generators
-Also called `function *`, generators allow you to create functions whose execution can be paused and then later resumed maintaining the state between pause-resume transitions. The value returned from a generator is called an `iterator` and can be used to control this `pause-resume` transition.
+Генератори, які також називаються `функцією *`, дозволяють створювати функції, виконання яких можна призупинити, а потім відновити, зберігаючи стан між переходами пауза-відновлення. Значення, яке повертає генератор, називається «ітератором», і його можна використовувати для керування цим переходом «пауза-відновлення».
 
-Here is a simple example of a generator function that generates an *infinite* list of whole numbers.
+Ось простий приклад функції генератора, яка генерує *нескінченний* список цілих чисел.
 
 ```ts
 function* wholeNumbers() {
@@ -12,7 +12,7 @@ function* wholeNumbers() {
 }
 ```
 
-The `yield` contextual keyword is used to return control from a generator (effectively pausing function execution) along with an optional value (here `current`). You can get access to this value using the `iterator`'s `.next()` member function, this is shown below:
+Контекстне ключове слово `yield` використовується для повернення керування від генератора (ефективно призупиняючи виконання функції) разом із необов’язковим значенням (тут `current`). Ви можете отримати доступ до цього значення за допомогою функції-члена `iterator.next()`, це показано нижче:
 
 ```ts
 function* wholeNumbers() {
@@ -28,10 +28,10 @@ console.log(iterator.next()); // 2
 // so on till infinity....
 ```
 
-Now that you have seen `function*`, `yield` and `.next()` we can dig deeper.
+Тепер, коли ви бачили `function*`, `yield` і `.next()`, ми можемо копати глибше.
 
 #### Catching Errors
-Any errors thrown (intentionally using `throw` or unintentionally due to error) from the generator can be caught using `try/catch` just like normal function executions. This is demonstrated below:
+Будь-які помилки, викинуті генератором (навмисно за допомогою `throw` або випадково через помилку), можуть бути перехоплени за допомогою `try/catch` так само, як і звичайне виконання функції. Це показано нижче:
 
 ```ts
 function* wholeNumbers() {
@@ -56,6 +56,6 @@ catch(ex) {
 ```
 
 #### Controlling function execution externally
-The iterator returned from the generator function can be used to control the state *inside* the generator function as well.
+Ітератор, повернутий функцією генератора, також можна використовувати для керування станом *всередині* функції генератора.
 
-// TODO: example
+// TODO: приклад
