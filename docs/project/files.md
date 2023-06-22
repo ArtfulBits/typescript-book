@@ -1,6 +1,6 @@
 ## Which files?
 
-Use `include` and `exclude` to specify files / folders / globs. E.g.:
+Використовуйте `include` і `exclude`, щоб указати файли / папки / globs. Наприклад:
 
 
 ```json
@@ -17,10 +17,10 @@ Use `include` and `exclude` to specify files / folders / globs. E.g.:
 
 ### Globs
 
-* For globs : `**/*` (e.g. sample usage `somefolder/**/*`) means all folder and any files (the extensions `.ts`/`.tsx` will be assumed and if `allowJs:true` so will `.js`/`.jsx`)
+* Для глобальних: `**/*` (наприклад, приклад використання `somefolder/**/*`) означає всі папки та будь-які файли (припускаються розширення `.ts`/`.tsx` і якщо `allowJs:true ` так буде `.js`/`.jsx`)
 
 ### `files` option
-Alternatively, you can use `files` to be explicit: 
+Крім того, ви можете використовувати `files`, щоб бути явним:
 
 ```json
 {
@@ -30,4 +30,4 @@ Alternatively, you can use `files` to be explicit:
 }
 ```
 
-But it is not recommended as you have to keep updating it. Instead use `include` to just add the containing folder. 
+Але це не рекомендується, оскільки ви повинні постійно оновлювати його. Натомість використовуйте `include`, щоб просто додати папку, що містить.

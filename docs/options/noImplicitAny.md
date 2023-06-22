@@ -1,18 +1,18 @@
 # noImplicitAny
 
-There are some things that cannot be inferred or inferring them might result in unexpected errors. A fine example is function arguments. If you don't annotate them, its unclear what should and shouldn't be valid e.g.
+Є деякі речі, про які неможливо зробити висновок, або їх висновок може призвести до несподіваних помилок. Гарним прикладом є аргументи функції. Якщо ви не анотуєте їх, незрозуміло, що має бути дійсним, а що ні.
 
 ```ts
 function log(someArg) {
   sendDataToServer(someArg);
 }
 
-// What arg is valid and what isn't?
+// Який аргумент вірний а який ні?
 log(123);
 log('hello world');
 ```
 
-So if you don't annotate some function argument, TypeScript assumes `any` and moves on. This essentially turns off type checking for such cases, which is what a JavaScript dev would expect. But this can catch people that want high safety off guard. Hence there is an option, `noImplicitAny`, that when switched on will flag the cases where the type cannot be inferred e.g.
+Отже, якщо ви не анотуєте якийсь аргумент функції, TypeScript припускає `any` і йде далі. По суті, це вимикає перевірку типу для таких випадків, чого очікував би розробник JavaScript. Але це може застати людей, які хочуть високої безпеки, зненацька. Таким чином, існує опція `noImplicitAny`, яка після ввімкнення позначатиме випадки, коли тип не можна визначити, наприклад.
 
 ```ts
 function log(someArg) { // Error : someArg has an implicit `any` type
@@ -20,7 +20,7 @@ function log(someArg) { // Error : someArg has an implicit `any` type
 }
 ```
 
-Of course you can then go ahead and annotate:
+Звичайно, ви можете продовжити і описати:
 
 ```ts
 function log(someArg: number) {
@@ -28,7 +28,7 @@ function log(someArg: number) {
 }
 ```
 
-And if you truly want *zero safety* you can mark it *explicitly* as `any`:
+І якщо ви справді бажаєте *нульової безпеки*, ви можете позначити його *явно* як `any`:
 
 ```ts
 function log(someArg: any) {

@@ -1,40 +1,40 @@
 # TypeScript Module Resolution
 
-TypeScript's module resolution tries to model and support the real world modules systems / loaders there (commonjs/nodejs, amd/requirejs, ES6/systemjs etc.). The most simplest lookup is relative file path lookup. After that things become a bit complex *because of the nature of magical module loading done by various module loaders*.
+Роздільна здатність TypeScript намагається змоделювати та підтримувати реальні системи/завантажувачі модулів (commonjs/nodejs, amd/requirejs, ES6/systemjs тощо). Найпростішим пошуком є відносний пошук шляху до файлу. Після цього все стає дещо складнішим *because of the nature of magical module loading done by various module loaders*.
 
 ## File Extensions
 
-You import modules like `foo` or `./foo`. For any file path lookup TypeScript automatically checks for a `.ts` or `.d.ts` or `.tsx` or `.js` (optionally) or `.jsx` (optionally) file in the right order depending upon context. You should **not** provide a file extension with the module name (no `foo.ts`, just `foo`).
+Ви імпортуєте такі модулі, як `foo` або `./foo`. Для будь-якого пошуку шляху до файлу TypeScript автоматично перевіряє файл `.ts`, `.d.ts`, `.tsx`, `.js` (необов’язково) або `.jsx` (необов’язково) у правильному порядку залежно від контексту . Ви **не** повинні вказувати розширення файлу з назвою модуля (без `foo.ts`, лише `foo`).
 
 ## Relative File Module
 
-An import with a relative path e.g.:
+Імпорт із відносним шляхом, наприклад:
 
 ```ts
 import foo = require('./foo');
 ```
 
-Tells the TypeScript compiler to look for a TypeScript file at the relative location e.g. `./foo.ts` with respect to the current file. There is no further magic to this kind of import. Of course it can be a longer path e.g. `./foo/bar/bas` or `../../../foo/bar/bas` just like any other *relative paths* you are used to on disk.
+Вказує компілятору TypeScript шукати файл TypeScript у відносному місці, наприклад. `./foo.ts` щодо поточного файлу. У цьому виді імпорту більше немає магії. Звичайно, це може бути довший шлях, напр. `./foo/bar/bas` або `../../../foo/bar/bas`, як і будь-які інші *relative paths*, до яких ви звикли на диску.
 
 ## Named Module
 
-The following statement:
+Наступна заява:
 
 ```ts
 import foo = require('foo');
 ```
 
-Tells the TypeScript compiler to look for an external module in the following order:
+Вказує компілятору TypeScript шукати зовнішній модуль у такому порядку:
 
-* A named [module declaration](#module-declaration) from a file already in the compilation context.
-* If still not resolved and you are compiling with `--module commonjs`  or have set `--moduleResolution node` then its looked up using the [*node modules*](#node-modules) resolution algorithm.
-* If still not resolved and you provided `baseUrl` (and optionally `paths`) then the [*path substitutions*](#path-substitutions) resolution algorithm kicks in.
+* Іменована [декларація модуля](#module-declaration) з файлу, який уже знаходиться в контексті компіляції.
+* Якщо все ще не вирішено, а ви компілюєте за допомогою `--module commonjs` або встановили `--moduleResolution node`, тоді його шукають за допомогою алгоритму розв’язання [*node modules*](#node-modules).
+* Якщо все ще не вирішено, і ви вказали `baseUrl` (і додатково `paths`), тоді спрацьовує алгоритм вирішення [*заміни шляху*](#path-substitutions).
 
-Note that `"foo"` can be a longer path string e.g. `"foo/bar/bas"`. The key here is that *it does not start with `./` or `../`*.
+Зауважте, що "foo" може бути довшим рядком шляху, наприклад. `"foo/bar/bas"`. Ключовим тут є те, що *it does not start with `./` or `../`*.
 
 ## Module Declaration
 
-A module declaration looks like:
+Оголошення модуля виглядає так:
 
 ```ts
 declare module "foo" {
@@ -45,12 +45,12 @@ declare module "foo" {
 }
 ```
 
-This makes the module `"foo"`, *importable*.
+Це робить модуль `"foo"` *імпортованим*.
 
 ## Node Modules
-The node module resolution is actually pretty much the same one used by Node.js / NPM ([official nodejs docs](https://nodejs.org/api/modules.html#modules_all_together)). Here is a simple mental model I have:
+Роздільна здатність node модуля фактично майже така ж, яку використовує Node.js / NPM ([офіційні документи nodejs](https://nodejs.org/api/modules.html#modules_all_together)). Ось проста ментальна модель, яку я маю:
 
-* module `foo/bar` will resolve to some file : `node_modules/foo` (the module) + `foo/bar`
+* модуль `foo/bar` виведе на певний файл: `node_modules/foo` (модуль) + `foo/bar`
 
 ## Path Substitutions
 

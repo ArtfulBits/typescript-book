@@ -1,6 +1,6 @@
 ## Typesafe Event Emitter
 
-Conventionally in Node.js and traditional JavaScript you have a single event emitter. This event emitter internally tracks listener for different event types e.g. 
+Традиційно в Node.js і традиційному JavaScript ви маєте єдиний джерело подій. Цей джерело подій внутрішньо відстежує слухача для різних типів подій
 
 ```ts
 const emitter = new EventEmitter();
@@ -11,11 +11,11 @@ emitter.emit('bar', bar);
 emitter.on('foo', (foo)=>console.log(foo));
 emitter.on('bar', (bar)=>console.log(bar));
 ```
-Essentially `EventEmitter` internally stores data in the form of mapped arrays: 
+По суті, `EventEmitter` внутрішньо зберігає дані у формі відображених масивів:
 ```ts
 {foo: [fooListeners], bar: [barListeners]}
 ```
-Instead, for the sake of *event* type safety, you can create an emitter *per* event type:
+Замість цього, задля безпеки типу *event*, ви можете створити емітер *на* тип події:
 ```ts
 const onFoo = new TypedEvent<Foo>();
 const onBar = new TypedEvent<Bar>();
@@ -28,10 +28,10 @@ onFoo.on((foo)=>console.log(foo));
 onBar.on((bar)=>console.log(bar));
 ```
 
-This has the following advantages: 
-* The types of events are easily discoverable as variables.
-* The event emitter variables are easily refactored independently.
-* Type safety for event data structures.
+Це має такі переваги:
+* Типи подій легко знайти як змінні.
+* Змінні джерела подій легко переробляються незалежно.
+* Тип безпеки для структур даних подій.
 
 ### Reference TypedEvent
 ```ts

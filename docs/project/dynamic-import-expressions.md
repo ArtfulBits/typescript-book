@@ -1,17 +1,17 @@
 ## Dynamic import expressions 
 
-**Dynamic import expressions** are a new feature and part of **ECMAScript** that allows users to asynchronously request a module at any arbitrary point in your program.
-**TC39** JavaScript committee has it’s own proposal which is in stage 3, and it’s called [import() proposal for JavaScript](https://github.com/tc39/proposal-dynamic-import).
+**Вирази динамічного імпорту** — це нова функція та частина **ECMAScript**, яка дозволяє користувачам асинхронно запитувати модуль у будь-якій довільній точці вашої програми.
+**TC39** Комітет JavaScript має власну пропозицію, яка знаходиться на етапі 3, і вона називається [import() пропозиція для JavaScript](https://github.com/tc39/proposal-dynamic-import).
 
-Alternatively, **webpack** bundler has a feature called [**Code Splitting**](https://webpack.js.org/guides/code-splitting/) which allows you to split your bundle into chunks which can be downloaded asynchronously at a later time. For instance, this allows to serve a minimal bootstrap bundle first and to asynchronously load additional features later.
+Крім того, **webpack** bundler має функцію під назвою [**Code Splitting**](https://webpack.js.org/guides/code-splitting/), яка дозволяє вам розділити ваш пакет на частини, які можна завантажено асинхронно пізніше. Наприклад, це дозволяє спочатку обслуговувати мінімальний пакет початкового завантаження, а потім асинхронно завантажувати додаткові функції.
 
-It’s natural to think (if we are using webpack in our dev workflow) that [TypeScript 2.4 dynamic import expressions](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#dynamic-import-expressions) will **automatically produce** bundle chunks and automatically code-split your JS final bundle. BUT, that is not as easy as it seems, because it depends on the **tsconfig.json configuration** we are working with.
+Цілком природно думати (якщо ми використовуємо webpack у нашому робочому процесі розробників), що [вирази динамічного імпорту TypeScript 2.4](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#dynamic- import-expressions) **автоматично створюватиме** блоки пакетів і автоматично розділятиме ваш остаточний пакет JS. АЛЕ це не так просто, як здається, оскільки залежить від конфігурації **tsconfig.json**, з якою ми працюємо.
 
-The thing is that webpack code splitting supports two similar techniques to achieve this goal: using **import()** (preferred, ECMAScript proposal) and **require.ensure()** (legacy, webpack specific). And what that means is the expected TypeScript output is **leave the import() statement as it is** instead of transpile it to anything else.
+Річ у тім, що при розділенні коду webpack підтримує дві подібні техніки: використання **import()** (бажано, пропозиція ECMAScript) і **require.ensure()** (успадковане, специфічне для webpack). Це означає, що очікуваний результат TypeScript **залишить оператор import() таким, яким він є** замість того, щоб транспілювати його на щось інше.
 
-Let’s see an example to figure out how to configure webpack + TypeScript 2.4.
+Давайте розглянемо приклад, щоб зрозуміти, як налаштувати webpack + TypeScript 2.4.
 
-In the following code I want to **lazy load the library _moment_** but I am interested in code splitting as well, which means, having the moment library in a separate chunk of JS (JavaScript file) that will be loaded only when required.
+У наступному коді я хочу **ліниво завантажити бібліотеку _moment_**, але мене також цікавить розділення коду, що означає наявність бібліотеки моментів в окремому фрагменті JS (файлу JavaScript), який завантажуватиметься лише за потреби .
 
 ```ts
 import(/* webpackChunkName: "momentjs" */ "moment")
@@ -27,7 +27,7 @@ import(/* webpackChunkName: "momentjs" */ "moment")
   });
 ```
 
-Here is the tsconfig.json:
+Це tsconfig.json:
 
 ```json
 {
@@ -59,12 +59,12 @@ Here is the tsconfig.json:
 ```
 
 
-**Important notes**:
+**Важливі примітки**:
 
-- Using **"module": "esnext"** TypeScript produces the mimic import() statement to be input for Webpack Code Splitting.
-- For further information read this article: [Dynamic Import Expressions and webpack 2 Code Splitting integration with TypeScript 2.4](https://blog.josequinto.com/2017/06/29/dynamic-import-expressions-and-webpack-code-splitting-integration-with-typescript-2-4/).
+- За допомогою **"module": "esnext"** TypeScript створює оператор mimic import(), який буде введено для розділення коду Webpack.
+– Для отримання додаткової інформації прочитайте цю статтю: [Інтеграція Dynamic Import Expressions та webpack 2 Code Splitting із TypeScript 2.4](https://blog.josequinto.com/2017/06/29/dynamic-import-expressions-and-webpack-code) -splitting-integration-with-typescript-2-4/).
 
 
-You can see full example [here][dynamicimportcode].
+Повний приклад можна переглянути [тут][динамічний імпорткод].
 
 [dynamicimportcode]:https://cdn.rawgit.com/basarat/typescript-book/705e4496/code/dynamic-import-expressions/dynamicImportExpression.js

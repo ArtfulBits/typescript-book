@@ -1,19 +1,19 @@
 # Why Cypress
-Cypress is a great E2E testing tool. Here are a few great reasons to consider it:
+Cypress — чудовий інструмент тестування E2E. Ось кілька вагомих причин розглянути це:
 
-* Isolated installation possible.
-* Ships with TypeScript support out of the box.
-* Provides a nice interactive google chrome debug experience. This is very similar to how UI devs mostly work manually.
-* Has command - execution separation which allows for more powerful debugging and test stability (more on this below).
-* Has implicit assertions to provide more meaningful debug experience with less brittle tests (more on this in the tips below).
-* Provides the ability to mock out and observe backend XHRs easily without changing your application code (more on this in the tips below).
+* Можлива ізольована установка.
+* Поставляється з підтримкою TypeScript із коробки.
+* Забезпечує гарний інтерактивний досвід налагодження google chrome. Це дуже схоже на те, як розробники інтерфейсу користувача здебільшого працюють вручну.
+* Має поділ команди на виконання, що забезпечує більш потужне налагодження та тестування стабільності (докладніше про це нижче).
+* Містить неявні твердження для забезпечення більш значущого досвіду налагодження з менш крихкими тестами (докладніше про це в порадах нижче).
+* Надає можливість легко створювати та спостерігати за серверними XHR, не змінюючи код програми (докладніше про це в порадах нижче).
 
 ## Installation
-The steps provided in this installation process will give you a nice `e2e` folder that you can copy/paste or as boiler plate for your organization.
+Кроки, надані в цьому процесі інсталяції, дадуть вам гарну папку `e2e`, яку ви можете скопіювати/вставити або як шаблон для вашої організації.
 
-> Same steps presented in a video format over at my [youtube channel](https://www.youtube.com/watch?v=n3SvvZSWwfM).
+> Ті самі дії представлені у відеоформаті на моєму [каналі YouTube](https://www.youtube.com/watch?v=n3SvvZSWwfM).
 
-Create an e2e directory, install cypress, TypeScript and setup the typescript and cypress config files:
+Створіть каталог e2e, встановіть cypress, TypeScript і налаштуйте файли конфігурації typescript і cypress:
 
 ```sh
 mkdir e2e
@@ -24,11 +24,11 @@ npx tsc --init --types cypress --lib dom,es6
 echo {} > cypress.json 
 ```
 
-> Here are a few reasons for creating a separate `e2e` folder especially for cypress:
-* Creating a separate directory or `e2e` makes it easier to isolate its `package.json` dependencies from the rest of your project. This results in less dependency conflicts.
-* Testing frameworks have a habit of polluting the global namespace with stuff like `describe` `it` `expect`. It is best to keep the e2e `tsconfig.json` and `node_modules` in this special `e2e` folder to prevent global type definition conflicts.
+> Ось кілька причин для створення окремої папки `e2e` спеціально для cypress:
+* Створення окремого каталогу або `e2e` полегшує ізоляцію його залежностей `package.json` від решти вашого проекту. Це призводить до зменшення конфліктів залежностей.
+* Фреймворки тестування мають звичку забруднювати глобальний простір імен такими речами, як `describe` `it` `expect`. Найкраще зберігати `tsconfig.json` і `node_modules` e2e у цій спеціальній папці `e2e`, щоб запобігти глобальним конфліктам визначення типу.
 
-Add a few scripts to the `e2e/package.json` file:
+Додайте кілька сценаріїв до файлу `e2e/package.json`:
 
 ```json
   "scripts": {
@@ -37,7 +37,7 @@ Add a few scripts to the `e2e/package.json` file:
   },
 ```
 
-Write your first test under `cypress/integration/basic.ts`: 
+Напишіть свій перший тест у `cypress/integration/basic.ts`:
 
 ```ts
 it('should perform basic google search', () => {
@@ -48,18 +48,18 @@ it('should perform basic google search', () => {
 });
 ```
 
-Now run `npm run cypress:open` during development and `npm run cypress:run` on your build server 🌹
+Тепер запустіть `npm run cypress:open` під час розробки та `npm run cypress:run` на вашому сервері збірки 🌹
 
 ## More description of key Files
-Under the `e2e` folder you now have these files:
+У папці `e2e` у вас є такі файли:
 
-* `/cypress.json`: Configure cypress. The default is empty and that is all you need.
-* `/cypress` Subfolders:
-    * `/integration`: All your tests.
-        * Feel free to create tests under subfolders for better organization e.g. `/someFeatureFolder/something.spec.ts`.
+* `/cypress.json`: Налаштувати cypress. За умовчанням порожній, і це все, що вам потрібно.
+* Підпапки `/cypress`:
+     * `/integration`: усі ваші тести.
+         * Не соромтеся створювати тести у вкладених папках для кращої організації, напр. `/someFeatureFolder/something.spec.ts`.
 
 ## First test
-* create a file `/cypress/integration/first.ts` with the following contents:
+* створіть файл `/cypress/integration/first.ts` з таким вмістом:
 
 ```ts
 describe('google search', () => {
@@ -71,26 +71,26 @@ describe('google search', () => {
 ```
 
 ## Running in development
-Open the cypress IDE using the following command.
+Відкрийте IDE cypress за допомогою такої команди.
 
 ```sh
 npm run cypress:open
 ```
 
-And select a test to run.
+І виберіть тест для запуску.
 
 ## Running on a build server
 
-You can run cypress tests in ci mode using the following command.
+Ви можете запустити тести Cypress у режимі ci за допомогою наступної команди.
 
 ```sh
 npm run cypress:run
 ```
 
 ## Tip: Sharing code between UI and test
-Cypress tests are compiled / packed and run in the browser. So feel free to import any project code into your test.
+Тести Cypress скомпільовані / упаковані та запускаються в браузері. Тому сміливо імпортуйте будь-який код проекту у свій тест.
 
-For example you can share Id values between UI and Tests to make sure the CSS selectors don't break:
+Наприклад, ви можете поділитися значеннями ідентифікатора між інтерфейсом користувача та тестами, щоб переконатися, що селектори CSS не зламаються:
 
 ```js
 import { Ids } from '../../../src/app/constants';
@@ -101,7 +101,7 @@ cy.get(`#${Ids.username}`)
 ```
 
 ## Tip: Creating Page Objects
-Creating objects that provide a convenient handle for all the interactions that various tests need to do with a page is a common testing convention. You can create page objects using TypeScript classes with getters and methods e.g.
+Створення об’єктів, які надають зручну ручку для всіх взаємодій, які різні тести повинні робити зі сторінкою, є загальною умовою тестування. Ви можете створювати об’єкти сторінки за допомогою класів TypeScript із геттерами та методами, наприклад.
 
 ```js
 import { Ids } from '../../../src/app/constants';
@@ -125,17 +125,17 @@ page.username.type('john');
 ```
 
 ## Tip: Explicit assertion
-Cypress ships with (built in) chai and chai-query assertion libraries to help testing webpages. You use them with `.should` command passing in the chainer as a string, replacing `.to.foo` with `should('foo')` e.g. with chai-jquery you would `expect($(#foo)).to.have.text('something')`, with cypress you would `cy.get('#foo').should('have.text', 'something')`:
+Cypress поставляється з (вбудованими) бібліотеками тверджень chai та chai-query, які допомагають тестувати веб-сторінки. Ви використовуєте їх із командою `.should`, яка передається в ланцюжок як рядок, замінюючи `.to.foo` на `should('foo')`, наприклад. з chai-jquery ви б `expect($(#foo)).to.have.text('something')`, з cypress ви б `cy.get('#foo').should('have.text', 'something')`:
 
 ```
 cy.get('#foo')
   .should('have.text', 'something')
 ```
-> You get intellisense for `should` chainers as cypress ships with correct TypeScript definitions 👍🏻
+> Ви отримуєте інтелектуальну інформацію для ланцюжків `should`, оскільки Cypress поставляється з правильними визначеннями TypeScript 👍🏻
 
-The complete list of chainers is available here : https://docs.cypress.io/guides/references/assertions.html
+Повний список ланцюжків доступний тут: https://docs.cypress.io/guides/references/assertions.html
 
-If you want something complex you can even use `should(callback)` and e.g.
+Якщо ви хочете щось складне, ви можете навіть використати `should(callback)` і, наприклад,
 
 ```
 cy.get('div')
@@ -146,10 +146,10 @@ cy.get('div')
 // This is just an example. Normally you would `.should('have.class', 'heading')
 ```
 
-> TIP: cypress with do automatic retries on the callback as well, so they are just as flake free as standard string chainers.
+> ПОРАДА: cypress також виконує автоматичні повторні спроби під час зворотного виклику, тому вони так само вільні від розшарування, як і стандартні цепочки рядків.
 
 ## Tip: Commands and Chaining
-Every function call in a cypress chain is a `command`. The `should` command is an assertion. It is conventional to start distinct *category* of chains and actions separately e.g.
+Кожен виклик функції в ланцюжку Cypress є "командою". Команда `should` є твердженням. Традиційно починати окрему *категорію* ланцюжків і дій окремо, наприклад,
 
 ```ts
 // Don't do this
@@ -170,35 +170,35 @@ cy.get(/**something else*/)
   .should(/**something*/)
 ```
 
-Some other libraries *evaluate and run* the code at the same time. Those libraries force you to have a single chain which can be nightmare to debug with selectors and assertions mingled in.
+Деякі інші бібліотеки *оцінюють і запускають* код одночасно. Ці бібліотеки змушують вас мати єдиний ланцюжок, який може бути кошмаром для налагодження з перемішаними селекторами та твердженнями.
 
-Cypress commands are essentially *declarations* to the cypress runtime to execute the commands later. Simple words: Cypress makes it easier.
+Команди Cypress по суті є *деклараціями* для середовища виконання cypress для виконання команд пізніше. Прості слова: Cypress робить це легше.
 
 ## Tip: Using `contains` for easier querying
 
-The following shows an example:
+Нижче показано приклад:
 
 ```
 cy.get('#foo')
-  // Once #foo is found the following:
-  .contains('Submit')
-  .click()
-  // ^ will continue to search for something that has text `Submit` and fail if it times out.
-  // ^ After it is found trigger a click on the HTML Node that contained the text `Submit`.
+   // Коли #foo знайдено наступне:
+   .contains('Надіслати')
+   .click()
+   // ^ продовжуватиме шукати те, що містить текст `Надіслати`, і не вдасться, якщо мине час.
+   // ^ Після того, як його знайдено, клацніть вузол HTML, який містить текст `Надіслати`.
 ```
 
 ## Tip: Smart delays and retries
-Cypress will automatically wait (and retry) for many async things e.g.
+Cypress автоматично чекатиме (і повторюватиме спроби) для багатьох асинхронних речей, наприклад.
 ```
-// If there is no request against the `foo` alias cypress will wait for 4 seconds automatically
+// Якщо немає запиту на псевдонім `foo`, cypress автоматично чекатиме 4 секунди
 cy.wait('@foo')
-// If there is no element with id #foo cypress will wait for 4 seconds automatically and keep retrying
+// Якщо немає елемента з ідентифікатором #foo, cypress автоматично чекатиме 4 секунди та повторюватиме спроби
 cy.get('#foo')
 ```
-This keeps you from having to constantly add arbitrary timeout (and retry) logic in your test code flow.
+Це позбавляє вас від необхідності постійно додавати довільну логіку очікування (і повторних спроб) у потік тестового коду.
 
 ## Tip: Implicit assertion
-Cypress has a concept of implicit assertion. These kick in if a future command is erroring because of a previous command. E.g. the following will error at `contains` (after automatic retries of course) as nothing found can get `click`ed:
+Cypress має концепцію неявного твердження. Вони спрацьовують, якщо майбутня команда має помилку через попередню команду. наприклад наступне буде помилкою в `contains` (після автоматичних повторних спроб, звичайно), оскільки нічого знайденого не можна `клацнути`:
 
 ```ts
 cy.get('#foo')
@@ -208,14 +208,12 @@ cy.get('#foo')
   // ^ Error: #foo does not have anything that `contains` `'Submit'`
 ```
 
-In traditional frameworks you would get a horrible error like `click` doesn't exist on `null`. In Cypress you get a nice error `#foo` does not contain `Submit`. This error is a form of an implicit assertion.
+У традиційних фреймворках ви отримаєте жахливу помилку, наприклад, `click` не існує на `null`. У Cypress ви отримуєте гарну помилку `#foo` не містить `Submit`. Ця помилка є формою неявного твердження.
 
 ## Tip: Waiting for an HTTP request
-A lot of tests have been traditionally brittle due to all the arbitrary timeouts needed for XHRs that an application makes. `cy.server` makes it easy to
-* create an alias for backend calls
-* wait for them to occur
-
-e.g.
+Багато тестів традиційно були крихкими через усі довільні тайм-аути, необхідні для XHR, які створює програма. `cy.server` полегшує це
+* створити псевдонім для внутрішніх викликів
+* дочекатися їх появи
 
 ```ts
 cy.server()
@@ -232,14 +230,14 @@ cy.wait('@load')
 ```
 
 ## Tip: Mocking an HTTP request response
-You can also easily mock out a request response using `route`:
+Ви також можете легко імітувати відповідь на запит за допомогою `route`:
 ```ts
 cy.server()
   .route('POST', 'https://example.com/api/application/load', /* Example payload response */{success:true});
 ```
 
 ### Tip: Asserting an Http request response
-You can assert requests without mocking using `route` `onRequest` / `onResponse` e.g.
+Ви можете стверджувати запити без насмішок, використовуючи `route` `onRequest` / `onResponse`, наприклад.
 
 ```ts
 cy.route({
@@ -253,7 +251,7 @@ cy.route({
 ```
 
 ## Tip: Mocking time
-You can use `wait` to pause a test for some time e.g. to test an automatic "you are about to be logged out" notification screen:
+Ви можете використовувати `wait`, щоб призупинити тест на деякий час, наприклад. щоб перевірити екран автоматичного сповіщення "Ви збираєтеся вийти з системи":
 
 ```ts
 cy.visit('/');
@@ -261,7 +259,7 @@ cy.wait(waitMilliseconds);
 cy.get('#logoutNotification').should('be.visible');
 ```
 
-However, it is recommended to mock time using `cy.clock` and forwarding time using `cy.tick` e.g.
+Однак рекомендується імітувати час за допомогою `cy.clock` і пересилати час за допомогою `cy.tick`, наприклад.
 
 ```ts
 cy.clock();
@@ -272,7 +270,7 @@ cy.get('#logoutNotification').should('be.visible');
 ```
 
 ## Tip: Unit testing application code
-You can also use cypress to unit test your application code in isolation e.g.
+Ви також можете використовувати cypress для модульного тестування коду програми в ізоляції, наприклад.
 
 ```js
 import { once } from '../../../src/app/utils';
@@ -288,7 +286,7 @@ it('should only call function once', () => {
 ```
 
 ## Tip: Mocking in unit testing
-If you are unit testing modules in your application you can provide mocks using `cy.stub` e.g. if you want to ensure that `navigate` is called in a function `foo`:
+Якщо ви використовуєте модульне тестування модулів у своїй програмі, ви можете надати макети за допомогою `cy.stub`, наприклад. якщо ви хочете переконатися, що `navigate` викликається у функції `foo`:
 
 * `foo.ts`
 
@@ -300,7 +298,7 @@ export function foo() {
 }
 ```
 
-* You can do this as in `some.spec.ts`:
+* Ви можете зробити це, як у `some.spec.ts`:
 
 ```ts
 /// <reference types="cypress"/>
@@ -318,9 +316,9 @@ describe('should work', () => {
 ```
 
 ## Tip: Command - execution separation
-When you invoke a cypress command (or assertion) e.g. `cy.get('#something')`, the function immediately returns without actually carrying out the action. What it does do, is informs the cypress test runner that you will need to carry out (execute) an action (in this case a `get`) at some point.
+Коли ви викликаєте команду cypress (або твердження), наприклад. `cy.get('#something')`, функція негайно повертає без фактичного виконання дії. Що він робить, це інформує тестувальника cypress, що вам потрібно буде виконати (виконати) дію (у цьому випадку `get`) у якийсь момент.
 
-You are basically building a command list that the runner will then go ahead and execute. You can verify this command - execution separation with a simple test, observe that you will see the `start / between / end` `console.log` statements execute immediately before the runner starts *executing* the commands:
+По суті, ви створюєте список команд, який потім буде виконувати бігун. Ви можете перевірити цю команду - відокремлення виконання за допомогою простого тесту, зауважте, що ви побачите, що оператори `start / between / end` `console.log` виконуються безпосередньо перед тим, як програма запуску почне *виконувати* команди:
 
 ```ts
 /// <reference types="cypress"/>
@@ -336,25 +334,25 @@ describe('Hello world', () => {
 });
 ```
 
-This command execution separation has two big benefits:
-* The runner can execute the commands in a *flake resistant* manner with automatic retries and implicit assertions.
-* Allows you to write asynchronous code in a synchronous fashion without having to do a constant *chaining* which results in difficult to maintain code.
+Це розділення виконання команд має дві великі переваги:
+* Виконувач може виконувати команди в *flake-resistant* спосіб з автоматичними повторними спробами та неявними твердженнями.
+* Дозволяє писати асинхронний код у синхронному режимі без постійного *ланцюжка*, що призводить до складності підтримки коду.
 
 ## Tip: Breakpoint
-The automatic snapshots + command log generated by the cypress test are great for debugging. That said you can pause test execution if you want.
+Автоматичні знімки + журнал команд, згенерований тестом cypress, чудово підходять для налагодження. При цьому ви можете призупинити виконання тесту, якщо хочете.
 
-First make sure you have chrome developer tools (lovingly called dev tools) open in the test runner (`CMD + ALT + i` on mac / `F12` on windows). Once the dev tools are open you can re-run the test and the dev tools will stay open. If you have the dev tools open, you can pause test execution in two ways:
+Спочатку переконайтеся, що у вас відкриті інструменти розробника Chrome (з любов’ю — інструменти розробника) у програмі тестування («CMD + ALT + i» на mac / `F12` на Windows). Коли інструменти розробника відкриються, ви можете повторно запустити тест, і інструменти розробника залишаться відкритими. Якщо у вас відкриті інструменти розробника, ви можете призупинити виконання тесту двома способами:
 
-* Application code breakpoints: Use a `debugger` statement in your application code and the test runner will stop on that just like standard web development.
-* Test code breakpoints: You can use the `.debug()` command and cypress test execution will stop at it. Alternatively you can use a `debugger` statement in a `.then` command callback to cause a pause. e.g `.then(() => { debugger })`. You can even use it to grab some element `cy.get('#foo').then(($ /* a reference to the dom element */) => { debugger; })` or a network call e.g. `cy.request('https://someurl').then((res /* network response */) => { debugger });`. However idiomatic way is `cy.get('#foo').debug()` and then when the test runner is paused on `debug` you can click on the `get` in the command log to automatically `console.log` any information you might need about the `.get('#foo')` command (and similarly for any other commands you want to debug).
+* Точки зупинки коду програми: використовуйте оператор `debugger` у коді програми, і програма виконання тестів зупиниться на цьому, як і стандартна веб-розробка.
+* Точки зупинки тестового коду: ви можете використати команду `.debug()`, і виконання тесту cypress зупиниться на ній. Крім того, ви можете використати оператор `debugger` у зворотному виклику команди `.then`, щоб викликати паузу. наприклад `.then(() => { debugger })`. Ви навіть можете використовувати його, щоб отримати якийсь елемент `cy.get('#foo').then(($ /* посилання на елемент dom */) => { debugger; })` або мережевий виклик, наприклад. `cy.request('https://someurl').then((res /* відповідь мережі */) => { налагоджувач });`. Однак ідіоматичним способом є `cy.get('#foo').debug()`, а потім, коли програму тестування призупинено на `debug`, ви можете натиснути `get` у журналі команд, щоб автоматично `console.log` будь-яка інформація, яка вам може знадобитися про команду `.get('#foo')` (та аналогічно для будь-яких інших команд, які ви хочете налагодити).
 
 ## Tip: Start server and test
-If you need to start a local server before your tests can run you can add `start-server-and-test` https://github.com/bahmutov/start-server-and-test as a dependency. It takes the following arguments
-* an npm script to *run* the server (aka server)
-* an endpoint to check if the server has booted up (aka start)
-* an npm script to initiate the testing (aka test)
+Якщо вам потрібно запустити локальний сервер перед виконанням тестів, ви можете додати `start-server-and-test` https://github.com/bahmutov/start-server-and-test як залежність. Це вимагає наступних аргументів
+* сценарій npm для *запуску* сервера (він же сервер)
+* кінцева точка, щоб перевірити, чи завантажився сервер (він же старт)
+* сценарій npm для початку тестування (він же тест)
 
-Example package.json:
+Приклад package.json:
 ```json
 {
     "scripts": {

@@ -1,6 +1,6 @@
 # Singleton Pattern
 
-The conventional singleton pattern is really something that is used to overcome the fact that all code must be in a `class`.
+Традиційний шаблон singleton насправді використовується для подолання того факту, що весь код має бути в `класі`.
 
 ```ts
 class Singleton {
@@ -23,8 +23,7 @@ let something = new Singleton() // Error: constructor of 'Singleton' is private.
 let instance = Singleton.getInstance() // do something with the instance...
 ```
 
-However, if you don't want lazy initialization you can instead just use a `namespace`: 
-
+Однак, якщо вам не потрібна відкладена ініціалізація, ви можете натомість просто використати `namespace`:
 ```ts
 namespace Singleton {
     // ... any one time initialization goes here ...
@@ -34,9 +33,9 @@ namespace Singleton {
 Singleton.someMethod();
 ```
 
-> Warning : Singleton is just a fancy name for [global](http://stackoverflow.com/a/142450/390330)
+> Попередження: Singleton — це лише дивовижна назва для [global](http://stackoverflow.com/a/142450/390330)
 
-For most projects `namespace` can additionally be replaced by a *module*.
+Для більшості проектів `namespace` можна додатково замінити на *module*.
 
 ```ts
 // someFile.ts

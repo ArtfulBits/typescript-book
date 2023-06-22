@@ -1,11 +1,11 @@
 ## Nominal Typing
-The TypeScript type system is structural [and this is one of the main motivating benefits](../why-typescript.md). However, there are real-world use cases for a system where you want two variables to be differentiated because they have a different *type name* even if they have the same structure. A very common use case is *identity* structures (which are generally just strings with semantics associated with their *name* in languages like C#/Java).
+Система типів TypeScript є структурною [і це одна з головних мотиваційних переваг](../why-typescript.md). Однак існують випадки реального використання системи, де потрібно, щоб дві змінні були розрізнені, оскільки вони мають різні *назви типу*, навіть якщо вони мають однакову структуру. Дуже поширеним випадком використання є структури *ідентичності* (які, як правило, являють собою просто рядки з семантикою, пов’язаною з їх *ім’ям* у таких мовах, як C#/Java).
 
-There are a few patterns that have emerged in the community. I cover them in decreasing order of personal preference:
+Є кілька моделей, які виникли в спільноті. Я розглядаю їх у порядку зменшення особистих переваг:
 
 ## Using literal types
 
-This pattern uses generics and literal types: 
+У цьому шаблоні використовуються узагальнені та літеральні типи:
 
 ```ts
 /** Generic Id type */
@@ -29,19 +29,19 @@ foo = bar; // Error
 foo = foo; // Okay
 ```
 
-* Advantages
-  - No need for any type assertions 
-* Disadvantage
-  - The structure `{type,value}` might not be desireable and need server serialization support
+* Переваги
+   - Немає потреби в твердженнях будь-якого типу
+* Недолік
+   - Структура `{type,value}` може бути небажаною та потребувати підтримки серверної серіалізації
 
 ## Using Enums
-[Enums in TypeScript](../enums.md) offer a certain level of nominal typing. Two enum types aren't equal if they differ by name. We can use this fact to provide nominal typing for types that are otherwise structurally compatible.
+[Enums у TypeScript](../enums.md) пропонують певний рівень номінальної типізації. Два типи перерахувань не є рівноправними, якщо вони відрізняються за назвою. Ми можемо використовувати цей факт для забезпечення номінальної типізації для типів, які в іншому структурно сумісні.
 
-The workaround involves:
-* Creating a *brand* enum.
-* Creating the type as an *intersection* (`&`) of the brand enum + the actual structure.
+Обхідний шлях передбачає:
+* Створення переліку *brand*.
+* Створення типу як *перетину* (`&`) переліку бренду + фактичної структури.
 
-This is demonstrated below where the structure of the types is just a string:
+Це показано нижче, де структура типів є лише рядком:
 
 ```ts
 // FOO
@@ -72,17 +72,17 @@ str = fooId;
 str = barId;
 ```
 
-Note how the brand enums,  ``FooIdBrand`` and ``BarIdBrand`` above, each have single member (`_`) that maps to the empty string, as specified by ``{ _ = "" }``. This forces TypeScript to infer that these are string-based enums, with values of type ``string``, and not enums with values of type ``number``.  This is necessary because TypeScript infers an empty enum (``{}``) to be a numeric enum, and as of TypeScript 3.6.2 the intersection of a numeric ``enum`` and ``string`` is ``never``.
+Зверніть увагу, що переліки брендів FooIdBrand і BarIdBrand вище мають один елемент (_), який відповідає порожньому рядку, як зазначено в {{ _ = "" }``. Це змушує TypeScript зробити висновок, що це переліки на основі рядків зі значеннями типу ``string``, а не переліки зі значеннями типу ``number``. Це необхідно, оскільки TypeScript робить висновок, що порожнє перелічення (``{}``) є числовим переліком, а з TypeScript 3.6.2 перетин числового ``enum`` і ``рядка`` є ``ніколи ``.
 
 ## Using Interfaces
 
-Because `numbers` are type compatible with `enum`s the previous technique cannot be used for them. Instead we can use interfaces to break the structural compatibility. This method is still used by the TypeScript compiler team, so worth mentioning. Using `_` prefix and a `Brand` suffix is a convention I strongly recommend (and [the one followed by the TypeScript team](https://github.com/Microsoft/TypeScript/blob/7b48a182c05ea4dea81bab73ecbbe9e013a79e99/src/compiler/types.ts#L693-L698)).
+Оскільки `numbers` є типом сумісним з `enum`, попередня техніка не може бути використана для них. Замість цього ми можемо використовувати інтерфейси, щоб порушити структурну сумісність. Цей метод досі використовується командою компіляторів TypeScript, тому варто згадати. Використання префікса `_` і суфікса `Brand` є угодою, яку я настійно рекомендую (і [той, якої дотримується команда TypeScript](https://github.com/Microsoft/TypeScript/blob/7b48a182c05ea4dea81bab73ecbbe9e013a79e99/src/compiler/types .ts#L693-L698)).
 
-The workaround involves the following:
-* adding an unused property on a type to break structural compatibility.
-* using a type assertion when needing to new up or cast down.
+Обхідний шлях передбачає наступне:
+* додавання невикористаної властивості до типу для порушення структурної сумісності.
+* використання твердження типу, коли потрібно оновити або ліквідувати.
 
-This is demonstrated below:
+Це показано нижче:
 
 ```ts
 // FOO
