@@ -2,7 +2,8 @@
 
 [Професійний урок про Jest / TypeScript](https://egghead.io/lessons/typescript-getting-started-with-jest-using-typescript)
 
-Жодне тестове рішення не є ідеальним. Тим не менш, jest є чудовим варіантом модульного тестування, який забезпечує чудову підтримку TypeScript.
+
+Жодне тестове рішення не є ідеальним. Тим не менш, jеst є чудовим варіантом модульного тестування, який забезпечує чудову підтримку TypeScript.
 
 > Примітка: ми припускаємо, що ви починаєте з простого налаштування вузла package.json. Також усі файли TypeScript мають бути в папці `src`, що завжди рекомендується (навіть без Jest) для чистого налаштування проекту.
 
@@ -16,11 +17,11 @@ npm i jest @types/jest ts-jest typescript -D
 
 Пояснення:
 
-* Встановити структуру `jest` (`jest`)
+* Встановити фреймворк `jest` (`jest`)
 * Встановіть типи для `jest` (`@types/jest`)
-* Встановіть препроцесор TypeScript для jest (`ts-jest`), який дозволяє jest транспілювати TypeScript на льоту та має вбудовану підтримку вихідної карти.
+* Встановіть препроцесор TypeScript для jest (`ts-jest`), який дозволяє jest транспілювати TypeScript на льоту та має вбудовану підтримку source-map.
 * Встановіть компілятор TypeScript ('typescript'), який є передумовою для 'ts-jest'.
-* Збережіть усе це у своїх залежностях розробника (тестування майже завжди залежить від розробника npm)
+* Збережіть усе це у своїх залежностях розробника (тестування майже завжди в dev-dependency npm)
 
 ## Step 2: Configure Jest
 
@@ -41,12 +42,12 @@ module.exports = {
 }
 ```
 
-(Якщо ваш файл `package.json` містить `"type": "module"`, через що Node припускає, що модулі мають формат es6, ви можете конвертувати наведене вище у формат es6, замінивши верхній рядок на `export default { ` .)
+(Якщо ваш файл `package.json` містить `"type": "module"`, через що Node припускає, що модулі мають формат es6, ви можете конвертувати наведене вище у формат es6, замінивши верхній рядок на `export default {` .)
 
 Пояснення:
 
-* Ми завжди рекомендуємо зберігати *всі* файли TypeScript у папці `src` вашого проекту. Ми припускаємо, що це правда, і вказуємо це за допомогою параметра `roots`.
-* Конфігурація `testMatch` — це глобальний збіг шаблонів для виявлення файлів .test / .spec у форматі ts / tsx / js.
+* Ми завжди рекомендуємо зберігати *всі* файли TypeScript у папці `src` вашого проекту. Ми вказуємо це за допомогою параметра `roots`.
+* Конфігурація `testMatch` — це глобальний відповідник шаблонів для виявлення файлів .test / .spec у форматі ts / tsx / js.
 * Конфігурація `transform` просто повідомляє `jest` використовувати `ts-jest` для файлів ts / tsx.
 
 ## Step 3: Run tests
@@ -55,7 +56,7 @@ module.exports = {
 
 ### Optional: Add script target for npm scripts
 
-Додайте `package.json`:
+додайте `package.json`:
 
 ```json
 {
@@ -72,7 +73,8 @@ module.exports = {
 
 ### Example
 
-* Для файлу `foo.ts`:
+* для `foo.ts`:
+
 
     ```js
     export const sum
@@ -80,7 +82,8 @@ module.exports = {
         a.reduce((acc, val) => acc + val, 0);
     ```
 
-* Простий `foo.test.ts`:
+* простий `foo.test.ts`:
+
 
     ```js
     import { sum } from '../foo';
@@ -101,7 +104,8 @@ module.exports = {
 
 ### Example async
 
-Jest має вбудовану підтримку async/await. напр.
+Jest має вбудовану підтримку async/await.
+
 
 ```js
 test('basic',async () => {
@@ -117,10 +121,10 @@ test('basic again', async () => {
 
 > [Професійний урок-яйцеголовий про Enzyme / Jest / TypeScript](https://egghead.io/lessons/react-test-react-components-and-dom-using-enzyme)
 
-Enzyme дозволяє тестувати реагують компоненти з підтримкою dom. Існує три етапи налаштування ферменту:
+Enzyme дозволяє тестувати реагують компоненти з підтримкою dom. Існує три етапи налаштування:
 
-1. Встановіть enzyme, типи для enzyme, кращий серіалізатор знімків для enzyme, enzyme-adapter-react для вашої версії react `npm i enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D`
-2. Додайте `"snapshotSerializers"` і `"setupTestFrameworkScriptFile"` до вашого `jest.config.js`: 
+1. Встановіть enzyme, типи для enzyme, a better snapshot serializer for enzyme, enzyme-adapter-react для вашої версії react `npm i enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D`
+2. Додайте `"snapshotSerializers"` і `"setupTestFrameworkScriptFile"` до вашого `jest.config.js`:  
 
     ```js
     module.exports = {
@@ -132,7 +136,7 @@ Enzyme дозволяє тестувати реагують компоненти
     }
     ```
 
-3. Створіть файл `src/setupEnzyme.ts`.
+3. створіть `src/setupEnzyme.ts` файл.
 
     ```js
     import { configure } from 'enzyme';
@@ -205,6 +209,6 @@ Enzyme дозволяє тестувати реагують компоненти
 * Вбудована бібліотека тверджень.
 * Чудова підтримка TypeScript.
 * Дуже надійний спостерігач за тестами.
-* Тестування знімків.
+* Тестування Snapshot.
 * Вбудовані звіти про покриття.
 * Вбудована підтримка async/await.

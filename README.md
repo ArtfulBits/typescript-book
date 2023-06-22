@@ -137,6 +137,16 @@
         <a href="https://github.com/SvitlanaRybakova">Svitlana Rybakova</a>
       </td>
     </tr>
+    <tr>
+      <td align="center">
+        <img
+          src="https://avatars.githubusercontent.com/u/64689542?v=4"
+          width="150"
+        />
+        <br>
+        <a href="https://github.com/SuperCat2812">SuperCat2812</a>
+      </td>
+    </tr>
       <!--
     <tr>
       <td align="center">
