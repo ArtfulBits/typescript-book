@@ -138,6 +138,7 @@ cy.get('#foo')
 
 Повний список ланцюжків доступний тут: <https://docs.cypress.io/guides/references/assertions.html>
 
+
 Якщо ви хочете щось складне, ви можете навіть використати `should(callback)` і, наприклад,
 
 ```
@@ -153,6 +154,7 @@ cy.get('div')
 
 ## Tip: Commands and Chaining
 Кожен виклик функції в ланцюжку Cypress є `command`. Команда `should` є твердженням. Традиційно починати окрему *category* ланцюжків і дій окремо, наприклад.
+
 
 ```ts
 // Don't do this
@@ -183,11 +185,11 @@ cy.get(/**something else*/)
 
 ```
 cy.get('#foo')
-  // Once #foo is found the following:
-  .contains('Submit')
-  .click()
-  // ^ will continue to search for something that has text `Submit` and fail if it times out.
-  // ^ After it is found trigger a click on the HTML Node that contained the text `Submit`.
+   // Коли #foo знайдено наступне:
+   .contains('Надіслати')
+   .click()
+   // ^ продовжуватиме шукати те, що містить текст `Надіслати`, і не вдасться, якщо мине час.
+   // ^ Після того, як його знайдено, клацніть вузол HTML, який містить текст `Надіслати`.
 ```
 
 ## Tip: Smart delays and retries
@@ -242,6 +244,7 @@ cy.server()
 ### Tip: Asserting an Http request response
 Ви можете стверджувати запити без mocking, використовуючи `route` `onRequest` / `onResponse`, наприклад.
 
+
 ```ts
 cy.route({
   method: 'POST',
@@ -263,6 +266,7 @@ cy.get('#logoutNotification').should('be.visible');
 ```
 
 Однак рекомендується імітувати час за допомогою `cy.clock` і пересилати час за допомогою `cy.tick`.
+
 
 ```ts
 cy.clock();

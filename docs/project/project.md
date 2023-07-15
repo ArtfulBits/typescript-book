@@ -1,3 +1,3 @@
 # Project
 
-To create a successful project using TypeScript you need to understand the various project organization language features available. In this section we will cover "compilation context", declaration spaces and modules.
+Щоб створити успішний проект за допомогою TypeScript, вам потрібно розуміти різні доступні функції мови організації проекту. У цьому розділі ми розглянемо «контекст компіляції», простори оголошень і модулі.

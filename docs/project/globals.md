@@ -1,16 +1,16 @@
 # global.d.ts
 
-We discussed *global* vs. *file* modules when covering [projects](./modules.md) and recommended using file based modules and not polluting the global namespace.
+Ми обговорювали *global* та *file* модулі під час розгляду [проектів](./modules.md) і рекомендували використовувати файлові модулі та не забруднювати глобальний простір імен.
 
-Nevertheless, if you have beginner TypeScript developers you can give them a `global.d.ts` file to put interfaces / types in the global namespace to make it easy to have some *types* just *magically* available for consumption in *all* your TypeScript code.
+Тим не менше, якщо у вас є розробники-початківці TypeScript, ви можете надати їм файл `global.d.ts` для розміщення інтерфейсів/типів у глобальному просторі імен, щоб зробити деякі *types* просто *magically* доступним для використання в *цілоту* вашему коді TypeScript.
 
-Another use case for a `global.d.ts` file is to declare compile-time constants that are being injected into the source code by Webpack via the standard [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) plugin.
+Іншим варіантом використання файлу `global.d.ts` є оголошення констант часу компіляції, які Webpack додає у вихідний код за допомогою стандартного [DefinePlugin](https://webpack.js.org/plugins/define -plugin/) плагін.
 
 ```ts
 declare const BUILD_MODE_PRODUCTION: boolean; // can be used for conditional compiling
 declare const BUILD_VERSION: string;
 ```
 
-> For any code that is going to generate *JavaScript* we highly recommend using *file modules*, and only use `global.d.ts` to declare compile-time constants and/or to extend standard type declarations declared in `lib.d.ts`.
+> Для будь-якого коду, який збирається генерувати *JavaScript*, ми наполегливо рекомендуємо використовувати *file modules* та використовувати лише `global.d.ts` для оголошення констант часу компіляції та/або для розширення стандартних декларацій типів, оголошених у `lib.d.ts`.
 
-* Bonus: The `global.d.ts` file is also good for quick `declare module "some-library-you-dont-care-to-get-defs-for";` when doing JS to TS migrations.
+* Бонус: файл `global.d.ts` також добре підходить для швидкого `declare module  "some-library-you-dont-care-to-get-defs-for";` під час міграції JS до TS.

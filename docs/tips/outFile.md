@@ -1,24 +1,24 @@
 # `--outFile` is BAD {#outFile}
 
-Its a bad idea for you to use because of the following reasons:
+Це погана ідея для вас через такі причини:
 
-* Runtime Errors
-* Fast compile
-* Global scope
-* Hard to analyze
-* Hard to scale
+* Помилки виконання
+* Швидка компіляція
+* Глобальний масштаб
+* Важко аналізувати
+* Важко масштабувати
 * `_references`
-* Code reuse
-* Multiple Targets
-* Isolated Compile
+* Повторне використання коду
+* Кілька цілей
+* Ізольована компіляція
 
 ## Runtime Errors
 
-If your code depends on any form of js ordering you will get random errors at runtime.
+Якщо ваш код залежить від будь-якої форми впорядкування js, ви отримаєте випадкові помилки під час виконання.
 
-* **class inheritance can break at runtime.**
+* **успадкування класу може бути порушено під час виконання.**
 
-Consider `foo.ts`: 
+Розглянемо `foo.ts`: 
 ```ts
 class Foo {
     
@@ -32,11 +32,11 @@ class Bar extends Foo {
 }
 ```
 
-If you fail to compile it in correct order e.g. perhaps alphabetically `tsc bar.ts foo.ts` the code will compile fine but error at runtime with `ReferenceError`. 
+Якщо вам не вдається скомпілювати його в правильному порядку, Напр. можливо, за алфавітом `tsc bar.ts foo.ts` код компілюватиметься добре, але під час виконання виникне помилка з `ReferenceError`.
 
-* **module splitting can fail at runtime.**
+* **розбиття модулів може виникнути збій під час виконання.**
 
-Consider `foo.ts`: 
+Розглянемо `foo.ts`: 
 ```ts
 module App {
     export var foo = 123;
@@ -49,43 +49,43 @@ module App {
 }
 ```
 
-If you fail to compile it in correct order e.g. perhaps alphabetically `tsc bar.ts foo.ts` the code will compile fine but  *silently* fail at runtime with `bar` set to `NaN`. 
+Якщо вам не вдається скомпілювати його в правильному порядку, напр. можливо, в алфавітному порядку `tsc bar.ts foo.ts` код скомпілюється добре, але *мовчки* зазнає помилки під час виконання з `bar` встановленим на `NaN`.
 
 ## Fast compile
-If you use `--out` then single `.ts` files cannot be codegened into single `.js` files in isolation without unnecessary hacks. `--out` essentially forces a slower incremental build.
+Якщо ви використовуєте `--out`, то окремі файли `.ts` не можна кодувати в окремі файли `.js` без непотрібних хаків. `--out` по суті змушує повільніше поступове збирання.
 
-Also source maps are positionally sensitive and run-length encoded so most of the map has to be rebuilt on a recompile if you use source maps (which you should!). At high-10s to 100s kloc combined it’s going to get slow.
+Крім того, source maps є позиційно чутливими та закодовані за довжиною циклу, тому більшу частину карти потрібно перекомпілювати заново, якщо ви використовуєте source maps (що ви повинні!). При високих показниках від 10 до 100 секунд він буде повільним.
 
 ## Global Scope
-Sure you can use name spaces but its still on `window` if you run it in the browser. Namespaces are just an unnecessary workaround. Also `/// <reference` comments introduce a global context in *your code* that can get hard to maintain.
+Звісно, ви можете використовувати простори імен, але він все ще знаходиться у `window`, якщо ви запускаєте його у браузері. Простори імен — це лише непотрібний обхідний шлях. Крім того, коментарі `/// <reference` вводять глобальний контекст у *ваш код*, який може бути важко підтримувати.
 
-Also if your company has several teams working independently and then someone decides to try integrating two independently written apps there is a high likelihood of a name conflict.
+Крім того, якщо у вашій компанії є кілька команд, які працюють незалежно, а потім хтось вирішує спробувати інтегрувати дві незалежно написані програми, висока ймовірність конфлікту імен.
 
 ## Hard to analyze
-We wish to provide more code analysis tools. These will be easier if you provide us with the dependency chain (implicitly there on a silver platter using external modules). 
+Ми хочемо надати більше інструментів аналізу коду. Це буде легше, якщо ви надасте нам ланцюжок залежностей (неявно  на срібному блюді за допомогою зовнішніх модулів).
 
-Also its not just the *dev tools* that have a hard time making sense of the code. The next human needs to understand a lot of the code base before they start to understand where stuff is actually imported from. Using internal modules also makes code difficult to review in isolation e.g. on github.
+Крім того, не тільки *dev tools* допомогають зрозуміти код. Колт людині потрібно зрозуміти багато кодової бази, перш ніж вони почнуть розуміти, звідки імпортуються речі. Використання внутрішніх модулів також ускладнює перегляд окремого коду, наприклад, на github.
 
 ## Hard to scale
-Really just a result of random runtime errors + slower and slower compile times + difficulty in understanding someone else's code.
+Насправді просто результат випадкових помилок виконання + все повільніший час компіляції + труднощі з розумінням чужого коду.
 
 ## `_references.ts`
-Isn't supported by `tsconfig.json` : https://github.com/Microsoft/TypeScript/issues/2472#issuecomment-85330803 You'll have to manually sort the  `files` array. 
+Не підтримується `tsconfig.json`: https://github.com/Microsoft/TypeScript/issues/2472#issuecomment-85330803 Вам доведеться вручну сортувати масив `files`.
 
 ## Code reuse
-If you want to reuse a portion of your code in another project, with all that *implicit* dependency management, it will be difficult to port it over without potential runtime errors. 
+Якщо ви хочете повторно використати частину свого коду в іншому проекті з усім цим *неявним* керуванням залежностями, буде важко перенести його без потенційних помилок виконання.
 
 ## Multiple Targets
-Also if you decide to reuse your browser code in something like nodejs (e.g. for *testing* APIs) you are going to need to port it over to a module system or come up with ugly hacks to make the nodejs `global` your new global scope (i.e. `window`).
+Крім того, якщо ви вирішите повторно використовувати свій код браузера в чомусь на кшталт nodejs (наприклад, для *тестування* API), вам потрібно буде перенести його на модульну систему або придумати потворні хаки, щоб зробити nodejs `global` вашим новим глобальним scope (тобто `window`).
 
 ## Isolated Compile
-Files cannot be compiled in isolation. E.g. consider `a.ts`: 
+Файли не можуть бути скомпільовані окремо. Наприклад розглянути `a.ts`:
 ```ts
 module M {
   var s = t;
 }
 ```
-Will have different output depending upon whether there is a `b.ts` of the form: 
+Матиме різний вихід залежно від того, чи існує `b.ts` форми: 
 ```ts
 module M {
   export var t = 5;
@@ -95,11 +95,11 @@ or
 ```ts
 var t = 5;
 ```
-So `a.ts` [cannot be compiled in isolation](https://github.com/Microsoft/TypeScript/issues/2715).
+Отже, `a.ts` [не можна скомпілювати ізольовано](https://github.com/Microsoft/TypeScript/issues/2715).
 
 ## Summary
-`--out` is really the job of some build tool. And even such a build tool can benefit from the dependency mentions provided by external modules. So we recommend you use external modules and then let the build tool create a single `.js` for you if you so desire.
+`--out` насправді є завданням якогось інструменту для збирання. І навіть такий інструмент збирання може отримати користь від згадок про залежності, наданих зовнішніми модулями. Тому ми рекомендуємо вам використовувати зовнішні модулі, а потім дозволити інструменту збірки створити для вас єдиний `.js`, якщо ви цього бажаєте.
 
-https://twitter.com/nycdotnet/status/613705850574778368 
+https://twitter.com/nycdotnet/status/613705850574778368
 
-![The Bas Signal](https://pbs.twimg.com/media/CIRSOBmWsAQdzvP.jpg)
+![Сигнал Bas](https://pbs.twimg.com/media/CIRSOBmWsAQdzvP.jpg)

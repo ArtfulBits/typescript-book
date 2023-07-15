@@ -1,6 +1,7 @@
 # Using Jest with TypeScript
 
-> [Pro egghead lesson on Jest / TypeScript](https://egghead.io/lessons/typescript-getting-started-with-jest-using-typescript)
+[Професійний урок про Jest / TypeScript](https://egghead.io/lessons/typescript-getting-started-with-jest-using-typescript)
+
 
 Жодне тестове рішення не є ідеальним. Тим не менш, jеst є чудовим варіантом модульного тестування, який забезпечує чудову підтримку TypeScript.
 
@@ -14,7 +15,7 @@
 npm i jest @types/jest ts-jest typescript -D
 ```
 
-Explanation:
+Пояснення:
 
 * Встановити фреймворк `jest` (`jest`)
 * Встановіть типи для `jest` (`@types/jest`)
@@ -74,6 +75,7 @@ module.exports = {
 
 * для `foo.ts`:
 
+
     ```js
     export const sum
       = (...a: number[]) =>
@@ -81,6 +83,7 @@ module.exports = {
     ```
 
 * простий `foo.test.ts`:
+
 
     ```js
     import { sum } from '../foo';
@@ -103,6 +106,7 @@ module.exports = {
 
 Jest має вбудовану підтримку async/await.
 
+
 ```js
 test('basic',async () => {
   expect(sum()).toBe(0);
@@ -115,7 +119,7 @@ test('basic again', async () => {
 
 ### Example enzyme
 
-> [Pro egghead lesson on Enzyme / Jest / TypeScript](https://egghead.io/lessons/react-test-react-components-and-dom-using-enzyme)
+> [Професійний урок-яйцеголовий про Enzyme / Jest / TypeScript](https://egghead.io/lessons/react-test-react-components-and-dom-using-enzyme)
 
 Enzyme дозволяє тестувати реагують компоненти з підтримкою dom. Існує три етапи налаштування:
 
@@ -200,7 +204,7 @@ Enzyme дозволяє тестувати реагують компоненти
 
 ## Reasons why we like jest
 
-> [For details on these features see jest website](http://facebook.github.io/jest/)
+> [Детальнішу інформацію про ці функції див. на веб-сайті jest](http://facebook.github.io/jest/)
 
 * Вбудована бібліотека тверджень.
 * Чудова підтримка TypeScript.

@@ -1,29 +1,29 @@
 ## External modules
-There is a lot of power and usability packed into the TypeScript external module pattern. Here we discuss its power and some patterns needed to reflect real world usages.
+Шаблон зовнішнього модуля TypeScript містить велику потужність і зручність використання. Тут ми обговорюємо його потужність і деякі моделі, необхідні для відображення використання в реальному світі.
 
 ### Clarification: commonjs, amd, es modules, others
 
-First up we need to clarify the (awful) inconsistency of the module systems out there. I'll just give you my *current* recommendation and remove the noise i.e. not show you all the *other* ways things can work.
+Спочатку нам потрібно прояснити (жахливу) невідповідність систем модулів. Я просто дам вам свою *поточну* рекомендацію та видалю шум, тобто не покажу всі *інші* способи роботи.
 
-From the *same TypeScript* you can generate different *JavaScript* depending upon the `module` option. Here are things you can ignore (I am not interested in explaining dead tech):
+З *того самого TypeScript* ви можете генерувати різний *JavaScript* залежно від параметра `module`. Ось речі, які ви можете ігнорувати (мені не цікаво пояснювати мертві технології):
 
-* AMD: Do not use. Was browser only.
-* SystemJS: Was a good experiment. Superseded by ES modules.
-* ES Modules: Not ready yet.
+* AMD: не використовувати. Був лише браузер.
+* SystemJS: це був хороший експеримент. Замінено модулями ES.
+* Модулі ES: ще не готові.
 
-Now these are just the options for *generating the JavaScript*. Instead of these options use `module:commonjs`
+Тепер це лише варіанти для *генерування JavaScript*. Замість цих параметрів використовуйте `module:commonjs`
 
-How you *write* TypeScript modules is also a bit of a mess. Again here is how not to do it *today*:
+Те, як ви *пишете* модулі TypeScript, також є дещо безладним. Ось як цього не робити *сьогодні*:
 
-* `import foo = require('foo')`. i.e. `import/require`. Use ES module syntax instead.
+* `import foo = require('foo')`. тобто `import/require`. Натомість використовуйте синтаксис модуля ES.
 
-Cool, with that out of the way, lets look at the ES module syntax.
+Круто, покінчивши з цим, давайте розглянемо синтаксис модуля ES.
 
-> Summary: Use `module:commonjs` and use the ES module syntax to import / export / author modules.
+> Резюме: Використовуйте `module:commonjs` і використовуйте синтаксис модуля ES для імпорту/експорту/авторських модулів.
 
 ### ES Module syntax
 
-* Exporting a variable (or type) is as easy as prefixing the keyword `export` e.g.
+* Експортувати змінну (або тип) так само просто, як додати префікс ключового слова `export`.
 
 ```js
 // file `foo.ts`
@@ -33,7 +33,7 @@ export type SomeType = {
 };
 ```
 
-* Exporting a variable or type in a dedicated `export` statement e.g.
+* Експортування змінної або типу в спеціальному операторі `export`.
 
 ```js
 // file `foo.ts`
@@ -46,7 +46,7 @@ export {
   SomeType
 };
 ```
-* Exporting a variable or type in a dedicated `export` statement *with renaming* e.g.
+* Експортування змінної або типу в спеціальному операторі `export` *з перейменуванням*.
 
 ```js
 // file `foo.ts`
@@ -54,21 +54,21 @@ let someVar = 123;
 export { someVar as aDifferentName };
 ```
 
-* Import a variable or a type using `import` e.g.
+* Імпорт змінну або тип за допомогою `import`.
 
 ```js
 // file `bar.ts`
 import { someVar, SomeType } from './foo';
 ```
 
-* Import a variable or a type using `import` *with renaming* e.g.
+* Імпортуйте змінну або тип за допомогою `import` *з перейменуванням*.
 
 ```js
 // file `bar.ts`
 import { someVar as aDifferentName } from './foo';
 ```
 
-* Import everything from a module into a name with `import * as` e.g.
+* Імпортуйте все з модуля в назву за допомогою `import * as`, наприклад.
 
 ```js
 // file `bar.ts`
@@ -76,37 +76,38 @@ import * as foo from './foo';
 // you can use `foo.someVar` and `foo.SomeType` and anything else that foo might export.
 ```
 
-* Import a file *only* for its side effect with a single import statement:
+* Імпортуйте файл *тільки* для його побічного ефекту за допомогою одного оператора імпорту:
 
 ```js
 import 'core-js'; // a common polyfill library
 ```
 
-* Re-Exporting all the items from another module
+* Повторний експорт усіх елементів з іншого модуля
 
 ```js
 export * from './foo';
 ```
 
-* Re-Exporting only some items from another module
+* Повторний експорт лише деяких елементів з іншого модуля
 
 ```js
 export { someVar } from './foo';
 ```
 
-* Re-Exporting only some items from another module *with renaming*
+* Повторний експорт лише деяких елементів з іншого модуля * з перейменуванням *
 
 ```js
 export { someVar as aDifferentName } from './foo';
 ```
 
 ### Default exports/imports
-As you will learn later, I am not a fan of default exports. Nevertheless here is syntax for export and using default exports
 
-* Export using `export default`
-  * before a variable (no `let / const / var` needed)
-  * before a function
-  * before a class
+Як ви дізнаєтесь пізніше, я не прихильник експорту за замовчуванням. Тим не менш, тут є синтаксис для експорту та використання стандартних експортів
+
+* Експортуйте за допомогою `export default`
+   * перед змінною (не потрібно `let / const / var`)
+   * перед функцією
+   * перед уроком
 
 ```js
 // some var
@@ -117,7 +118,7 @@ export default function someFunction() { }
 export default class SomeClass { }
 ```
 
-* Import using the `import someName from "someModule"` syntax (you can name the import whatever you want) e.g.
+* Імпортуйте за допомогою синтаксису `import someName from "someModule"` (ви можете назвати імпорт як завгодно).
 
 ```js
 import someLocalNameForThisFile from "../foo";
@@ -125,57 +126,57 @@ import someLocalNameForThisFile from "../foo";
 
 ### Module paths
 
-> I am just going to assume `moduleResolution: "Node"`. This is the option you should have in your TypeScript config. This setting is implied automatically by `module:commonjs`.
+>> Я просто припускаю `moduleResolution: "Node"`. Це параметр, який ви повинні мати у своїй конфігурації TypeScript. Цей параметр автоматично передбачається `module:commonjs`.
 
-There are two distinct kinds of modules. The distinction is driven by the path section of the import statement (e.g. `import foo from 'THIS IS THE PATH SECTION'`).
+Є два різних типи модулів. Розрізнення визначається розділом шляху оператора імпорту (наприклад, `import foo from 'THIS IS THE PATH SECTION'`).
 
-* Relative path modules (where path starts with `.` e.g. `./someFile` or `../../someFolder/someFile` etc.)
-* Other dynamic lookup modules (e.g. `'core-js'` or `'typestyle'` or `'react'` or even `'react/core'` etc.)
+* Модулі відносного шляху (де шлях починається з `.`, наприклад `./someFile` або `../../someFolder/someFile` тощо)
+* Інші модулі динамічного пошуку (наприклад, `'core-js'` або `'typestyle'` або `'react'` або навіть `'react/core'` тощо)
 
-The main difference is *how the module is resolved on the file system*.
+Основна відмінність полягає в тому, *як модуль вирішується у файловій системі*.
 
-> I will use a conceptual term *place* that I will explain after mentioning the lookup pattern.
+> Я буду використовувати концептуальний термін *місце*, який я поясню після згадки шаблону пошуку.
 
 #### Relative path modules
-Easy, just follow the relative path :) e.g.
+Легко, просто дотримуйтеся відносного шляху :)
 
-* if file `bar.ts` does `import * as foo from './foo';` then place `foo` must exist in the same folder.
-* if file `bar.ts` does `import * as foo from '../foo';` then place `foo` must exist in a folder up.
-* if file `bar.ts` does `import * as foo from '../someFolder/foo';` then one folder up, there must be a folder `someFolder` with a place `foo`
+якщо файл `bar.ts` виконує `імпорт * як foo з './foo';`, тоді місце `foo` має існувати в тій же папці.
+* якщо файл `bar.ts` виконує `імпорт * як foo з '../foo';`, тоді місце `foo` має існувати в папці вище.
+* якщо файл `bar.ts` виконує `імпорт * як foo з '../someFolder/foo';`, тоді на одну папку вище, має бути папка `someFolder` з місцем `foo`
 
-Or any other relative path you can think of :)
+Або будь-який інший відносний шлях, який ви можете придумати :)
 
 #### Dynamic lookup
 
-When the import path is *not* relative, lookup is driven by [*node style resolution*](https://nodejs.org/api/modules.html#modules_all_together). Here I only give a simple example:
+Якщо шлях імпорту *не* відносний, пошук керується [*роздільністю стилю вузла*](https://nodejs.org/api/modules.html#modules_all_together). Тут я наведу лише простий приклад:
 
-* You have `import * as foo from 'foo'`, the following are the places that are checked *in order*
-  * `./node_modules/foo`
-  * `../node_modules/foo`
-  * `../../node_modules/foo`
-  * Till root of file system
+* У вас є `імпорт * як foo з 'foo'`, нижче наведено місця, які перевіряються *по порядку*
+   * `./node_modules/foo`
+   * `../node_modules/foo`
+   * `../../node_modules/foo`
+   * До кореня файлової системи
 
-* You have `import * as foo from 'something/foo'`, the following are the places that are checked *in order*
-  * `./node_modules/something/foo`
-  * `../node_modules/something/foo`
-  * `../../node_modules/something/foo`
-  * Till root of file system
+* У вас є `імпорт * як foo з 'something/foo'`, нижче наведено місця, які перевіряються *по порядку*
+   * `./node_modules/something/foo`
+   * `../node_modules/something/foo`
+   * `../../node_modules/something/foo`
+   * До кореня файлової системи
 
 
 ### What is *place*
-When I say *places that are checked* I mean that the following things are checked in that place. e.g. for a place `foo`:
+Коли я кажу *місця, які перевіряються*, я маю на увазі, що в цьому місці перевіряються такі речі. Наприклад. для місця `foo`:
 
-* If the place is a file, e.g. `foo.ts`, hurray!
-* else if the place is a folder and there is a file `foo/index.ts`, hurray!
-* else if the place is a folder and there is a `foo/package.json` and a file specified in the `types` key in the package.json that exists, then hurray!
-* else if the place is a folder and there is a `package.json` and a file specified in the `main` key in the package.json that exists, then hurray!
+* Якщо місцем є файл, напр. `foo.ts`, ура!
+* інакше, якщо місцем є папка і є файл `foo/index.ts`, ура!
+* інакше, якщо місцем є папка і існує `foo/package.json` і файл, указаний у ключі `types` у package.json, тоді ура!
+* інакше, якщо місцем є папка, і існує `package.json` і файл, указаний у ключі `main` у package.json, який існує, тоді ура!
 
-By file I actually mean `.ts` / `.d.ts` and `.js`.
+Під файлом я насправді маю на увазі `.ts` / `.d.ts` і `.js`.
 
-And that's it. You are now module lookup experts (not a small feat!).
+І це все. Тепер ви експерт із пошуку модулів (це не маленький подвиг!).
 
 ### Overturning dynamic lookup *just for types*
-You can declare a module *globally* for your project by using `declare module 'somePath'` and then imports will resolve *magically* to that path
+Ви можете оголосити модуль *глобально* для свого проекту за допомогою `declare module 'somePath'`, а потім імпорт буде *чарівним* чином вирішувати цей шлях
 
 e.g.
 ```ts
@@ -196,66 +197,67 @@ import * as foo from 'foo';
 ```
 
 ### `import/require` for importing type only
-The following statement:
+Наступна заява:
 
 ```ts
 import foo = require('foo');
 ```
 
-actually does *two* things:
+насправді робить *дві* речі:
 
-* Imports the type information of the foo module.
-* Specifies a runtime dependency on the foo module.
+* Імпортує інформацію про тип модуля foo.
+* Визначає залежність часу виконання від модуля foo.
 
-You can pick and choose so that only *the type information* is loaded and no runtime dependency occurs. Before continuing you might want to recap the [*declaration spaces*](../project/declarationspaces.md) section of the book.
+Ви можете вибирати так, щоб завантажувалася лише *інформація про тип* і не виникала залежність під час виконання. Перш ніж продовжити, можливо, ви захочете підсумувати розділ [*просторів для оголошень*](../project/declarationspaces.md) у книзі.
 
-If you do not use the imported name in the variable declaration space then the import is completely removed from the generated JavaScript. This is best explained with examples. Once you understand this we will present you with use cases.
+Якщо ви не використовуєте імпортоване ім’я в просторі оголошення змінних, імпорт буде повністю видалено зі згенерованого JavaScript. Це найкраще пояснити на прикладах. Як тільки ви це зрозумієте, ми представимо вам випадки використання.
 
 #### Example 1
 ```ts
 import foo = require('foo');
 ```
-will generate the JavaScript:
+створить JavaScript:
 
 ```js
 
 ```
-That's right. An *empty* file as foo is not used.
+Це вірно. *Порожній* файл як foo не використовується.
 
 #### Example 2
 ```ts
 import foo = require('foo');
 var bar: foo;
 ```
-will generate the JavaScript:
+створить JavaScript:
 ```js
 var bar;
 ```
-This is because `foo` (or any of its properties e.g. `foo.bas`) is never used as a variable.
+Це тому, що `foo` (або будь-яка з його властивостей, наприклад `foo.bas`) ніколи не використовується як змінна.
 
 #### Example 3
 ```ts
 import foo = require('foo');
 var bar = foo;
 ```
-will generate the JavaScript (assuming commonjs):
+створить JavaScript (припускаючи, що commonjs):
+
 ```js
 var foo = require('foo');
 var bar = foo;
 ```
-This is because `foo` is used as a variable.
+Це тому, що `foo` використовується як змінна.
 
 
 ### Use case: Lazy loading
-Type inference needs to be done *upfront*. This means that if you want to use some type from a file `foo` in a file `bar` you will have to do:
+Висновок типу потрібно зробити *заздалегідь*. Це означає, що якщо ви хочете використовувати певний тип із файлу `foo` у файлі `bar`, вам доведеться зробити:
 
 ```ts
 import foo = require('foo');
 var bar: foo.SomeType;
 ```
-However, you might want to only load the file `foo` at runtime under certain conditions. For such cases you should use the `import`ed name only in *type annotations* and **not** as a *variable*. This removes any *upfront* runtime dependency code being injected by TypeScript. Then *manually import* the actual module using code that is specific to your module loader.
+Однак ви можете завантажувати файл `foo` лише під час виконання за певних умов. У таких випадках вам слід використовувати імпортовану назву лише в *анотаціях типу*, а **не** як *змінну*. Це видаляє будь-який *попередній* код залежності часу виконання, який впроваджується TypeScript. Потім *вручну імпортуйте* фактичний модуль, використовуючи код, який відповідає вашому завантажувачу модулів.
 
-As an example, consider the following `commonjs` based code where we only load a module `'foo'` on a certain function call:
+Як приклад, розглянемо наступний код на основі `commonjs`, де ми завантажуємо модуль `'foo`` лише під час певного виклику функції:
 
 ```ts
 import foo = require('foo');
@@ -267,7 +269,7 @@ export function loadFoo() {
 }
 ```
 
-A similar sample in `amd` (using requirejs) would be:
+Схожий приклад на `amd` (using requirejs) буде:
 ```ts
 import foo = require('foo');
 
@@ -279,17 +281,17 @@ export function loadFoo() {
 }
 ```
 
-This pattern is commonly used:
-* in web apps where you load certain JavaScript on particular routes,
-* in node applications where you only load certain modules if needed to speed up application bootup.
+Цей шаблон зазвичай використовується:
+* у веб-додатках, де ви завантажуєте певний JavaScript за певними маршрутами,
+* у вузлових програмах, де ви завантажуєте лише певні модулі, якщо це необхідно для прискорення завантаження програми.
 
 ### Use case: Breaking Circular dependencies
 
-Similar to the lazy loading use case certain module loaders (commonjs/node and amd/requirejs) don't work well with circular dependencies. In such cases it is useful to have *lazy loading* code in one direction and loading the modules upfront in the other direction.
+Подібно до випадку використання відкладеного завантаження, деякі завантажувачі модулів (commonjs/node і amd/requirejs) погано працюють із циклічними залежностями. У таких випадках корисно мати *ліниве завантаження* коду в одному напрямку та завантаження модулів наперед в іншому напрямку.
 
 ### Use case: Ensure Import
 
-Sometimes you want to load a file just for the side effect (e.g. the module might register itself with some library like [CodeMirror addons](https://codemirror.net/doc/manual.html#addons) etc.). However, if you just do a `import/require` the transpiled JavaScript will not contain a dependency on the module and your module loader (e.g. webpack) might completely ignore the import. In such cases you can use a `ensureImport` variable to ensure that the compiled JavaScript takes a dependency on the module e.g.:
+Іноді ви хочете завантажити файл лише для побічного ефекту (наприклад, модуль може зареєструватися в якійсь бібліотеці, наприклад [CodeMirror addons](https://codemirror.net/doc/manual.html#addons) тощо). Однак, якщо ви просто виконуєте команду `import/require`, транспільований JavaScript не міститиме залежності від модуля, і ваш завантажувач модуля (наприклад, веб-пакет) може повністю ігнорувати імпорт. У таких випадках ви можете використовувати змінну `ensureImport`, щоб переконатися, що скомпільований JavaScript приймає залежність від модуля, наприклад:
 
 ```ts
 import foo = require('./foo');

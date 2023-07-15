@@ -1,12 +1,12 @@
 # Convenience vs. Soundness
 
-There are a few things that TypeScript prevents you from doing out of the box e.g. using a variable that *isn't ever declared* (of course you can use a *declaration file* for external systems).
+Є кілька речей, які TypeScript не дозволяє вам робити з коробки, наприклад. використовуючи змінну, яка *ніколи не оголошується* (звичайно, ви можете використовувати *файл декларації* для зовнішніх систем).
 
-That said, traditionally programming languages have a hard boundary between what is and isn't allowed by the type system. TypeScript is different in that it gives you control over where you put the slider. This is really to allow you to use the JavaScript you know and love with as much safety as **you** want. There are lots of compiler options to control exactly this slider so let's have a look.
+Тим не менш, традиційні мови програмування мають жорстку межу між тим, що дозволено і заборонено системою типів. TypeScript відрізняється тим, що він дає вам контроль над тим, де розмістити повзунок. Це дійсно для того, щоб дозволити вам використовувати JavaScript, який ви знаєте і любите, з такою безпечністю, як **Ви** хочете. Існує багато параметрів компілятора для керування саме цим повзунком, тому давайте подивимося.
 
 ## Boolean Options
 
-`compilerOptions` that are `boolean` can be specified as `compilerOptions` in `tsconfig.json`:
+`compilerOptions`, які є `boolean`, можна вказати як `compilerOptions` у `tsconfig.json`:
 
 ```json
 {
@@ -16,12 +16,12 @@ That said, traditionally programming languages have a hard boundary between what
 }
 ```
 
-or on the command line
+чи в командному рядку
 
 ```sh
 tsc --someBooleanOption
 ```
 
-> All of these are `false` by default.
+> Усе це за замовчуванням `false`.
 
-Click [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html) to see all compiler options.
+Натисніть [тут](https://www.typescriptlang.org/docs/handbook/compiler-options.html), щоб переглянути всі параметри компілятора.

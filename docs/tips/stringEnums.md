@@ -1,3 +1,3 @@
 ## String enums
 
-Sometimes you need a collection of strings collected under a common key. Prior to TypeScript 2.4, TypeScript only supported number-based enums. If using versions prior to 2.4, a work-around is to use [string literal types to create string based enums by combining with union types](../types/literal-types.md).
+Іноді вам потрібна колекція рядків, зібраних під загальним ключем. До TypeScript 2.4 TypeScript підтримував лише числові переліки. Якщо ви використовуєте версії до 2.4, обхідним шляхом є використання [типів рядкового літералу для створення переліків на основі рядків шляхом поєднання з типами об’єднання](../types/literal-types.md).

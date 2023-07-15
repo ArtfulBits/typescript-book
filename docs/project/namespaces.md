@@ -1,5 +1,5 @@
 ## Namespaces
-Namespaces provide you with a convenient syntax around a common pattern used in JavaScript:
+Простори імен надають вам зручний синтаксис навколо загального шаблону, який використовується в JavaScript:
 
 ```ts
 (function(something) {
@@ -9,8 +9,7 @@ Namespaces provide you with a convenient syntax around a common pattern used in 
 })(something || (something = {}))
 ```
 
-Basically `something || (something = {})` allows an anonymous function `function(something) {}` to *add stuff to an existing object* (the `something ||` portion) or *start a new object then add stuff to that object* (the `|| (something = {})` portion). This means that you can have two such blocks split by some execution boundary:
-
+В основному `something || (something = {})` дозволяє анонімній функції `function(something) {}` *add stuff to an existing object* (`something`) або *start a new object then add stuff to that object* (`|| (something = {})`). Це означає, що ви можете мати два таких блоки, розділені деякою межею виконання:
 ```ts
 (function(something) {
 
@@ -30,7 +29,7 @@ console.log(something); // {foo:123, bar:456}
 
 ```
 
-This is commonly used in  the JavaScript land for making sure that stuff doesn't leak into the global namespace. With file based modules you don't need to worry about this, but the pattern is still useful for *logical grouping* of a bunch of functions. Therefore TypeScript provides the `namespace` keyword to group these e.g.:
+Це зазвичай використовується в JavaScript, щоб переконатися, що матеріал не просочується в глобальний простір імен. З модулями на основі файлів вам не потрібно турбуватися про це, але шаблон все ще корисний для *logical grouping* купи функцій. Тому TypeScript надає ключове слово `namespace` для групування, наприклад:
 
 ```ts
 namespace Utility {
@@ -47,7 +46,7 @@ Utility.log('Call me');
 Utility.error('maybe!');
 ```
 
-The `namespace` keyword generates the same JavaScript that we saw earlier:
+Ключове слово `namespace` генерує той самий JavaScript, який ми бачили раніше:
 
 ```ts
 (function (Utility) {
@@ -57,6 +56,6 @@ The `namespace` keyword generates the same JavaScript that we saw earlier:
 })(Utility || (Utility = {}));
 ```
 
-One thing to note is that namespaces can be nested so you can do stuff like `namespace Utility.Messaging` to nest a `Messaging` namespace under `Utility`.
+Варто зауважити, що простори імен можуть бути вкладеними, тому ви можете робити такі речі, як `namespace Utility.Messaging`, щоб вкладати простір імен `Messaging` у `Utility`.
 
-For most projects we recommend using external modules and using `namespace` for quick demos and porting old JavaScript code.
+Для більшості проектів ми рекомендуємо використовувати зовнішні модулі та `namespace` для швидких демонстрацій і перенесення старого коду JavaScript.
