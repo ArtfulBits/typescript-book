@@ -5,7 +5,7 @@
 declare var process: any;
 ```
 
-> Вам *потрібно* робити це для `process`, оскільки вже існує [community maintained `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
+> Вам *не потрібно* робити це для `process`, оскільки вже існує [community maintained `node.d.ts`](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/node/index.d.ts).
 
 Це дозволяє вам використовувати змінну `process` без скарг TypeScript:
 
